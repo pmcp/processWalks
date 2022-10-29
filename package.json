@@ -9,6 +9,8 @@
   },
   "devDependencies": {
     "@nuxtjs/supabase": "^0.2.2",
+    "@vueuse/core": "^9.4.0",
+    "@vueuse/nuxt": "^9.4.0",
     "autoprefixer": "^10.4.13",
     "nuxt": "3.0.0-rc.12",
     "postcss": "^8.4.18",
