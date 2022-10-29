@@ -1,16 +1,16 @@
 <template>
-  <form class="form-widget" @submit.prevent="updateProfile">
+  <form @submit.prevent="updateProfile">
     <div>
       <label for="email">Email</label>
-      <input id="email" type="text" :value="user.email" disabled />
+      <input class="border-2 border-rose-500" id="email" type="text" :value="user.email" disabled/>
     </div>
     <div>
       <label for="username">Username</label>
-      <input id="username" type="text" v-model="username" />
+      <input class="border-2 border-rose-500" id="username" type="text" v-model="username" />
     </div>
     <div>
       <label for="website">Website</label>
-      <input id="website" type="website" v-model="website" />
+      <input class="border-2 border-rose-500" id="website" type="website" v-model="website" />
     </div>
 
     <div>
