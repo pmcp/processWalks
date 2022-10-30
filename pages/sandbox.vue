@@ -1,0 +1,3 @@
+<template>
+  <sandbox-formkit />
+</template>

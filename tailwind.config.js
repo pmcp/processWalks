@@ -1,4 +1,5 @@
 const formKitTailwind = require('@formkit/themes/tailwindcss');
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   mode: "jit",
@@ -8,12 +9,17 @@ module.exports = {
     "./components/**/*.{vue,js}",
     "./pages/*.vue",
     "./pages/**/*.vue",
+    "./layouts/**/*.vue",
     "./plugins/**/*.{js,ts}",
     "./*.{vue,js,ts}",
     "./nuxt.config.{js,ts}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+      },
+    },
   },
   variants: {
     extend: {},

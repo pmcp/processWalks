@@ -1,0 +1,140 @@
+<template>
+  <main-modal ref="addProcessModal">
+    <template v-slot:openButton>
+      Add new walk
+    </template>
+    <template v-slot:title>
+      The header
+    </template>
+    <template v-slot:content>
+      <FormKit
+          type="form"
+          id="addWalk"
+          submit-label="Add Walk"
+          @submit="submitAddWalk"
+      >
+        <FormKitSchema :schema="walkSchema" />
+      </FormKit>
+    </template>
+    <template v-slot:closeButton>
+      Close
+    </template>
+  </main-modal>
+  <div v-if="walks?.length > 0" class="overflow-hidden bg-white shadow sm:rounded-md">
+    <ul role="list" class="divide-y divide-gray-200">
+      <li  v-for="walk of walks" :key="walk.id">
+        <a href="#" class="block hover:bg-gray-50">
+          <div class="flex items-center px-4 py-4 sm:px-6">
+            <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+              <div class="truncate">
+                <div class="flex text-sm">
+                  <p class="truncate font-medium text-indigo-600">{{ walk.date }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="ml-5 flex-shrink-0">
+              <ChevronRightIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+            </div>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div v-else>
+    No walks yet
+  </div>
+
+
+</template>
+
+<script setup>
+import { ChevronRightIcon } from '@heroicons/vue/20/solid'
+const processSchema = [
+  {
+    $formkit: 'date',
+    name: 'date',
+    label: 'Date',
+    validation: 'required'
+  },
+  {
+    $formkit: 'text',
+    name: 'video',
+    label: 'Video'
+  },
+  {
+    $formkit: 'autocomplete',
+    name: 'personas',
+    label: 'Personas',
+    validation: 'length:5,16'
+  }
+]
+
+
+// import { Process } from '~/types/processes'
+// import { RealtimeChannel } from '@supabase/supabase-js'
+
+const client = useSupabaseClient()
+
+
+const loading = ref(true)
+
+
+let realtimeChannel;
+
+const { data: processes, refresh: refreshProcesses } = await useAsyncData('processes', async () => {
+  const { data } = await client
+      .from('processes')
+      .select('id, name, passwordProtected, description')
+      .order('created_at', { ascending: false })
+  return data
+})
+
+
+const addProcessModal = ref('addProcessModal')
+
+onMounted(() => {
+
+
+
+
+
+  // TODO: THIS IS NOT WORKING :(
+  realtimeChannel = client.channel('public:processes')
+      .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'processes' },
+          () => refreshProcesses()
+      ).subscribe()
+
+})
+// Don't forget to unsubscribe when user left the page
+onUnmounted(() => {
+  client.removeChannel(realtimeChannel)
+})
+
+async function submitAddProcess (newProcess) {
+  console.log(newProcess)
+  const { error, data } = await client.from('processes')
+      .upsert({
+        name: newProcess.name,
+        description: newProcess.description,
+        password: newProcess.password,
+        passwordProtected: newProcess.passwordProtected
+      })
+      .select('name, description, password, passwordProtected')
+      .single()
+  if (error) {
+    console.error(error);
+    return;
+  }
+  addProcessModal.value.closeModal()
+
+  // TODO: If realtime works, remove this!
+  refreshProcesses()
+
+
+}
+
+// console.log($refs['addProcessModal'])
+
+</script>

@@ -1,5 +1,4 @@
 <template>
-  {{ loading }}
   <main-modal ref="addProcessModal">
     <template v-slot:openButton>
       Add new process
