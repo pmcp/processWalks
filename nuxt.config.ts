@@ -1,8 +1,8 @@
-import { defineNuxtConfig } from 'nuxt'
 export default defineNuxtConfig({
     modules: [
-        '@nuxtjs/supabase',
         '@vueuse/nuxt',
+        '@nuxtjs/supabase',
+        '@formkit/nuxt'
     ],
     css: ["@/assets/css/styles.css"],
     build: {

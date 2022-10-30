@@ -1,7 +1,9 @@
+const formKitTailwind = require('@formkit/themes/tailwindcss');
+
 module.exports = {
   mode: "jit",
   purge: [
-    "./assets/**/*.{css}",
+    "./assets/css/*.{css}",
     "./components/*.{vue,js}",
     "./components/**/*.{vue,js}",
     "./pages/*.vue",
@@ -16,5 +18,8 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  content: ['./src/**/*.{html,js}', './formkit.config.js'],
+  plugins: [
+    formKitTailwind
+  ],
 };
