@@ -112,6 +112,9 @@ let realtimeChannel = RealtimeChannel
 const addPersonaModal = ref('addPersonaModal')
 const addWalkModal = ref('addWalkModal')
 
+// Needed to check the checkbox of newly added Persona
+const personasInput = ref([])
+
 // Called from the Walks modal
 const startAddPersona = (e) => {
   addPersonaModal.value.openModal()
