@@ -37,7 +37,7 @@
           <FormKit
               type="button"
               help="Add a persona to the list"
-              @click="openPersonaDialog"
+              @click="startAddPersona"
           >
             Add a Persona
           </FormKit>
@@ -103,25 +103,28 @@
 <script setup>
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
 const route = useRoute()
+
+// Supabase stuff
 const client = useSupabaseClient()
 import { RealtimeChannel } from '@supabase/supabase-js'
 let realtimeChannel = RealtimeChannel
 
-// import { getNode } from '@formkit/core'
-
-
+// Refs to the modal, to open and close them
 const addPersonaModal = ref('addPersonaModal')
 const addWalkModal = ref('addWalkModal')
-const openPersonaDialog = (e) => {
+
+// Called from the Walks modal
+const startAddPersona = (e) => {
   addPersonaModal.value.openModal()
   e.preventDefault();
 }
 
-const personasInput = ref([])
+const startAddWalk = () => {
+  addWalkModal.value.openModal()
+}
 
 
-
-
+// Load the Walks
 const { data: walks, refresh: refreshWalks } = await useAsyncData('walks', async () => {
   const { data } = await client
       .from('walks')
@@ -131,6 +134,7 @@ const { data: walks, refresh: refreshWalks } = await useAsyncData('walks', async
   return data
 })
 
+// Load the Personas
 const { data: personas, refresh: refreshPersonas } = await useAsyncData('personas', async () => {
     let {data} = await client
         .from('personas')
@@ -142,15 +146,21 @@ const { data: personas, refresh: refreshPersonas } = await useAsyncData('persona
         label: p.description,
       }
     })
-    walkSchema.value
   })
 
 
 onMounted(() => {
+  // Subscribe to changes of Walks
+  realtimeChannel = client.channel('public:walks').on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'walks' },
+      () => {
+        refreshPersonas()
+      }
+  )
+  realtimeChannel.subscribe()
 
-
-
-
+  // Subscribe to changes of Personas
   realtimeChannel = client.channel('public:personas').on(
       'postgres_changes',
       { event: '*', schema: 'public', table: 'personas' },
@@ -160,13 +170,6 @@ onMounted(() => {
   )
   realtimeChannel.subscribe()
 })
-
-const walkSchema = ref([])
-
-
-const startAddWalk = () => {
-  addWalkModal.value.openModal()
-}
 
 async function submitAddWalk (newWalk) {
   const { error, data } = await client.from('walks')
@@ -197,17 +200,13 @@ async function submitAddPersona (item) {
     return;
   }
   addPersonaModal.value.closeModal()
+  // Checkbox of added item gets checked
   const addedItem = data[0]
   personasInput.value.node.input([...personasInput.value.node.value, addedItem.id])
-
-
 }
-
-
 
 onUnmounted(() => {
   client.removeChannel(realtimeChannel)
 })
-
 
 </script>
