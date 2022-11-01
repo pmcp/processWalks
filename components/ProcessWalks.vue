@@ -3,7 +3,6 @@
     <template v-slot:title>
       Add a Walk
     </template>
-    The value: {{ FKvalue }}
     <template v-slot:content>
       <FormKit
           type="form"
