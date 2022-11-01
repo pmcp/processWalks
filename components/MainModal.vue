@@ -1,12 +1,4 @@
 <template>
-  <div class="inset-0 flex items-center justify-center">
-    <FormKit
-        type="button"
-        @click="openModal"
-    >
-      <slot name="openButton"></slot>
-    </FormKit>
-  </div>
   <ClientOnly>
     <TransitionRoot appear :show="isOpen" as="template">
       <Dialog as="div" @close="closeModal" class="relative z-10">
@@ -86,7 +78,8 @@ function openModal() {
 }
 
 defineExpose({
-  closeModal,
+  openModal,
+  closeModal
 });
 
 </script>

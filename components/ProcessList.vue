@@ -1,8 +1,5 @@
 <template>
   <main-modal ref="addProcessModal">
-    <template v-slot:openButton>
-      Add new process
-    </template>
     <template v-slot:title>
       The header
     </template>
@@ -24,10 +21,15 @@
       Close
     </template>
   </main-modal>
+
+  <main-button @click="startAddProcess">
+    Add a Process
+  </main-button>
+
   <div v-if="processes?.length > 0" class="overflow-hidden bg-white shadow sm:rounded-md">
     <ul role="list" class="divide-y divide-gray-200">
       <li  v-for="process of processes" :key="process.id">
-        <a href="#" class="block hover:bg-gray-50">
+        <NuxtLink :to="`/process/${process.id}`" class="block hover:bg-gray-50">
           <div class="flex items-center px-4 py-4 sm:px-6">
             <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
               <div class="truncate">
@@ -51,7 +53,7 @@
               <ChevronRightIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
             </div>
           </div>
-        </a>
+        </NuxtLink>
       </li>
     </ul>
   </div>
@@ -85,12 +87,14 @@ import { ChevronRightIcon } from '@heroicons/vue/20/solid'
     },
     {
       $formkit: 'password',
+      if: '$get(passwordProtected).value',
       name: 'password',
       label: 'Password',
       help: 'Enter your new password.',
       validation: 'length:5,16'
     }
   ]
+
 
 
   // import { Process } from '~/types/processes'
@@ -114,6 +118,11 @@ import { ChevronRightIcon } from '@heroicons/vue/20/solid'
 
 
     const addProcessModal = ref('addProcessModal')
+
+const startAddProcess = () => {
+  addProcessModal.value.openModal()
+}
+
 
   onMounted(() => {
 
