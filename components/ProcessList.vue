@@ -1,7 +1,7 @@
 <template>
-  <main-modal ref="addProcessModal">
+  <ui-modal ref="addProcessModal">
     <template v-slot:title>
-      The header
+      Add a Process
     </template>
     <template v-slot:content>
       <p class="text-sm text-gray-500">
@@ -14,28 +14,57 @@
           submit-label="Add Process"
           @submit="submitAddProcess"
       >
+
         <FormKitSchema :schema="processSchema" />
+        <FormKit
+            id="repeater"
+            name="stages"
+            type="repeater"
+            label="Stages in the process"
+            add-label="Add a stage"
+            help="Describe the process by listing all the stages."
+        >
+          <FormKit
+              label="Stage title"
+              name="title"
+              validation="required"
+          />
+        </FormKit>
       </FormKit>
     </template>
     <template v-slot:closeButton>
       Close
     </template>
-  </main-modal>
+  </ui-modal>
 
-  <main-button @click="startAddProcess">
+  <ui-button @click="startAddProcess">
     Add a Process
-  </main-button>
-
+  </ui-button>
+  <ui-slide-over ref="slideOver" @close="closeProcessSlideOver">
+    <template v-slot:title>
+      {{  activeProcess.name }}
+    </template>
+    <template v-slot:description>
+      {{  activeProcess.description }}
+    </template>
+    <template v-slot:walks>
+      <process-walks :process="activeProcess.id" ></process-walks>
+    </template>
+  </ui-slide-over>
   <div v-if="processes?.length > 0" class="overflow-hidden bg-white shadow sm:rounded-md">
     <ul role="list" class="divide-y divide-gray-200">
-      <li  v-for="process of processes" :key="process.id">
-        <NuxtLink :to="`/process/${process.id}`" class="block hover:bg-gray-50">
+      <li
+          v-for="process of processes"
+          :key="process.id"
+          @click="openProcessSlideOver(process)"
+      >
+<!--        <NuxtLink :to="`/[process]/${[process].id}`" class="block hover:bg-gray-50">-->
           <div class="flex items-center px-4 py-4 sm:px-6">
             <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
               <div class="truncate">
                 <div class="flex text-sm">
                   <p class="truncate font-medium text-indigo-600">{{ process.name }}</p>
-<!--                    <p class="ml-1 flex-shrink-0 font-normal text-gray-500">in {{ process.description }}</p>-->
+<!--                    <p class="ml-1 flex-shrink-0 font-normal text-gray-500">in {{ [process].description }}</p>-->
                 </div>
                 <div class="mt-2 flex">
                   <div class="flex items-center text-sm text-gray-500">
@@ -53,7 +82,7 @@
               <ChevronRightIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
             </div>
           </div>
-        </NuxtLink>
+<!--        </NuxtLink>-->
       </li>
     </ul>
   </div>
@@ -66,107 +95,107 @@
 
 <script setup>
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
-  const processSchema = [
-    {
-      $formkit: 'text',
-      name: 'name',
-      label: 'Name',
-      validation: 'required'
-    },
-    {
-      $formkit: 'text',
-      name: 'description',
-      label: 'Description'
-    },
-    {
-      $formkit: 'checkbox',
-      name: 'passwordProtected',
-      id: 'passwordProtected',
-      value: false,
-      label: 'Do you want to protect this process with a password?',
-    },
-    {
-      $formkit: 'password',
-      if: '$get(passwordProtected).value',
-      name: 'password',
-      label: 'Password',
-      help: 'Enter your new password.',
-      validation: 'length:5,16'
-    }
-  ]
+const loading = ref(true)
+const activeProcess = ref({})
 
+// Supabase stuff
+const client = useSupabaseClient()
+import { RealtimeChannel } from '@supabase/supabase-js'
+import ProcessWalks from "./ProcessWalks";
+let realtimeChannel = RealtimeChannel
 
+// Refs to the modal, to open and close them
+const addProcessModal = ref('addProcessModal')
+const startAddProcess = () => {
+  addProcessModal.value.open()
+}
 
-  // import { Process } from '~/types/processes'
-  // import { RealtimeChannel } from '@supabase/supabase-js'
+const processSchema = [
+  {
+    $formkit: 'text',
+    name: 'name',
+    label: 'Name',
+    validation: 'required'
+  },
+  {
+    $formkit: 'textarea',
+    name: 'description',
+    label: 'Description'
+  },
+  {
+    $formkit: 'checkbox',
+    name: 'passwordProtected',
+    id: 'passwordProtected',
+    value: false,
+    label: 'Do you want to protect this process with a password?',
+  },
+  {
+    $formkit: 'password',
+    if: '$get(passwordProtected).value',
+    name: 'password',
+    label: 'Password',
+    help: 'Enter your new password.',
+    validation: 'length:5,16'
+  }
+]
 
-  const client = useSupabaseClient()
+// Load the Processes
+const { data: processes, refresh: refreshProcesses } = await useAsyncData('processes', async () => {
+  const { data } = await client
+      .from('processes')
+      .select('id, name, passwordProtected, description')
+      .order('created_at', { ascending: false })
+  return data
+})
 
+// Open Slide Over Menu
+const slideOver = ref('slideOver')
 
-  const loading = ref(true)
+const openProcessSlideOver = (process) => {
+  // Set the [process] id, so Walks can be loaded
+  console.log(process)
+  activeProcess.value = process
+  slideOver.value.open()
+}
 
+const closeProcessSlideOver = () => {
+  // The closing itself is done from the component, we just need to clear the active [process]
+  activeProcess.value = {}
+}
 
-  let realtimeChannel;
-
-  const { data: processes, refresh: refreshProcesses } = await useAsyncData('processes', async () => {
-    const { data } = await client
-        .from('processes')
-        .select('id, name, passwordProtected, description')
-        .order('created_at', { ascending: false })
-    return data
+onMounted(() => {
+  realtimeChannel = client
+    .channel('public:[process]')
+    .on(
+      'postgres_changes',
+        { event: '*', schema: 'public', table: 'processes' },
+      () => refreshProcesses())
+    .subscribe()
   })
 
-
-    const addProcessModal = ref('addProcessModal')
-
-const startAddProcess = () => {
-  addProcessModal.value.openModal()
+async function submitAddProcess (newProcess) {
+  console.log(newProcess)
+  const { error, data } = await client.from('processes')
+    .upsert({
+      name: newProcess.name,
+      description: newProcess.description,
+      password: newProcess.password,
+      passwordProtected: newProcess.passwordProtected,
+      stages: newProcess.stages
+    })
+    .select('name, description, password, passwordProtected, stages')
+    .single()
+  if (error) {
+    console.error(error);
+    return;
+  }
+  addProcessModal.value.close()
 }
 
 
-  onMounted(() => {
-
-
-
-
-
-    // TODO: THIS IS NOT WORKING :(
-    realtimeChannel = client.channel('public:processes')
-        .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'processes' },
-        () => refreshProcesses()
-    ).subscribe()
-
-  })
-  // Don't forget to unsubscribe when user left the page
-  onUnmounted(() => {
-    client.removeChannel(realtimeChannel)
-  })
-
-  async function submitAddProcess (newProcess) {
-    console.log(newProcess)
-    const { error, data } = await client.from('processes')
-        .upsert({
-          name: newProcess.name,
-          description: newProcess.description,
-          password: newProcess.password,
-          passwordProtected: newProcess.passwordProtected
-        })
-        .select('name, description, password, passwordProtected')
-        .single()
-    if (error) {
-      console.error(error);
-      return;
-    }
-    addProcessModal.value.closeModal()
-
-    // TODO: If realtime works, remove this!
-    refreshProcesses()
-
-
-  }
-
-// console.log($refs['addProcessModal'])
+onUnmounted(() => {
+  client.removeChannel(realtimeChannel)
+  processes.value = []
+})
 
 </script>

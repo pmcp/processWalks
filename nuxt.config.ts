@@ -5,6 +5,9 @@ export default defineNuxtConfig({
         '@formkit/nuxt'
     ],
     css: ["@/assets/css/styles.css"],
+    formkit: {
+        configFile: './formkit.config.ts',
+    },
     build: {
         postcss: {
             postcssOptions: require("./postcss.config.js"),

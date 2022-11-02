@@ -1,9 +1,9 @@
 <template>
   <div class="container" >
-    <process-walks />
+    <process-walks :process="route.params.process" />
   </div>
 </template>
 
 <script setup>
-const user = useSupabaseUser()
+const route = useRoute()
 </script>

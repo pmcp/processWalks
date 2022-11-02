@@ -1,5 +1,5 @@
 <template>
-  <main-modal ref="addWalkModal">
+  <ui-modal ref="addWalkModal">
     <template v-slot:title>
       Add a Walk
     </template>
@@ -45,8 +45,8 @@
     <template v-slot:closeButton>
       Close
     </template>
-  </main-modal>
-  <main-modal ref="addPersonaModal">
+  </ui-modal>
+  <ui-modal ref="addPersonaModal">
     <template v-slot:title>
       Add a Persona
     </template>
@@ -68,14 +68,14 @@
     <template v-slot:closeButton>
       Close
     </template>
-  </main-modal>
-  <main-button @click="startAddWalk">
+  </ui-modal>
+  <ui-button @click="startAddWalk">
     Add a Walk
-  </main-button>
+  </ui-button>
   <div v-if="walks?.length > 0" class="overflow-hidden bg-white shadow sm:rounded-md">
     <ul role="list" class="divide-y divide-gray-200">
       <li  v-for="walk of walks" :key="walk.id">
-        <a href="#" class="block hover:bg-gray-50">
+        <nuxt-link :to="`/${props.process}/${walk.id}`" class="block hover:bg-gray-50">
           <div class="flex items-center px-4 py-4 sm:px-6">
             <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
               <div class="truncate">
@@ -88,7 +88,7 @@
               <ChevronRightIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
             </div>
           </div>
-        </a>
+        </nuxt-link>
       </li>
     </ul>
   </div>
@@ -101,12 +101,15 @@
 
 <script setup>
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
-const route = useRoute()
+const loading = ref(true)
 
 // Supabase stuff
 const client = useSupabaseClient()
 import { RealtimeChannel } from '@supabase/supabase-js'
 let realtimeChannel = RealtimeChannel
+
+// Id of [process] is passed as prop
+const props = defineProps(['process'])
 
 // Refs to the modal, to open and close them
 const addPersonaModal = ref('addPersonaModal')
@@ -117,60 +120,84 @@ const personasInput = ref([])
 
 // Called from the Walks modal
 const startAddPersona = (e) => {
-  addPersonaModal.value.openModal()
+  addPersonaModal.value.open()
   e.preventDefault();
 }
 
 const startAddWalk = () => {
-  addWalkModal.value.openModal()
+  addWalkModal.value.open()
 }
 
-
-// Load the Walks
-const { data: walks, refresh: refreshWalks } = await useAsyncData('walks', async () => {
-  const { data } = await client
-      .from('walks')
-      .select('id, date,personas, video')
-      .eq('process', route.params.process)
-      .order('date', { ascending: false })
-  return data
-})
-
 // Load the Personas
-const { data: personas, refresh: refreshPersonas } = await useAsyncData('personas', async () => {
-    let {data} = await client
+const personas = ref([])
+async function getPersonas() {
+  try {
+    loading.value = true
+    let { data, error, status } = await client
         .from('personas')
         .select('id, description')
         .order('description')
-    return data.map((p) => {
-      return {
-        value: p.id,
-        label: p.description,
-      }
-    })
-  })
+    if (error && status !== 406) throw error
+    if (data) {
+      personas.value = data.map((p) => {
+        return {
+          value: p.id,
+          label: p.description,
+        }
+      })
+    }
+  } catch (error) {
+    alert(error.message)
+  } finally {
+    loading.value = false
+  }
+}
 
+// Load the Walks
+const walks = ref([])
+async function getWalks(id) {
+  console.log(`getting walks with ${id}`)
+  try {
+    loading.value = true
+    let { data, error, status } = await client
+        .from('walks')
+        .select('id, date,personas, video')
+        .eq('process', id)
+        .order('date', { ascending: false })
+    if (error && status !== 406) throw error
+    if (data) {
+      walks.value = data
+    }
+  } catch (error) {
+    alert(error.message)
+  } finally {
+    loading.value = false
+  }
+}
 
-onMounted(() => {
+onMounted(async () => {
+  // TODO: Doesn't make sense to reload the personas constantly, should do this once, somehwere else.
+  getPersonas();
+  getWalks(props.process);
+
   // Subscribe to changes of Walks
-  realtimeChannel = client.channel('public:walks').on(
+  realtimeChannel = client.channel('public:[walk]').on(
       'postgres_changes',
       { event: '*', schema: 'public', table: 'walks' },
-      () => {
-        refreshPersonas()
-      }
-  )
-  realtimeChannel.subscribe()
+      () => getWalks(props.process)
+  ).subscribe()
+  // realtimeChannel.subscribe()
 
   // Subscribe to changes of Personas
-  realtimeChannel = client.channel('public:personas').on(
+  realtimeChannel = client
+      .channel('public:personas')
+      .on(
       'postgres_changes',
       { event: '*', schema: 'public', table: 'personas' },
-      () => {
-        refreshPersonas()
-      }
-  )
-  realtimeChannel.subscribe()
+      () => getPersonas())
+      .subscribe()
+
+  loading.value = false
 })
 
 async function submitAddWalk (newWalk) {
@@ -178,16 +205,16 @@ async function submitAddWalk (newWalk) {
       .upsert({
         date: newWalk.date,
         video: newWalk.video,
-        process: route.params.process,
+        process: props.process,
         personas: newWalk.personas
       })
-      .select('date, video, process')
+      .select('date, video, [process]')
       .single()
   if (error) {
     console.error(error);
     return;
   }
-  addWalkModal.value.closeModal()
+  addWalkModal.value.close()
 
 }
 
@@ -198,10 +225,9 @@ async function submitAddPersona (item) {
       })
       .select()
   if (error) {
-    console.error(error);
     return;
   }
-  addPersonaModal.value.closeModal()
+  addPersonaModal.value.close()
   // Checkbox of added item gets checked
   const addedItem = data[0]
   personasInput.value.node.input([...personasInput.value.node.value, addedItem.id])
@@ -209,6 +235,7 @@ async function submitAddPersona (item) {
 
 onUnmounted(() => {
   client.removeChannel(realtimeChannel)
+  walks.value = []
 })
 
 </script>
