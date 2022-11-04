@@ -1,5 +1,5 @@
 <template>
-  <ui-modal ref="addStepModal">
+  <Ui-Modal ref="addStepModal">
     <template v-slot:title>
       Add a Step
     </template>
@@ -55,7 +55,7 @@
     <template v-slot:closeButton>
       Close
     </template>
-  </ui-modal>
+  </Ui-Modal>
   <div class="px-4 sm:px-6 lg:px-8">
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
@@ -63,7 +63,7 @@
         <p class="mt-2 text-sm text-gray-700">A list of all the users in your account including their name, title, email and role.</p>
       </div>
       <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-        <ui-button @click="startAddStep">Add step</ui-button>
+        <Ui-Button @click="startAddStep">Add step</Ui-Button>
       </div>
     </div>
     <div class="mt-8 flex flex-col">

@@ -12,7 +12,6 @@
       <label for="website">Website</label>
       <input class="border-2 border-rose-500" id="website" type="website" v-model="website" />
     </div>
-
     <div>
       <input
           type="submit"
@@ -21,7 +20,6 @@
           :disabled="loading"
       />
     </div>
-
     <div>
       <button class="button block" @click="signOut" :disabled="loading">
         Sign Out
@@ -31,7 +29,7 @@
 </template>
 
 <script setup>
-const supabase = useSupabaseClient()
+const client = useSupabaseClient()
 
 const loading = ref(true)
 const username = ref('')
@@ -41,7 +39,7 @@ const avatar_path = ref('')
 
 loading.value = true
 const user = useSupabaseUser();
-let { data } = await supabase
+let { data } = await client
     .from('profiles')
     .select(`username, website, avatar_url`)
     .eq('id', user.value.id)
@@ -64,7 +62,7 @@ async function updateProfile() {
       avatar_url: avatar_path.value,
       updated_at: new Date(),
     }
-    let { error } = await supabase.from('profiles').upsert(updates, {
+    let { error } = await client.from('profiles').upsert(updates, {
       returning: 'minimal', // Don't return the value after inserting
     })
     if (error) throw error
@@ -78,7 +76,7 @@ async function updateProfile() {
 async function signOut() {
   try {
     loading.value = true
-    let { error } = await supabase.auth.signOut()
+    let { error } = await client.auth.signOut()
     if (error) throw error
     user.value = null
   } catch (error) {

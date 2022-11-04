@@ -1,16 +1,16 @@
 <template>
   <!-- Primary column -->
   <section aria-labelledby="primary-heading" class="flex min-w-0 flex-1 flex-col lg:order-last">
-    <steps-list process="" walk=""></steps-list>
+    <Steps-List process="" walk=""></Steps-List>
   </section>
 
   <!-- Secondary column (hidden on smaller screens) -->
   <aside class="hidden lg:order-first lg:block lg:flex-shrink-0">
-    <div class="relative flex h-full w-96 flex-col overflow-y-auto border-r border-gray-200 bg-gray-100 sticky top-0">
-        Process & Walk info
+    <div class="relative flex w-96 flex-col  border-r border-gray-200 ">
+      <Walks-Detail :walk="route.params.walk" :process="route.params.process" />
     </div>
   </aside>
 </template>
 <script setup>
-
+const route = useRoute()
 </script>

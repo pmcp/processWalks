@@ -1,6 +1,6 @@
 <template>
   <div class="container" >
-    <process-list />
+    <processes-list />
   </div>
 </template>
 

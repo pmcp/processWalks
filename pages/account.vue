@@ -1,4 +1,4 @@
 <template>
-  <Account v-if="user" />
-  <Auth v-else />
+  <User-Account v-if="user" />
+  <User-Auth v-else />
 </template>

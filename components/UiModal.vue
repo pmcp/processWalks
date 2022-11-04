@@ -28,19 +28,19 @@
                 leave-to="opacity-0 scale-95"
             >
               <DialogPanel
-                  class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+                  class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
               >
                 <DialogTitle
                     as="h3"
-                    class="text-lg font-medium leading-6 text-gray-900"
+                    class="p-6 text-lg font-medium leading-6 text-gray-900 bg-gray-200"
                 >
                   <slot name="title"></slot>
                 </DialogTitle>
-                <div class="mt-2">
+                <div class="mt-2 p-6">
                   <slot name="content"></slot>
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-4 p-6">
                   <button
                       type="button"
                       class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
@@ -66,7 +66,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/vue'
-import MainModal from "./uiModal";
+import MainModal from "./UiModal";
 
 const isOpen = ref(false)
 

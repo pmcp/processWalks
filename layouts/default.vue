@@ -66,11 +66,11 @@
       </DisclosurePanel>
     </Disclosure>
 
-    <header class="bg-white shadow-sm">
-      <div class="mx-auto max-w-7xl py-4 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-lg font-semibold leading-6 text-gray-900">Dashboard</h1>
-      </div>
-    </header>
+<!--    <header class="bg-white shadow-sm">-->
+<!--      <div class="mx-auto max-w-7xl py-4 px-4 sm:px-6 lg:px-8">-->
+<!--        <h1 class="text-lg font-semibold leading-6 text-gray-900">Dashboard</h1>-->
+<!--      </div>-->
+<!--    </header>-->
     <main>
       <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 flex justify-center">
         <slot />
@@ -90,14 +90,11 @@ const user = {
       'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-  { name: 'Dashboard', href: '/[process]', current: true },
-  { name: 'Sandbox', href: '/sandbox', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-  { name: 'Reports', href: '#', current: false },
+  { name: 'Dashboard', href: '/', current: true },
+  { name: 'Sandbox', href: '/sandbox', current: false }
 ]
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
+  { name: 'Your Profile', href: '/account' },
   { name: 'Settings', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
