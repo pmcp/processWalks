@@ -1,72 +1,6 @@
 <template>
-  <Ui-Modal ref="addStepModal">
-    <template v-slot:title>
-      Add a Step
-    </template>
-    <template v-slot:content>
-      <p class="text-sm text-gray-500">
-        Your payment has been successfully submitted. We’ve sent you
-        an email with all of the details of your order.
-      </p>
-      <FormKit
-          type="form"
-          id="addProcess"
-          submit-label="Add Process"
-          @submit="submitAddProcess"
-      >
-        <FormKit
-            type="textarea"
-            label="Description"
-            name="description"
-            help="What is happening at this moment in the walk?"
-        />
-        <FormKit
-            type="checkbox"
-            label="Milestone"
-            name="milestone"
-            help="Is this an important moment in the walk?"
-        />
-        <FormKit
-            type="time"
-            label="Timing in video"
-            name="timing"
-            help="At what moment did this happen?"
-        />
-
-        <FormKit
-            type="textarea"
-            label="Observation"
-            name="observation"
-            help="What do you observe?"
-        />
-        <FormKit
-            type="rating"
-            rating-icon="star"
-            min="1"
-            max="10"
-            label="How do you rate this step?"
-            name="rating"
-            id="rating"
-        />
-
-
-      </FormKit>
-    </template>
-    <template v-slot:closeButton>
-      Close
-    </template>
-  </Ui-Modal>
-  <div class="px-4 sm:px-6 lg:px-8">
-    <div class="sm:flex sm:items-center">
-      <div class="sm:flex-auto">
-        <h1 class="text-xl font-semibold text-gray-900">Users</h1>
-        <p class="mt-2 text-sm text-gray-700">A list of all the users in your account including their name, title, email and role.</p>
-      </div>
-      <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-        <Ui-Button @click="startAddStep">Add step</Ui-Button>
-      </div>
-    </div>
-    <div class="mt-8 flex flex-col">
+  <div class="ml-8 px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col">
       <div class="-my-2 -mx-4 sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle">
           <div class="shadow-sm ring-1 ring-black ring-opacity-5">
@@ -109,10 +43,39 @@
 </template>
 
 <script setup>
-import { createProPlugin, rating } from '@formkit/pro'
-const addStepModal = ref('addStepModal')
-const startAddStep = () => {
-  addStepModal.value.open()
+const loading = ref(true)
+// Supabase stuff
+const client = useSupabaseClient()
+import { RealtimeChannel } from '@supabase/supabase-js'
+let realtimeChannel = RealtimeChannel
+
+const props = defineProps(['walk'])
+
+// Load the Steps
+const walks = ref([])
+async function getWalks(id) {
+  try {
+    let { data, error, status } = await client
+        .from('steps')
+        .select('stages', 'id, timing, description, observation, rating, actions, topics')
+        .eq('walk', id)
+        .order('timing', { ascending: false })
+    if (error && status !== 406) throw error
+    if (data) {
+
+      // const inOrder = data.reduce(function (acc, curr) {
+      //   if(acc[curr.])
+      //   if (accumulator.indexOf(curValue) === -1) {
+      //     accumulator.push(curValue)
+      //   }
+      //   return acc
+      // }, [])
+
+      // steps.value = inOrder
+    }
+  } catch (error) {
+    alert(error.message)
+  } finally {}
 }
 
 const locations = [

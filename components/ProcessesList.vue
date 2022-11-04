@@ -44,7 +44,6 @@
 </template>
 
 <script setup>
-import { PencilIcon } from '@heroicons/vue/20/solid'
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
 const loading = ref(true)
 
@@ -53,8 +52,6 @@ let activeProcessId = ref(null)
 // Supabase stuff
 const client = useSupabaseClient()
 import { RealtimeChannel } from '@supabase/supabase-js'
-
-import ProcessesEdit from "./ProcessesEdit";
 let realtimeChannel = RealtimeChannel
 
 // Load the Processes

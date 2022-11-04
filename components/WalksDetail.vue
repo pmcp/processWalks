@@ -1,12 +1,16 @@
 <template>
-<!--  <Video-Player :url="url"/>-->
-  <pre>{{ walk}}</pre>
-  <pre>{{ process }}</pre>
-<!--  <form class="form-widget" @submit.prevent="getVideo">-->
-<!--  <File-Upload v-model:path="avatar_url" @upload="getVideo" size="10" />-->
-<!--  </form>-->
+  <div  class="sticky top-0 z-10 bg-white p-2 border-b-2 border-gray-50">
+    <Video-Detail v-if="walk" @upload="addVideo" :video="walk.video" />
+    <Steps-Edit  :walk="props.walk"/>
+  </div>
+
+
   <Processes-Detail v-if="process" :process="process" :hide-walks="true"/>
   <Personas-List v-if="walk" :personas="walk.personas"/>
+
+<!--  <pre>{{ walk}}</pre>-->
+<!--  <pre>{{ process }}</pre>-->
+
 
 </template>
 <script setup>
@@ -32,6 +36,13 @@ async function getWalk(walkId) {
 
     if (error && status !== 406) throw error
     if (data) {
+      // Get signed Url of video
+      console.log('THe video', data.video)
+      const videoUrl = await client
+          .storage
+          .from('movies')
+          .createSignedUrl(data.video, 3600)
+      data.video = videoUrl.data.signedUrl
       walk.value = data
     }
   } catch (error) {
@@ -41,7 +52,6 @@ async function getWalk(walkId) {
     loading.value = false
   }
 }
-
 
 // Get Process
 async function getProcess(processId) {
@@ -65,6 +75,14 @@ async function getProcess(processId) {
   } finally {
     loading.value = false
   }
+}
+
+async function addVideo(video) {
+  const { error } = await client
+      .from('walks')
+      .update({ video: video })
+      .eq('id', props.walk)
+    getWalk(props.walk)
 }
 
 

@@ -5,14 +5,13 @@
   </Ui-Button>
   <Ui-Modal ref="addWalkModal">
     <template v-slot:title>
-      Add a Walk
+      Add Walk
     </template>
     <template v-slot:content>
       <FormKit
           type="form"
           name="addWalk"
           id="addWalk"
-          :value="addWalkValue"
           submit-label="Add Walk"
           @submit="submitAddWalk"
       >
@@ -54,23 +53,21 @@ const props = defineProps(['process', 'mode'])
 
 const addWalkModal = ref('addWalkModal')
 const loading = ref(true)
-const addWalkValue = ref({})
+
 
 const startAddWalk = () => {
   addWalkModal.value.open()
 }
 
-const startAddPersona = (e) => {
-  addPersonaModal.value.open()
-  e.preventDefault();
-}
+// const startAddPersona = (e) => {
+//   addPersonaModal.value.open()
+//   e.preventDefault();
+// }
 
 // if(props.mode === 'edit') {}
 
 
 async function submitAddWalk (newWalk) {
-
-
   const { error, data } = await client.from('walks')
       .upsert({
         date: newWalk.date,
@@ -85,7 +82,6 @@ async function submitAddWalk (newWalk) {
     return;
   }
   addWalkModal.value.close()
-
 }
 
 // PERSONAS
