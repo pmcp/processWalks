@@ -23,9 +23,8 @@
     "@formkit/themes": "^1.0.0-beta.11",
     "@headlessui/vue": "^1.7.3",
     "@heroicons/vue": "^2.0.12",
-    "@vidstack/player": "^1.6.4",
-    "@vime/core": "^5.3.3",
-    "@vime/vue-next": "^5.3.3",
-    "netlify-cli": "^12.0.11"
+    "@videojs-player/vue": "^1.0.0",
+    "netlify-cli": "^12.0.11",
+    "video.js": "^7.20.3"
   }
 }

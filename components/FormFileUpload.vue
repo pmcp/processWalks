@@ -1,7 +1,12 @@
 <template>
-  <Ui-Button>
+  <Ui-Button :light="!empty">
     <label class="button primary block" for="single">
-      {{ uploading ? "Uploading ..." : "Upload" }}
+      <template v-if="empty">
+        {{ uploading ? "Uploading ..." : "Add video" }}
+      </template>
+      <template v-else>
+      {{ uploading ? "Uploading ..." : "Change video" }}
+      </template>
     </label>
     <input
         style="visibility: hidden; position: absolute"
@@ -22,7 +27,10 @@ const emit = defineEmits(['upload'])
 const uploading = ref(false)
 const files = ref()
 
+const props = defineProps(['light', 'empty'])
+
 const upload = async (evt) => {
+
   files.value = evt.target.files
   try {
     uploading.value = true

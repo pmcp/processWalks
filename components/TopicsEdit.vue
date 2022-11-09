@@ -1,5 +1,5 @@
 <template>
-  <ui-button @click="startAddTopic">
+  <ui-button @click="startAddTopic" :light="true" class="absolute -top-1 right-4">
     <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
     New Topic
   </ui-button>
@@ -11,7 +11,7 @@
       <FormKit
           type="form"
           id="addTopic"
-          submit-label="Add Topic"
+          :actions="false"
           @submit="submitAddTopic"
       >
         <FormKit
@@ -25,6 +25,17 @@
             name="description"
             help="Description of the topic"
         />
+        <div  class="absolute right-6 bottom-0">
+        <FormKit type="submit">
+          <template v-if="props.mode === 'edit'">
+            Edit
+          </template>
+          <template v-else>
+            <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            Add Topic
+          </template>
+        </FormKit>
+        </div>
       </FormKit>
     </template>
     <template v-slot:closeButton>

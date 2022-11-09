@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 pr-2">
     <div class="bg-gray-50 px-4 py-6 sm:px-6 sm:rounded-t-lg">
-      <div class="space-y-1 space-x-4 flex items-center">
+      <div class="space-y-1 space-x-4 flex items-center flex-row justify-between">
         <Ui-Header>
           {{  process.name }}
         </Ui-Header>
@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <Stages-List :stages="process.stages"/>
+<!--    <Stages-List :stages="process.stages"/>-->
     <div v-if="!hideWalks" class="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
       <Walks-List :process="process.id" ></Walks-List>
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <Ui-Button @click="startAddProcess" :mode="props.mode">
+  <Ui-Button @click="startAddProcess" :mode="props.mode" :light="props.mode === 'edit'">
       <template v-if="props.mode === 'edit'">
         Edit
       </template>
@@ -18,35 +18,36 @@
           type="form"
           id="addProcess"
           name="addProcess"
-          ref="addProcessForm"
           :actions="false"
           @submit="submitAddProcess"
       >
 
         <FormKitSchema :schema="processSchema" />
-        <FormKit
-            id="repeater"
-            name="stages"
-            type="repeater"
-            label="Stages in the process"
-            add-label="Add a stage"
-            help="Describe the process by listing all the stages."
-        >
-          <FormKit
-              label="Stage title"
-              name="title"
-          />
+<!--        <FormKit-->
+<!--            id="repeater"-->
+<!--            name="stages"-->
+<!--            type="repeater"-->
+<!--            label="Stages in the process"-->
+<!--            add-label="Add a stage"-->
+<!--            help="Describe the process by listing all the stages."-->
+<!--        >-->
+<!--          <FormKit-->
+<!--              label="Stage title"-->
+<!--              name="title"-->
+<!--          />-->
 
-        </FormKit>
+<!--        </FormKit>-->
+        <div  class="absolute right-6 bottom-0">
         <FormKit type="submit">
           <template v-if="props.mode === 'edit'">
-            Edit
+            Save changes
           </template>
           <template v-else>
             <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
             Add Process
           </template>
         </FormKit>
+        </div>
       </FormKit>
     </template>
     <template v-slot:closeButton>
@@ -65,7 +66,7 @@ const submitButton = ref('Add Process')
 if(props.mode === 'edit') submitButton.value = 'Save Process'
 
 const loading = ref(true)
-const addProcessForm = ref({})
+
 
 // Refs to the modal, to open and close them
 const addProcessModal = ref('addProcessModal')
@@ -111,14 +112,14 @@ async function getProcess(processId) {
   try {
     let { data, error, status } = await client
         .from('processes')
-        .select(`name, passwordProtected, password, description, stages`)
+        .select(`name, passwordProtected, password, description`)
         .eq('id', processId)
         .single()
 
     if (error && status !== 406) throw error
     if (data) {
 
-      if(Array.isArray(data.stages)) data.stages = data.stages.map(x => JSON.parse(x))
+      // if(Array.isArray(data.stages)) data.stages = data.stages.map(x => JSON.parse(x))
 
       getNode('addProcess').input({
         id: processId,
@@ -126,7 +127,7 @@ async function getProcess(processId) {
         description: data.description,
         password: data.password,
         passwordProtected: data.passwordProtected,
-        stages: data.stages
+        // stages: data.stages
       })
 
     }
@@ -146,9 +147,9 @@ async function submitAddProcess (newProcess) {
         description: newProcess.description,
         password: newProcess.password,
         passwordProtected: newProcess.passwordProtected,
-        stages: newProcess.stages
+        // stages: newProcess.stages
       })
-      .select('name, description, password, passwordProtected, stages')
+      .select('name, description, password, passwordProtected')
       .single()
   if (error) {
     console.error(error);

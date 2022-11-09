@@ -1,41 +1,62 @@
 <template>
-  <div class="ml-8 px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col">
-      <div class="-my-2 -mx-4 sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 align-middle">
-          <div class="shadow-sm ring-1 ring-black ring-opacity-5">
-            <table class="min-w-full border-separate" style="border-spacing: 0">
-              <thead class="bg-gray-50">
-              <tr>
-                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Name</th>
-                <th scope="col" class="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell">Title</th>
-                <th scope="col" class="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter lg:table-cell">Email</th>
-                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Role</th>
-                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pr-4 pl-3 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8">
-                  <span class="sr-only">Edit</span>
-                </th>
+  <div v-if="steps.length == 0" class="flex flex-row gap-4 w-full pt-24 justify-center   ">
+<!--    <div class="rotate-90">-->
+<!--      <div class="animate-bounce">-->
+<!--        <ArrowLongLeftIcon class="-rotate-90  h-5 w-5 text-gray-500" aria-hidden="true" />-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <span class="italic text-gray-500">Add a video to get started</span>-->
+  </div>
+  <div v-else class="ml-8 px-4 sm:px-6 lg:px-8">
+    <div class="-my-2 -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-auto">
+      <div class="inline-block min-w-full py-2 align-middle">
+        <div class="shadow-sm ring-1 ring-black ring-opacity-5">
+          <table class="min-w-full border-separate" style="border-spacing: 0">
+            <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Timing</th>
+              <th scope="col" class="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter lg:table-cell">Milestone</th>
+              <th scope="col" class="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell">Description</th>
+              <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Observation</th>
+              <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Topics</th>
+              <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Actions</th>
+              <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pr-4 pl-3 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8">
+                <span class="sr-only">Edit</span>
+              </th>
+            </tr>
+            </thead>
+            <tbody class="bg-white">
+              <tr v-for="(step, id) in filteredSteps" :key="step.id" :class="id % 2 === 0 ? undefined : 'bg-gray-50'">
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                  <Ui-Button :light="true" @click="emit('seekVideoTime', step.timing)">
+                    {{ readableTime(step.timing) }}
+                  </Ui-Button>
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-50" align="center">
+                  <StarIcon v-if="step.milestone" class="border-transparent text-indigo-500 h-5 w-5" aria-hidden="true" />
+                  <StarIcon v-else class="h-5 w-5 stroke-gray-500 text-transparent" aria-hidden="true" />
+                </td>
+
+
+                <td class="whitespace min-w-20 px-3 py-4 text-sm text-gray-500 ">{{ step.description }}</td>
+                <td class="whitespace px-3 py-4 text-sm text-gray-500">{{ step.observation }}</td>
+                <td class="whitespace px-3 py-4 text-sm text-gray-500">
+                  <Topic-Detail v-for="topic in step.topics" :key="topic" :topic="topic"/>
+                </td>
+                <td class="whitespace px-3 py-4 text-sm text-gray-500">
+                  <template v-if="step.actions">
+                    {{ step.actions.length }}
+                  </template>
+                  <template v-else>
+                    No action cards yet, add one
+                  </template>
+                </td>
+                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                  <Ui-Button @click="emit('editStep', step.id)">Edit</Ui-Button>
+                </td>
               </tr>
-              </thead>
-              <tbody class="bg-white">
-              <template v-for="location in locations" :key="location.name">
-                <tr class="border-t border-gray-200">
-                  <th colspan="5" scope="colgroup" class="bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6">{{ location.name }}</th>
-                </tr>
-                <tr v-for="(person, personIdx) in location.people" :key="person.email" :class="[personIdx === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t']">
-                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ person.name }}</td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ person.title }}</td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ person.email }}</td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ person.role }}</td>
-                  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                    <a href="#" class="text-indigo-600 hover:text-indigo-900"
-                    >Edit<span class="sr-only">, {{ person.name }}</span></a
-                    >
-                  </td>
-                </tr>
-              </template>
-              </tbody>
-            </table>
-          </div>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -43,6 +64,8 @@
 </template>
 
 <script setup>
+// import { ArrowLongLeftIcon } from '@heroicons/vue/20/solid'
+import { StarIcon } from '@heroicons/vue/20/solid'
 const loading = ref(true)
 // Supabase stuff
 const client = useSupabaseClient()
@@ -51,91 +74,82 @@ let realtimeChannel = RealtimeChannel
 
 const props = defineProps(['walk'])
 
+const emit = defineEmits(['editStep', 'seekVideoTime'])
+
 // Load the Steps
-const walks = ref([])
+const steps = ref([])
 async function getWalks(id) {
   try {
     let { data, error, status } = await client
         .from('steps')
-        .select('stages', 'id, timing, description, observation, rating, actions, topics')
+        .select( 'id, timing, walk, description, observation, rating, actions, topics, milestone')
         .eq('walk', id)
-        .order('timing', { ascending: false })
+        .order('timing', { ascending: true })
     if (error && status !== 406) throw error
     if (data) {
-
-      // const inOrder = data.reduce(function (acc, curr) {
-      //   if(acc[curr.])
-      //   if (accumulator.indexOf(curValue) === -1) {
-      //     accumulator.push(curValue)
-      //   }
-      //   return acc
-      // }, [])
-
-      // steps.value = inOrder
+      steps.value = data
     }
   } catch (error) {
     alert(error.message)
   } finally {}
 }
 
-const locations = [
+getWalks(props.walk)
 
 
-  {
-    name: 'Edinburgh',
-    people: [
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-    ],
-  },
-  {
-    name: 'Edinburgh',
-    people: [
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-    ],
-  },
-  {
-    name: 'Edinburgh',
-    people: [
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-    ],
-  },
-  {
-    name: 'Edinburgh',
-    people: [
-      { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-      { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-    ],
+const filteredSteps = computed(() => {
+  // steps.value.sort((a, b) => a.distance - b.distance)
+
+  // const onlyMilestones = steps.value.filter(x => x.milestone)
+
+  return steps.value
+});
+
+function readableTime(time) {
+  // To convert seconds to time
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
   }
-  ]
+  function convertMsToTime(secs) {
+    if(!secs) return '00:00:00.000'
+    console.log(secs.toString())
+    let milliseconds = (secs.toFixed(3).toString()).split('.', 2);
+    let milli = milliseconds[1]
+    console.log(milli)
+    let seconds = Math.floor(secs)
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds = seconds % 60;
+    minutes = minutes % 60;
+
+
+    return `${padTo2Digits(hours)}:${padTo2Digits(minutes)}:${padTo2Digits(
+        seconds)}.${milli}`;
+  }
+
+  return convertMsToTime(time);
+}
+onMounted(async () => {
+  loading.value = true
+  // Subscribe to changes of Steps
+  realtimeChannel = client
+      .channel('steps')
+      .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'steps', filter: `walk=eq.${props.walk}` },
+          data => {
+            getWalks(props.walk)
+          })
+      .subscribe()
+  loading.value = false
+})
+
+
+
+
+onUnmounted(() => {
+  client.removeChannel(realtimeChannel)
+})
+
 </script>

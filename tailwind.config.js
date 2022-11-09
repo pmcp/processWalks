@@ -1,6 +1,5 @@
 const formKitTailwind = require('@formkit/themes/tailwindcss');
 const defaultTheme = require('tailwindcss/defaultTheme')
-const vidstackTheme = require('@vidstack/player/tailwind.cjs')
 
 module.exports = {
   mode: "jit",
@@ -27,7 +26,6 @@ module.exports = {
   },
   content: ['./src/**/*.{html,js}', './formkit.config.js'],
   plugins: [
-    formKitTailwind,
-    vidstackTheme
+    formKitTailwind
   ],
 };

@@ -66,7 +66,9 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/vue'
-import MainModal from "./UiModal";
+
+const emit = defineEmits(['closed', 'opened'])
+
 
 const isOpen = ref(false)
 
@@ -75,7 +77,20 @@ function close() {
 }
 function open() {
   isOpen.value = true
+  emit('opened')
 }
+
+
+
+onMounted(() => {
+  console.log('gonna emit')
+  emit('opened')
+})
+
+onUnmounted(() => {
+  emit('closed')
+})
+
 
 defineExpose({
   open,
