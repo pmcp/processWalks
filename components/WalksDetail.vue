@@ -4,7 +4,7 @@
       <Player :video="walk.video" ref="walksVideoPlayer" @timeupdate="updateTime"/>
       <div class="flex flex-row justify-between mt-2">
         <Form-File-Upload :light="true" @upload="addVideo" />
-        <Steps-Edit ref="addEditStep"  :walk="props.walk" :step="props.step"  :videoTime="currentVideoTime" :videoUrl="walk.video" @stopPlayer="$refs.walksVideoPlayer.player.pause()" />
+        <Steps-Edit class=" grow" ref="addEditStep"  :walk="props.walk" :step="props.step"  :videoTime="currentVideoTime" :videoUrl="walk.video" @stopPlayer="$refs.walksVideoPlayer.player.pause()" />
       </div>
     </div>
     <div v-else class="h-full rounded-lg border-4 border-dashed border-gray-200 flex justify-center py-20">

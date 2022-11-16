@@ -19,7 +19,6 @@ async function getTopic(id) {
 
     if (error && status !== 406) throw error
     if (data) {
-      console.log(data)
       p.value = data.name
     }
   } catch (error) {

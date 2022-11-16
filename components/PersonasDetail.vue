@@ -19,7 +19,6 @@ async function getPersona(id) {
 
     if (error && status !== 406) throw error
     if (data) {
-      console.log(data)
       p.value = data.description
     }
   } catch (error) {

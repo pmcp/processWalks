@@ -71,6 +71,8 @@ const loading = ref(true)
 // Refs to the modal, to open and close them
 const addProcessModal = ref('addProcessModal')
 const startAddProcess = () => {
+
+
   if(props.mode === 'edit') {
     getProcess(props.process)
   }

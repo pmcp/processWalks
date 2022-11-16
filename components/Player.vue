@@ -44,7 +44,7 @@ export default defineComponent({
       player.value = payload.player
     }
     const handleEvent = (log: any) => {
-      console.log(log)
+      // console.log(log)
     }
 
     return { player, handleMounted, handleEvent }
@@ -52,7 +52,7 @@ export default defineComponent({
   mounted(){
     // if we have a start time, go there
     if(this.startTime) {
-      console.log('here', this.startTime)
+
       this.player.currentTime(this.startTime);
 
     }

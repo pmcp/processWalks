@@ -26,6 +26,7 @@ function seekVideoTime(time) {
 
 
 function editStep(id) {
+  console.log('here', id)
   if(!walkDetail.value) return;
   walkDetail.value.startAddSteps(id)
 }

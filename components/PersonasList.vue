@@ -16,5 +16,5 @@
 </template>
 <script setup>
   const props = defineProps(['personas'])
-  console.log(props.personas)
+
 </script>

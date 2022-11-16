@@ -83,7 +83,6 @@ function open() {
 
 
 onMounted(() => {
-  console.log('gonna emit')
   emit('opened')
 })
 
