@@ -1,7 +1,7 @@
 <template>
   <Ui-Button @click="startAddSteps">
     <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-    New step at {{ walkTimeToStamp }}
+    New step at <span class="w-24 pl-1 text-center">{{ walkTimeToStamp }}</span>
   </Ui-Button>
 
   <Ui-Modal ref="addStepModal" @closed="cleanUp" @opened="prepare">
@@ -61,7 +61,7 @@
         </div>
         <div  class="absolute right-6 bottom-0">
         <FormKit type="submit">
-          <template v-if="props.mode === 'edit'">
+          <template v-if="mode === 'edit'">
             Save changes
           </template>
           <template v-else>

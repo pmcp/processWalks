@@ -1,18 +1,26 @@
 <template>
-  <div v-if="walk" class="sticky top-0 z-10 bg-white p-2 border-b-2 border-gray-50">
-    <div v-if="walk.video">
-      <Player :video="walk.video" ref="walksVideoPlayer" @timeupdate="updateTime"/>
-      <div class="flex flex-row justify-between mt-2">
-        <Form-File-Upload :light="true" @upload="addVideo" />
-        <Steps-Edit class=" grow" ref="addEditStep"  :walk="props.walk" :step="props.step"  :videoTime="currentVideoTime" :videoUrl="walk.video" @stopPlayer="$refs.walksVideoPlayer.player.pause()" />
+  <div v-if="walk" class="sticky top-5 z-10 bg-white border-b-2 border-gray-50">
+    <div class="px-2 pb-4 shadow-xl rounded-lg">
+
+      <div v-if="walk.video">
+        <Player :video="walk.video" ref="walksVideoPlayer" @timeupdate="updateTime"/>
+        <div class="flex flex-row justify-between mt-2 ">
+          <Form-File-Upload :light="true" @upload="addVideo" />
+          <Steps-Edit ref="addEditStep"  :walk="props.walk" :step="props.step"  :videoTime="currentVideoTime" :videoUrl="walk.video" @stopPlayer="$refs.walksVideoPlayer.player.pause()" />
+        </div>
+      </div>
+      <div v-else class="h-full rounded-lg border-4 border-dashed border-gray-200 flex justify-center py-20">
+        <Form-File-Upload :light="true" :empty="walk.video == null" @upload="addVideo" />
       </div>
     </div>
-    <div v-else class="h-full rounded-lg border-4 border-dashed border-gray-200 flex justify-center py-20">
-      <Form-File-Upload :light="true" :empty="walk.video == null" @upload="addVideo" />
-    </div>
   </div>
-  <Processes-Detail v-if="process" :process="process" :hide-walks="true"/>
+
+  <h3 v-if="walk  " class="text-lg font-medium leading-6 my-6">Date: {{ walk.date }}</h3>
   <Personas-List v-if="walk" :personas="walk.personas"/>
+  <div class="my-4">
+    <Processes-Detail v-if="processObject" :process="processObject" :hide-walks="true" :hide-edit="true"/>
+  </div>
+
 </template>
 <script setup>
 
@@ -21,10 +29,10 @@ import { RealtimeChannel } from '@supabase/supabase-js'
 let realtimeChannel = RealtimeChannel
 
 const props = defineProps(['process', 'walk', 'step', 'mode'])
-
+console.log(props.process)
 const loading = ref(false)
 const walk = ref(null)
-const process = ref(null)
+const processObject = ref(null)
 
 const walksVideoPlayer = ref(null)
 const mode = ref('add')
@@ -90,8 +98,8 @@ async function getProcess(processId) {
 
     if (error && status !== 406) throw error
     if (data) {
-      data.stages = data.stages.map(x => JSON.parse(x))
-      process.value = data
+      // data.stages = data.stages.map(x => JSON.parse(x))
+      processObject.value = data
     }
   } catch (error) {
     console.log(error)

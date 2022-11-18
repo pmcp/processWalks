@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
     <TransitionRoot appear :show="isOpen" as="template">
-      <Dialog as="div" @close="close" class="relative z-10">
+      <Dialog as="div" @close="close" class="relative z-40">
         <TransitionChild
             as="template"
             enter="duration-300 ease-out"

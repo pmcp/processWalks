@@ -1,8 +1,6 @@
 <template>
-  <div class="overflow-hidden bg-white shadow sm:rounded-lg ">
+  <div class="sticky top-0 pl-2 bg-white shadow sm:rounded-lg z-10">
     <slot name="header"/>
   </div>
-  <div class=" px-6 ">
-    <slot name="content"/>
-  </div>
+  <slot name="content"/>
 </template>

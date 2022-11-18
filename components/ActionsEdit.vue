@@ -34,6 +34,12 @@
             name="actBy"
             help="When should this action be done?"
         />
+        <FormKit
+            type="checkbox"
+            label="Done"
+            name="done"
+            help="Has this action been done?"
+        />
 
         <div  class="absolute right-6 bottom-0">
           <FormKit type="submit">
@@ -67,6 +73,7 @@ let realtimeChannel = RealtimeChannel
 
 const props = defineProps(['action', 'step', 'mode', 'walk'])
 
+
 const addActionModal = ref('addActionModal')
 const loading = ref(true)
 
@@ -74,31 +81,39 @@ const mode = ref('add')
 
 async function startAddAction() {
   // If edit mode, fill form with Action
-  console.log(props.action)
   await addActionModal.value.open()
   if(mode.value === 'edit') {
     getNode('addActions').input({
       id: props.action.id,
       assignedTo: props.action.assigned_to,
       description: props.action.description,
-      actBy: props.action.act_by
+      actBy: props.action.act_by,
+      done: props.action.done,
     }).then((data) => {})
   }
 }
 
 async function submitAddAction (item) {
   // Create the action
+  console.log(props.walk)
   const { error, data } = await client.from('actions')
       .upsert({
         id: item.id,
         assigned_to: item.assignedTo,
         description: item.description,
-        act_by: item.actBy
+        act_by: item.actBy,
+        done: item.done,
+        walk: props.walk
       })
-      .select('id, assigned_to, description, act_by')
+      .select('id, assigned_to, description, act_by, done')
       .single()
   if(data) {
-    if(mode === 'edit') return
+    console.log(mode.value)
+    if(mode.value === 'edit') {
+      addActionModal.value.close()
+      return;
+    }
+
     // Create the link in steps_actions
     await client.from('steps_actions')
         .upsert({
@@ -108,7 +123,6 @@ async function submitAddAction (item) {
         })
         .select()
         .single()
-  //  TODO: Reload walk efficiently?
   }
   if (error) {
     console.error(error);

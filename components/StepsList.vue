@@ -7,13 +7,13 @@
 <!--    </div>-->
 <!--    <span class="italic text-gray-500">Add a video to get started</span>-->
   </div>
-  <div v-else class="ml-8 px-4 sm:px-6 lg:px-8">
+  <div v-else class="px-4">
     <ui-slide-over ref="slideOver" @close="closeStepSlideOver">
       <Actions-List :key="activeStepActions.length" :walk="props.walk" :step="activeStepId" :actions="activeStepActions"/>
     </ui-slide-over>
 
-    <div class="-my-2 -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-auto">
-      <div class="inline-block min-w-full py-2 align-middle">
+    <div class=" overflow-x-auto shadow-xl mb-4">
+      <div class="inline-block min-w-full  align-middle">
         <div class="shadow-sm ring-1 ring-black ring-opacity-5">
           <table class="min-w-full border-separate" style="border-spacing: 0">
             <thead class="bg-gray-50">
@@ -69,8 +69,9 @@ const loading = ref(true)
 // Supabase stuff
 const client = useSupabaseClient()
 import { RealtimeChannel } from '@supabase/supabase-js'
-let realtimeChannel = RealtimeChannel
-let StepsActionRealtimeChannel = RealtimeChannel
+let StepsRealtimeChannel = RealtimeChannel
+let ActionsRealtimeChannel = RealtimeChannel
+
 
 const props = defineProps(['walk'])
 
@@ -86,7 +87,7 @@ async function getSteps(id) {
   try {
     let { data, error, status } = await client
         .from('steps')
-        .select( 'id, timing, walk, description, observation, rating, topics, milestone, actions(id, created_at, assigned_to, act_by, description)')
+        .select( 'id, timing, walk, description, observation, rating, topics, milestone, actions(id, created_at, assigned_to, act_by, description, done)')
         .eq('walk', id)
         .order('timing', { ascending: true })
     if (error && status !== 406) throw error
@@ -102,7 +103,6 @@ getSteps(props.walk)
 
 const activeStepActions = computed(() => {
   const actions = steps.value.filter(x => x.id === activeStepId.value)
-  console.log(actions)
   return actions[0].actions
 });
 
@@ -158,7 +158,7 @@ function openStepSlideOver(stepId, stepActions) {
 onMounted(async () => {
   loading.value = true
   // Subscribe to changes of Steps
-  realtimeChannel = client
+  StepsRealtimeChannel = client
       .channel('steps')
       .on(
           'postgres_changes',
@@ -169,18 +169,29 @@ onMounted(async () => {
 
           })
       .subscribe()
-  loading.value = false
+  //
+  // StepsActionRealtimeChannel = client
+  //     .channel('steps_actions')
+  //     .on(
+  //         'postgres_changes',
+  //         { event: '*', schema: 'public', table: 'steps_actions', filter: `walk_id=eq.${props.walk}` },
+  //         data => {
+  //           console.log('change')
+  //           getSteps(props.walk)
+  //         })
+  //     .subscribe()
 
-  StepsActionRealtimeChannel = client
-      .channel('steps_actions')
+  ActionsRealtimeChannel = client
+      .channel('actions')
       .on(
           'postgres_changes',
-          { event: '*', schema: 'public', table: 'steps_actions', filter: `walk_id=eq.${props.walk}` },
+          { event: '*', schema: 'public', table: 'actions', filter: `walk=eq.${props.walk}` },
           data => {
             console.log('change')
             getSteps(props.walk)
           })
       .subscribe()
+
   loading.value = false
 })
 
@@ -188,8 +199,8 @@ onMounted(async () => {
 
 
 onUnmounted(() => {
-  client.removeChannel(realtimeChannel)
-  client.removeChannel(StepsActionRealtimeChannel)
+  client.removeChannel(StepsRealtimeChannel)
+  client.removeChannel(ActionsRealtimeChannel)
 })
 
 </script>

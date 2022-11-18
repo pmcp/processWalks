@@ -3,9 +3,11 @@
     <div class="bg-gray-50 px-4 py-6 sm:px-6 sm:rounded-t-lg">
       <div class="space-y-1 space-x-4 flex items-center flex-row justify-between">
         <Ui-Header>
-          {{  process.name }}
+          <div class="flex items-center">
+          <span class="mr-4">{{  process.name }}</span>
+          <Processes-Edit v-if="!hideEdit" mode="edit" :process="process.id" ></Processes-Edit>
+          </div>
         </Ui-Header>
-        <Processes-Edit mode="edit" :process="process.id" ></Processes-Edit>
       </div>
 
       <div class="pt-4">
@@ -21,5 +23,5 @@
 
 </template>
 <script setup>
-  const props = defineProps(['process', 'hideWalks'])
+  const props = defineProps(['process', 'hideWalks', 'hideEdit'])
 </script>

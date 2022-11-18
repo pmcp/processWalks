@@ -1,17 +1,19 @@
 <template>
   <Ui-Loading v-if="loading"/>
   <template v-else>
-    <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
+    <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6 mb-6">
       <div class="flex flex-wrap items-center justify-between sm:flex-nowrap">
         <Ui-Header>
-          Walks
+          <div class="flex items-center">
+            <span class="mr-4">Walks</span>
+            <Walks-Edit mode="add" :process="props.process"></Walks-Edit>
+          </div>
         </Ui-Header>
         <div class="ml-4 mt-4 flex-shrink-0">
-          <Walks-Edit mode="add" :process="props.process"></Walks-Edit>
         </div>
       </div>
     </div>
-    <div v-if="walks?.length > 0" class="overflow-hidden bg-white shadow sm:rounded-md">
+    <div v-if="walks?.length > 0" class=" overflow-hidden bg-white shadow sm:rounded-md mx-6">
       <ul role="list" class="divide-y divide-gray-200">
         <li  v-for="walk of walks" :key="walk.id">
           <nuxt-link :to="`/${props.process}/${walk.id}`" class="block hover:bg-gray-50">
