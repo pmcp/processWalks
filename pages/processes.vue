@@ -1,9 +1,11 @@
 <template>
   <div class="container" >
-    Home
+    <processes-list />
   </div>
 </template>
 
 <script setup>
+
+
 
 </script>

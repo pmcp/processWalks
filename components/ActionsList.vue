@@ -10,11 +10,16 @@
     </template>
     <template v-slot:content>
       <div class="h-40 w-full flex justify-center items-center" v-if="actions.length < 1">
-        <p class="italic">No actions yet.</p>
+        <p class="italic">No actions yet</p>
       </div>
       <div v-else>
         <div class="px-6 bg-white border-b border-gray-200 pb-5 sticky top-16 z-0 pt-8 mt-8">
           <h3 class="text-lg font-medium leading-6">Active</h3>
+        </div>
+        <div v-if="actionsOpen.length < 1" class="h-40 w-full  p-4">
+          <div class="w-full h-full rounded-lg border-4 border-dashed border-gray-200 text-gray-400 flex justify-center items-center">
+            <p class="italic">No active actions</p>
+          </div>
         </div>
         <ul class="px-6">
           <li v-for="action in actionsOpen" :key="action.id">

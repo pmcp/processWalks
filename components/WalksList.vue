@@ -21,7 +21,7 @@
               <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                 <div class="truncate">
                   <div class="flex text-sm">
-                    <p class="truncate font-medium text-indigo-600">{{ walk.date }}</p>
+                    <p class="truncate font-medium text-rose-600">{{ walk.date }}</p>
                   </div>
                 </div>
               </div>

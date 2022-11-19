@@ -1,5 +1,11 @@
 <template>
-  <Processes-Edit mode="add"></Processes-Edit>
+  <Ui-Heading>
+    <span class="pr-4">
+      Processes
+    </span>
+    <Processes-Edit mode="add"></Processes-Edit>
+  </Ui-Heading>
+
   <ui-slide-over ref="slideOver" @close="closeProcessSlideOver">
     <Processes-Detail :process="activeProcess"/>
   </ui-slide-over>
@@ -14,7 +20,7 @@
           <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
             <div class="truncate">
               <div class="flex text-sm">
-                <p class="truncate font-medium text-indigo-600">{{ process.name }}</p>
+                <p class="truncate font-medium text-rose-600">{{ process.name }}</p>
 <!--                    <p class="ml-1 flex-shrink-0 font-normal text-gray-500">in {{ [process].description }}</p>-->
               </div>
               <div class="mt-2 flex">
@@ -52,6 +58,7 @@ let activeProcessId = ref(null)
 // Supabase stuff
 const client = useSupabaseClient()
 import { RealtimeChannel } from '@supabase/supabase-js'
+import UiHeading from "./UiHeading";
 let realtimeChannel = RealtimeChannel
 
 // Load the Processes

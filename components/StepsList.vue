@@ -12,7 +12,7 @@
       <Actions-List :key="activeStepActions.length" :walk="props.walk" :step="activeStepId" :actions="activeStepActions"/>
     </ui-slide-over>
 
-    <div class=" overflow-x-auto shadow-xl mb-4">
+    <div class=" overflow-x-auto shadow-xl rounded-lg mb-4">
       <div class="inline-block min-w-full  align-middle">
         <div class="shadow-sm ring-1 ring-black ring-opacity-5">
           <table class="min-w-full border-separate" style="border-spacing: 0">
@@ -30,7 +30,7 @@
             <tbody class="bg-white">
               <tr v-for="(step, id) in filteredSteps" :key="step.id" :class="id % 2 === 0 ? undefined : 'bg-gray-50'">
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-50" align="center">
-                  <StarIcon v-if="step.milestone" class="border-transparent text-indigo-500 h-5 w-5" aria-hidden="true" />
+                  <StarIcon v-if="step.milestone" class="border-transparent text-rose-500 h-5 w-5" aria-hidden="true" />
                   <StarIcon v-else class="h-5 w-5 stroke-gray-500 text-transparent" aria-hidden="true" />
                 </td>
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
@@ -50,7 +50,7 @@
                 </td>
                 <td class="relative whitespace-nowrap py-4 text-right text-sm font-medium sm:pr-2">
                   <Ui-Button-Icon :icon=true :light="true" @click="emit('editStep', step.id)">
-                    <PencilSquareIcon class="h-5 w-5 fill-gray-500 hover:fill-indigo-500 text-transparent" aria-hidden="true" />
+                    <PencilSquareIcon class="h-5 w-5 fill-gray-500 hover:fill-rose-500 text-transparent" aria-hidden="true" />
                   </Ui-Button-Icon>
                 </td>
               </tr>
