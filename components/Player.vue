@@ -38,30 +38,16 @@ export default defineComponent({
 
   setup() {
     const player = shallowRef<VideoJsPlayer>()
-    const handleMounted = (payload: any) => {
-
-
-      player.value = payload.player
-    }
-    const handleEvent = (log: any) => {
-      // console.log(log)
-    }
-
+    const handleMounted = (payload: any) => player.value = payload.player
+    const handleEvent = (log: any) => {}
     return { player, handleMounted, handleEvent }
   },
   mounted(){
     // if we have a start time, go there
-    if(this.startTime) {
-
-      this.player.currentTime(this.startTime);
-
-    }
+    if(this.startTime) this.player.currentTime(this.startTime)
   },
   beforeDestroy() {
-    if (this.player) {
-      this.player.dispose();
-    }
+    if (this.player) this.player.dispose()
   }
-
 })
 </script>

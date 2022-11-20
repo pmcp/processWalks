@@ -63,22 +63,14 @@
 </template>
 <script setup>
 import { PlusIcon } from '@heroicons/vue/20/solid'
-
-import { getNode } from '@formkit/core';
+const loading = ref(true)
+const props = defineProps(['action', 'step'])
+const addActionModal = ref('addActionModal')
 
 // Supabase stuff
 const client = useSupabaseClient()
-import { RealtimeChannel } from '@supabase/supabase-js'
-let realtimeChannel = RealtimeChannel
 
-const props = defineProps(['action', 'step', 'mode', 'walk'])
-
-
-const addActionModal = ref('addActionModal')
-const loading = ref(true)
-
-const mode = ref('add')
-
+import { getNode } from '@formkit/core';
 async function startAddAction() {
   // If edit mode, fill form with Action
   await addActionModal.value.open()
@@ -95,7 +87,7 @@ async function startAddAction() {
 
 async function submitAddAction (item) {
   // Create the action
-  console.log(props.walk)
+  console.log(props.step)
   const { error, data } = await client.from('actions')
       .upsert({
         id: item.id,
@@ -103,26 +95,25 @@ async function submitAddAction (item) {
         description: item.description,
         act_by: item.actBy,
         done: item.done,
-        walk: props.walk
+        walk: props.step.walk
       })
-      .select('id, assigned_to, description, act_by, done')
+      .select('id')
       .single()
   if(data) {
-    console.log(mode.value)
+    // If we are editing, wee don't need to update the join table ('steps_actions')
     if(mode.value === 'edit') {
       addActionModal.value.close()
       return;
     }
-
     // Create the link in steps_actions
+    console.log(data)
     await client.from('steps_actions')
         .upsert({
-          step_id: props.step,
+          step_id: props.step.id,
           action_id: data.id,
-          walk_id: props.walk
+          walk_id: props.step.walk
         })
-        .select()
-        .single()
+
   }
   if (error) {
     console.error(error);
@@ -131,34 +122,12 @@ async function submitAddAction (item) {
   addActionModal.value.close()
 }
 
-
-// To convert seconds to time
-function padTo2Digits(num) {
-  return num.toString().padStart(2, '0');
-}
-function convertMsToTime(secs) {
-  if(!secs) return '00:00:00.000'
-  console.log(secs.toString())
-  let milliseconds = (secs.toFixed(3).toString()).split('.', 2);
-  let milli = milliseconds[1]
-  console.log(milli)
-  let seconds = Math.floor(secs)
-  let minutes = Math.floor(seconds / 60);
-  let hours = Math.floor(minutes / 60);
-
-  seconds = seconds % 60;
-  minutes = minutes % 60;
-
-
-  return `${padTo2Digits(hours)}:${padTo2Digits(minutes)}:${padTo2Digits(
-      seconds)}.${milli}`;
-}
-
+// Editing or adding?
+const mode = ref('add')
 onMounted(async () => {
   if(props.action) {
     mode.value = 'edit'
   }
-
 })
 
 defineExpose({

@@ -1,7 +1,6 @@
 import { generateClasses } from '@formkit/themes'
 import { createProPlugin, repeater, rating } from '@formkit/pro'
 
-
 import theme from './formkit.theme.js'
 
 

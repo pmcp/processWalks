@@ -25,16 +25,16 @@
             name="description"
             help="Description of the topic"
         />
-        <div  class="absolute right-6 bottom-0">
-        <FormKit type="submit">
-          <template v-if="props.mode === 'edit'">
-            Edit
-          </template>
-          <template v-else>
-            <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-            Add Topic
-          </template>
-        </FormKit>
+        <div class="absolute right-6 bottom-0">
+          <FormKit type="submit">
+            <template v-if="props.mode === 'edit'">
+              Edit
+            </template>
+            <template v-else>
+              <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              Add Topic
+            </template>
+          </FormKit>
         </div>
       </FormKit>
     </template>

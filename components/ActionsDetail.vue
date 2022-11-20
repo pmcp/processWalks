@@ -13,7 +13,7 @@
             <time :datetime="action.act_by">To finish by {{ action.act_by }}</time>
           </p>
         </div>
-        <Actions-Edit ref="addEditAction" :step="props.step" :walk="props.walk" :action="action"/>
+        <Actions-Edit ref="addEditAction" :step="props.step" :action="action"/>
       </div>
       <div class="flex items-center justify-between">
         <p class=" text-sm  text-gray-600">{{ action.description }}</p>
@@ -26,5 +26,5 @@
 
 <script setup>
 import { CalendarIcon, MapPinIcon, UsersIcon } from '@heroicons/vue/20/solid'
-const props = defineProps(['action'])
+const props = defineProps(['step', 'action'])
 </script>

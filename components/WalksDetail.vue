@@ -1,19 +1,4 @@
 <template>
-  <div v-if="walk" class="sticky top-5 z-10 bg-white border-b-2 border-gray-50">
-    <div class="px-2 pb-4 shadow-xl rounded-lg">
-
-      <div v-if="walk.video">
-        <Player :video="walk.video" ref="walksVideoPlayer" @timeupdate="updateTime"/>
-        <div class="flex flex-row justify-between mt-2 ">
-          <Form-File-Upload :light="true" @upload="addVideo" />
-          <Steps-Edit ref="addEditStep"  :walk="props.walk" :step="props.step"  :videoTime="currentVideoTime" :videoUrl="walk.video" @stopPlayer="$refs.walksVideoPlayer.player.pause()" />
-        </div>
-      </div>
-      <div v-else class="h-full rounded-lg border-4 border-dashed border-gray-200 flex justify-center py-20">
-        <Form-File-Upload :light="true" :empty="walk.video == null" @upload="addVideo" />
-      </div>
-    </div>
-  </div>
 
   <h3 v-if="walk  " class="text-lg font-medium leading-6 my-6">Date: {{ walk.date }}</h3>
   <Personas-List v-if="walk" :personas="walk.personas"/>
@@ -29,7 +14,6 @@ import { RealtimeChannel } from '@supabase/supabase-js'
 let realtimeChannel = RealtimeChannel
 
 const props = defineProps(['process', 'walk', 'step', 'mode'])
-console.log(props.process)
 const loading = ref(false)
 const walk = ref(null)
 const processObject = ref(null)
@@ -51,63 +35,6 @@ function seekVideoTime(time){
   walksVideoPlayer.value.player.currentTime(time)
 }
 
-
-const currentVideoTime = ref(0)
-// Get Walk
-async function getWalk(walkId) {
-  loading.value = true
-  try {
-    let { data, error, status } = await client
-        .from('walks')
-        .select(`date, video, personas, process`)
-        .eq('id', walkId)
-        .single()
-
-    if (error && status !== 406) throw error
-    if (data) {
-      // Get signed Url of video
-      if(data.video) {
-        const videoUrl = await client
-            .storage
-            .from('movies')
-            .createSignedUrl(data.video, 3600)
-        data.video = videoUrl.data.signedUrl
-      }
-
-      walk.value = data
-    }
-  } catch (error) {
-    console.log(error)
-
-  } finally {
-    loading.value = false
-  }
-}
-
-const updateTime = (time) => currentVideoTime.value = time
-
-// Get Process
-async function getProcess(processId) {
-  loading.value = true
-  try {
-    let { data, error, status } = await client
-        .from('processes')
-        .select(`id, name, passwordProtected, password, description, stages`)
-        .eq('id', processId)
-        .single()
-
-    if (error && status !== 406) throw error
-    if (data) {
-      // data.stages = data.stages.map(x => JSON.parse(x))
-      processObject.value = data
-    }
-  } catch (error) {
-    console.log(error)
-
-  } finally {
-    loading.value = false
-  }
-}
 
 async function addVideo(video) {
   const { error } = await client
@@ -138,7 +65,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   client.removeChannel(realtimeChannel)
-  personas.value = []
+
 })
 
 defineExpose({

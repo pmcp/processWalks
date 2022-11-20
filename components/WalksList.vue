@@ -6,7 +6,7 @@
         <Ui-Header>
           <div class="flex items-center">
             <span class="mr-4">Walks</span>
-            <Walks-Edit mode="add" :process="props.process"></Walks-Edit>
+            <Walks-Edit :process="props.process"></Walks-Edit>
           </div>
         </Ui-Header>
         <div class="ml-4 mt-4 flex-shrink-0">
@@ -45,11 +45,9 @@
 
 <script setup>
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
-
 const loading = ref(true)
-
-// Supabase stuff
 const client = useSupabaseClient()
+
 import { RealtimeChannel } from '@supabase/supabase-js'
 let realtimeChannel = RealtimeChannel
 

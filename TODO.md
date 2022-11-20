@@ -2,3 +2,4 @@
 - Add "edit walk"
 - Personas to JOIN Table
 - Topics to JOIN Table
+- Change storage to UploadCare?
