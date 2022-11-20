@@ -1,6 +1,6 @@
 <template>
-  <Ui-Button @click="startAddProcess" :mode="props.mode" :light="props.mode === 'edit'">
-      <template v-if="props.mode === 'edit'">
+  <Ui-Button @click="startAddProcess" :mode="mode.value" :light="mode === 'edit'">
+      <template v-if="mode === 'edit'">
         Edit
       </template>
       <template v-else>
@@ -10,7 +10,7 @@
   </Ui-Button>
   <Ui-Modal ref="addProcessModal">
     <template v-slot:title>
-      <span v-if="props.mode === 'edit'">Edit Process</span>
+      <span v-if="mode === 'edit'">Edit Process</span>
       <span v-else>Add Process</span>
     </template>
     <template v-slot:content>
@@ -39,7 +39,7 @@
 <!--        </FormKit>-->
         <div  class="absolute right-6 bottom-0">
         <FormKit type="submit">
-          <template v-if="props.mode === 'edit'">
+          <template v-if="mode === 'edit'">
             Save changes
           </template>
           <template v-else>
@@ -59,11 +59,19 @@
 import { PlusIcon } from '@heroicons/vue/20/solid'
 import { getNode } from '@formkit/core';
 const client = useSupabaseClient()
+const props = defineProps(['process'])
 
-const props = defineProps(['mode', 'process'])
+const mode = ref('add')
+onMounted(async () => {
+  console.log(props.process)
+  if(props.process) {
+    mode.value = 'edit'
+  }
+})
+
 
 const submitButton = ref('Add Process')
-if(props.mode === 'edit') submitButton.value = 'Save Process'
+if(mode.value === 'edit') submitButton.value = 'Save Process'
 
 const loading = ref(true)
 
@@ -71,9 +79,7 @@ const loading = ref(true)
 // Refs to the modal, to open and close them
 const addProcessModal = ref('addProcessModal')
 const startAddProcess = () => {
-
-
-  if(props.mode === 'edit') {
+  if(mode.value === 'edit') {
     getProcess(props.process)
   }
   addProcessModal.value.open()

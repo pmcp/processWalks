@@ -1,13 +1,13 @@
 <template>
-  <div v-for="action in actions" :key="action.id">
-    {{ action }}
+  <div class="flex flex-col gap-4">
+    <Action-Card v-for="action in actions" :key="action.id" :action="action"/>
+
   </div>
 
 </template>
 <script setup>
 const loading = ref(false)
 const client = useSupabaseClient()
-
 const actions = ref(null)
 
 // Load the Actions

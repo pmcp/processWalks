@@ -7,7 +7,7 @@
       <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions"/>
     </section>
     <aside class="hidden lg:order-first lg:block lg:flex-shrink-0 h-full">
-      <div class="relative flex w-96 pr-2 flex-col border-r border-gray-200 h-full">
+      <div class="relative flex gap-8 w-96 pr-2 flex-col border-r border-gray-200 h-full">
         <div class="sticky top-5 z-10 bg-white border-b-2 border-gray-50">
           <div class="px-2 pb-4 shadow-xl rounded-lg">
             <div v-if="walk.video">
@@ -22,9 +22,17 @@
             </div>
           </div>
         </div>
-        <h3 class="text-lg font-medium leading-6 my-4">Date: {{ walk.date }}</h3>
-        <Personas-List :personas="walk.personas"/>
-        <Processes-Detail :process="walk.processes"/>
+
+
+
+        <Processes-Detail :process="walk.processes">
+          <template v-slot:content>
+            <h3 class="text-lg font-medium leading-6 my-4">Date: {{ walk.date }}</h3>
+            <div>
+              <Personas-List :personas="walk.personas"/>
+            </div>
+          </template>
+        </Processes-Detail>
       </div>
     </aside>
   </template>
@@ -48,7 +56,7 @@ async function getWalk(walkId) {
   try {
     let { data, error, status } = await client
         .from('walks')
-        .select(`id, date, video, personas, processes(id, description, name), steps!steps_walk_fkey(id, walk, description, timing, observation, milestone, topics, rating, actions(id, description, act_by, done, walk))`)
+        .select(`id, date, video, personas, processes(id, description, name), steps!steps_walk_fkey(id, walk, description, timing, observation, milestone, topics, rating, actions(id, description, act_by, done, walk, assigned_to))`)
         .eq('id', walkId)
         .single()
     if (error && status !== 406) throw error

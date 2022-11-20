@@ -12,7 +12,14 @@
               <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Timing</th>
               <th scope="col" class="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell">Description</th>
               <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Observation</th>
-              <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">rating</th>
+              <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
+                <span class="flex hover:underline cursor-pointer" @click="setOrderByRating">
+                  <span>Rating</span>
+                  <ChevronDownIcon v-if="orderByRating === null" class="h-5 w-5" aria-hidden="true" />
+                  <ChevronUpIcon v-if="orderByRating === true" class="h-5 w-5" aria-hidden="true" />
+                  <XMarkIcon v-if="orderByRating === false" class="pt-1 h-5 w-5" aria-hidden="true" />
+                </span>
+              </th>
               <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Topics</th>
               <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 text-lefts text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Actions</th>
               <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8"><span class="sr-only">Edit</span></th>
@@ -64,18 +71,36 @@
 </template>
 
 <script setup>
-import { StarIcon, PencilSquareIcon } from '@heroicons/vue/20/solid'
+import { StarIcon, PencilSquareIcon, ChevronDownIcon, ChevronUpIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import { useSorted } from '@vueuse/core'
 import {useReadableTime} from "../utils/readableTime";
 const readableTime = useReadableTime
 const props = defineProps(['steps'])
 const emit = defineEmits(['editStep', 'seekVideoTime', 'showActions'])
 
+const orderByRating = ref(null)
+
+function setOrderByRating() {
+  if(orderByRating.value === false) return orderByRating.value = null
+  if(orderByRating.value === true) return orderByRating.value = false
+  if(orderByRating.value === null) return orderByRating.value = true
+}
+
 
 const stepsOrdered = computed(() => {
   if(!props.steps) return []
-  const byTiming = useSorted(props.steps, (a, b) => a.timing - b.timing)
-  return byTiming.value
+  let ordered = []
+  if(orderByRating.value !== null) {
+    if(orderByRating.value){
+      ordered = useSorted(props.steps, (a, b) => a.rating - b.rating)
+    } else {
+      ordered = useSorted(props.steps, (a, b) => b.rating - a.rating)
+    }
+  } else {
+    // if no order is selected, just do by timing
+    ordered = useSorted(props.steps, (a, b) => a.timing - b.timing)
+  }
+  return ordered.value
 })
 
 

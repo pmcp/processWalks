@@ -87,7 +87,6 @@ async function startAddAction() {
 
 async function submitAddAction (item) {
   // Create the action
-  console.log(props.step)
   const { error, data } = await client.from('actions')
       .upsert({
         id: item.id,

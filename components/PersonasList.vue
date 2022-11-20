@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white border-b border-gray-200 pb-5 z-0 mr-4">
+  <div class="border-b border-gray-200 pb-5 z-0 mr-4">
     <h3 class="text-lg font-medium leading-6">Personas</h3>
   </div>
   <ul role="list" class="divide-y divide-gray-200">
@@ -10,5 +10,4 @@
 </template>
 <script setup>
   const props = defineProps(['personas'])
-
 </script>

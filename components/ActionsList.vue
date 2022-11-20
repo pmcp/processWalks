@@ -43,6 +43,17 @@
 <script setup>
 const props = defineProps(['step', 'actions'])
 
-const actionsOpen = computed(() => props.actions.filter(a => !a.done || a.done === null))
+const actionsOpen = computed(() => {
+    const open = props.actions.filter(a => !a.done || a.done === null)
+    // console.log('open', open.length, open)
+    const hasNoActByDate = open.filter(a => a.act_by === null )
+    // console.log('hasNoActByDate', hasNoActByDate.length)
+    const hasActByDate = open.filter(a => a.act_by !== null )
+    // console.log('hasActByDate', hasActByDate.length)
+    const orderByFinished = useSorted(hasActByDate, (a, b) => new Date(a.act_by) - new Date(b.act_by))
+
+    console.log(orderByFinished.value)
+  return [...orderByFinished.value, ...hasNoActByDate];
+})
 const actionsDone = computed(() => props.actions.filter(a => a.done))
 </script>

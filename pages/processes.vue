@@ -1,6 +1,7 @@
 <template>
   <ui-slide-over ref="slideOver" @close="closeSlideOver">
-    <Processes-Detail :process="activeProcess"/>
+    <Processes-Detail :process="activeProcess" />
+    <Walks-List :process="activeProcess.id" />
   </ui-slide-over>
   <div class="container" >
     <processes-list :processes="processes" @open="openProcess" />
