@@ -3,18 +3,18 @@
     <span class="pr-4">
       Processes
     </span>
-    <Processes-Edit mode="add"></Processes-Edit>
+    <Processes-Edit></Processes-Edit>
   </Ui-Heading>
-  <div v-if="processes?.length > 0" class="overflow-hidden bg-white shadow-xl sm:rounded-xl">
-    <ul role="list" class="divide-y divide-gray-200 bg-rose-50">
+  <div v-if="processes?.length > 0" class="overflow-hidden bg-white shadow-xl sm:rounded-xl p-2 ">
+    <ul role="list" class="divide-y divide-gray-200">
       <li
           v-for="process of processes"
           :key="process.id"
           @click="open(process.id)"
-          class="bg-white transition ease-in-out hover:-translate-y-1 hover:scale-20 hover:bg-rose-50 duration-300 hover:cursor-pointer"
+          class="bg-white hover:cursor-pointer"
       >
-        <div class="flex items-center px-4 py-4 sm:px-6">
-          <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+        <div class="flex items-center px-4 py-4 sm:px-6  border-2 border-white hover:border-rose-400 hover:border-2 transition ease-in-out duration-300 my-1">
+          <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between ">
             <div class="truncate">
               <div class="flex text-sm">
                 <p class="truncate font-medium text-rose-600">{{ process.name }}</p>

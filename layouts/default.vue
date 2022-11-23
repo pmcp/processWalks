@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-full">
     <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
           <div class="flex items-center">
             <div class="hidden md:block">
@@ -11,8 +11,6 @@
             </div>
           </div>
           <div class="hidden md:block">
-
-
               <Menu as="div" class="relative inline-block text-left">
                 <div>
                   <MenuButton class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 focus:ring-offset-gray-100">
@@ -90,9 +88,7 @@
 <!--      </div>-->
 <!--    </header>-->
     <main>
-      <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 flex justify-center">
-        <slot />
-      </div>
+      <slot />
     </main>
   </div>
 </template>

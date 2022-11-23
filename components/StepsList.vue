@@ -9,9 +9,9 @@
             <thead class="bg-gray-50">
             <tr>
               <th scope="col" class="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter lg:table-cell"><span class="sr-only">Milestone</span></th>
-              <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Timing</th>
-              <th scope="col" class="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell">Description</th>
-              <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Observation</th>
+              <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-2 pr-2 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-2 lg:pl-2">Timing</th>
+              <!-- <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-2 pr-2 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-2 lg:pl-2">Timing</th> -->
+              <th scope="col" class="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell">Explanation</th>
               <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
                 <span class="flex hover:underline cursor-pointer" @click="setOrderByRating">
                   <span>Rating</span>
@@ -31,32 +31,37 @@
                 No steps
               </template>
               <tr v-else v-for="(step, id) in stepsOrdered"  :class="id % 2 === 0 ? undefined : 'bg-gray-50'">
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-50" align="center">
+                <td class="align-top pt-6 whitespace-nowrap px-2 py-4 text-sm text-gray-50" align="center">
                   <StarIcon v-if="step.milestone" class="border-transparent text-rose-500 h-5 w-5" aria-hidden="true" />
                   <StarIcon v-else class="h-5 w-5 stroke-gray-500 text-transparent" aria-hidden="true" />
                 </td>
-                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                <td class="align-top whitespace-nowrap py-4 px-2 text-sm font-medium text-gray-900 ">
                   <Ui-Button :light="true" @click="emit('seekVideoTime', step.timing)">
                     {{ readableTime(step.timing) }}
                   </Ui-Button>
                 </td>
-                <td class="whitespace min-w-20 px-3 py-4 text-sm text-gray-500 ">{{ step.description }}</td>
-                <td class="whitespace px-3 py-4 text-sm text-gray-500">{{ step.observation }}</td>
-                <td class="whitespace px-3 py-4 text-sm text-gray-500">
+                <td class="align-top whitespace min-w-full px-3 py-4 text-sm text-gray-500 ">
+                  <p class="font-bold">Description</p>
+                  <p>{{ step.description }}</p>
+                  <p class="font-bold mt-2">Observation</p>
+                  <p>{{ step.observation }}</p>
+                </td>
+
+                <td class="align-top whitespace px-3 py-4 text-sm text-gray-500">
                   <div class="flex justify-center items-center overflow-hidden rounded-lg">
                     <Step-Rating v-for="i in 11" :key="`rating-${i}`" :rating="step.rating" :block="i"  />
                   </div>
                 </td>
-                <td class="whitespace px-3 py-4 text-sm text-gray-500">
+                <td class="align-top whitespace px-3 py-4 text-sm text-gray-500">
                   <Topic-Detail v-for="topic in step.topics" :key="topic" :topic="topic"/>
                 </td>
-                <td class="whitespace text-center px-2 py-4 text-sm text-gray-500">
+                <td class="align-top whitespace text-center px-2 py-4 text-sm text-gray-500">
                   <Ui-Button :light="true" @click="emit( 'showActions', step)">
                     <span v-if="step.actions">{{ step.actions.length }}</span>
                     <span v-else>0</span>
                   </Ui-Button>
                 </td>
-                <td class="relative whitespace-nowrap py-4 text-right text-sm font-medium sm:pr-2">
+                <td class="align-top relative whitespace-nowrap py-4 text-right text-sm font-medium sm:pr-2">
                   <Ui-Button-Icon :icon=true :light="true" @click="emit('editStep', step.id)">
                     <PencilSquareIcon class="h-5 w-5 fill-gray-500 hover:fill-rose-500 text-transparent" aria-hidden="true" />
                   </Ui-Button-Icon>

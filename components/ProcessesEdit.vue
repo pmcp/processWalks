@@ -63,7 +63,6 @@ const props = defineProps(['process'])
 
 const mode = ref('add')
 onMounted(async () => {
-  console.log(props.process)
   if(props.process) {
     mode.value = 'edit'
   }

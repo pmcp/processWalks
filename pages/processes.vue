@@ -1,10 +1,12 @@
 <template>
-  <ui-slide-over ref="slideOver" @close="closeSlideOver">
-    <Processes-Detail :process="activeProcess" />
-    <Walks-List :process="activeProcess.id" />
-  </ui-slide-over>
-  <div class="container" >
-    <processes-list :processes="processes" @open="openProcess" />
+  <div class="mx-auto max-w-screen-2xl py-6 sm:px-6 lg:px-8 flex justify-center"> 
+    <ui-slide-over ref="slideOver" @close="closeSlideOver">
+      <Processes-Detail :process="activeProcess" />
+      <Walks-List :process="activeProcess.id" />
+    </ui-slide-over>
+    <div class="container" >
+      <processes-list :processes="processes" @open="openProcess" />
+    </div>
   </div>
 </template>
 

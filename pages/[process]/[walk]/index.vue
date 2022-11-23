@@ -1,5 +1,6 @@
 <template>
-  <template v-if="walk">
+  <div>
+  <div class="mx-auto max-w-screen-2xl py-6 sm:px-6 lg:px-8 flex justify-center" v-if="walk">
     <ui-slide-over ref="slideOver" @close="closeStepSlideOver">
       <Actions-List :step="activeStep" :actions="activeStep.actions"/>
     </ui-slide-over>
@@ -23,8 +24,6 @@
           </div>
         </div>
 
-
-
         <Processes-Detail :process="walk.processes">
           <template v-slot:content>
             <h3 class="text-lg font-medium leading-6 my-4">Date: {{ walk.date }}</h3>
@@ -35,7 +34,8 @@
         </Processes-Detail>
       </div>
     </aside>
-  </template>
+  </div>
+  </div>
 
 </template>
 <script setup>
@@ -69,7 +69,6 @@ async function getWalk(walkId) {
             .createSignedUrl(data.video, 3600)
         data.video = videoUrl.data.signedUrl
       }
-      console.log(data)
       walk.value = data
     }
   } catch (error) {
