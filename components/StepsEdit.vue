@@ -8,8 +8,8 @@
     <template v-slot:title>
       <Player :video="videoUrl" :startTime="videoTime"  ref="stepVideoPlayer" />
       <div class="flex flex-row justify-between mt-2">
-        <Ui-Button :light="true" @click="$refs.stepVideoPlayer.player.currentTime(stepTiming)">Go to step ({{ stepTimeToStamp }})</Ui-Button>
-        <Ui-Button :light="true" @click="setCurrentTime($refs.stepVideoPlayer.player.currentTime())">Save current time</Ui-Button>
+        <Ui-Button :light="true" @click="$refs.stepVideoPlayer.player.currentTime(stepTiming)"><span class="underline">Go to step ({{ stepTimeToStamp }})</span></Ui-Button>
+        <Ui-Button :light="true" @click="setCurrentTime($refs.stepVideoPlayer.player.currentTime())"><span class="underline">Save current time</span></Ui-Button>
       </div>
     </template>
     <template v-slot:content>
@@ -40,8 +40,8 @@
         />
         <FormKit
             type="range"
-            min="-5"
-            max="5"
+            min="-4"
+            max="4"
 
             prefix-icon="sad"
             suffix-icon="EmojiHappyIcon"

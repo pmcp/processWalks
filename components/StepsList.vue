@@ -27,9 +27,13 @@
             </thead>
 
             <tbody  class="bg-white">
-              <template v-if="stepsOrdered.length < 1">
-                No steps
-              </template>
+              <tr v-if="stepsOrdered.length < 1" >
+                <th colspan="7" scope="colgroup" class="">
+                  <div class="rounded-lg border-4 border-dashed border-gray-200 text-gray-400 font-medium p-40 text-center m-4" >
+                    No Steps
+                  </div>
+                </th>
+              </tr>
               <tr v-else v-for="(step, id) in stepsOrdered"  :class="id % 2 === 0 ? undefined : 'bg-gray-50'">
                 <td class="align-top pt-6 whitespace-nowrap px-2 py-4 text-sm text-gray-50" align="center">
                   <StarIcon v-if="step.milestone" class="border-transparent text-rose-500 h-5 w-5" aria-hidden="true" />
@@ -49,7 +53,7 @@
 
                 <td class="align-top whitespace px-3 py-4 text-sm text-gray-500">
                   <div class="flex justify-center items-center overflow-hidden rounded-lg">
-                    <Step-Rating v-for="i in 11" :key="`rating-${i}`" :rating="step.rating" :block="i"  />
+                    <Step-Rating v-for="i in 9" :key="`rating-${i}`" :rating="step.rating" :block="i"  />
                   </div>
                 </td>
                 <td class="align-top whitespace px-3 py-4 text-sm text-gray-500">

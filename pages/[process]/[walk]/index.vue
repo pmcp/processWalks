@@ -112,6 +112,7 @@ function editStep(id) {
 
 // Uploading a video
 async function addVideo(video) {
+  console.log(video)
   const { error } = await client
       .from('walks')
       .update({ video: video })

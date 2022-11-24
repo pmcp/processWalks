@@ -1,5 +1,5 @@
 <template>
-    <div :class="color">
+    <div class="h-8 w-2" :style="color">
 </div>
 
 
@@ -8,54 +8,48 @@
 const props = defineProps(['rating', 'block'])
 
 const color = computed(() => {
-  const blockWeighed = props.block-6
-  let classes = ''
+  const blockWeighed = props.block-5
+  let style = ''
   switch(blockWeighed) {
-    case -5:
-      classes = 'bg-red-600'
-      break;
     case -4:
-      classes = 'bg-red-500'
+      style = 'background-color:#E63946'
       break;
     case -3:
-      classes = 'bg-red-400'
+      style = 'background-color:#D67078'
       break;
     case -2:
-      classes = 'bg-red-300'
+      style = 'background-color:#D69599'
       break;
     case -1:
-      classes = 'bg-orange-500'
+      style = 'background-color:#DFB8BB'
       break;
     case 0:
-      classes = 'bg-orange-400'
+      style = 'background-color:#BBBBBB'
       break;
     case 1:
-      classes = 'bg-orange-300'
+      style = 'background-color:#9DCCB8'
       break;
     case 2:
-      classes = 'bg-green-300'
+      style = 'background-color:#6FC09D'
       break;
     case 3:
-      classes = 'bg-green-400'
+      style = 'background-color:#4FA881'
       break;
     case 4:
-      classes = 'bg-green-500'
-      break;
-    case 5:
-      classes = 'bg-green-600'
+      style = 'background-color:#0D8953'
       break;
     default:
-      classes = 'bg-gray-500'
+      style = 'background-color:#BBBBBB'
   }
 
   if(props.rating === blockWeighed) {
-    classes = classes + ' opacity-100 h-8 w-2'
+    style = style + ';opacity:1'
   } else {
-    classes = classes + ' opacity-20 h-8 w-2'
+    style = style + ';opacity:.4;'
 
   }
-
-  return classes
+  console.log(style)
+  return style
 })
 
 

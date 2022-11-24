@@ -23,7 +23,6 @@ const slideOver = ref('slideOver')
 
 const openProcess = (processId) => {
   // Set the [process] id, so Walks can be loaded
-  console.log(processId)
   activeProcessId.value = processId
   slideOver.value.open()
 }
@@ -46,7 +45,7 @@ async function getProcesses () {
   try {
     let { data, error, status } = await client
         .from('processes')
-        .select('id, name, passwordProtected, description', )
+        .select('id, name, passwordProtected, description, walks(id)', )
         .order('created_at', { ascending: false })
     if (error && status !== 406) throw error
     if (data) {

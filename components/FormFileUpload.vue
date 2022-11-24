@@ -30,7 +30,6 @@ const files = ref()
 const props = defineProps(['light', 'empty'])
 
 const upload = async (evt) => {
-
   files.value = evt.target.files
   try {
     uploading.value = true
@@ -42,7 +41,6 @@ const upload = async (evt) => {
     const filePath = `${Math.random()}.${fileExt}`
     let { error: uploadError } = await client.storage.from('movies').upload(filePath, file)
     if (uploadError) throw uploadError
-
     emit( 'upload', filePath)
   } catch (error) {
     alert(error.message)
