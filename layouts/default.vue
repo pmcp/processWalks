@@ -1,4 +1,15 @@
 <template>
+  <Ui-Modal ref="loginModal">
+    <template v-slot:title>
+      Sign up / login
+    </template>
+    <template v-slot:content>
+      {{ loginMessage }}
+    </template>
+    <template v-slot:closeButton>
+      Close
+    </template>
+  </Ui-Modal>
   <div class="min-h-full">
     <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
       <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
@@ -103,13 +114,18 @@ const userSB = useSupabaseUser();
 
 
 // Sign in
+const loginModal = ref('loginModal')
+const loginMessage = ref('')
 async function signIn (data) {
   try {
     const { error } = await client.auth.signInWithOtp({ email: data.email })
     if (error) throw error
-    alert('Check your email for the login link!')
+    loginMessage.value = `Please check your email inbox, we've send you a login link.`
+    loginModal.value.open()
   } catch (error) {
-    alert(error.error_description || error.message)
+    console.log({error})
+    loginMessage.value = `You are not allowed to log in to this app.`
+    loginModal.value.open()
   } finally {
   //  Set loading false if we use this
   }
