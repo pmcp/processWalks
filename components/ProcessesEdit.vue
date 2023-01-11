@@ -16,6 +16,7 @@
     <template v-slot:content>
       <FormKit
           type="form"
+          #default="{ value }"
           id="addProcess"
           name="addProcess"
           :actions="false"
@@ -37,6 +38,17 @@
 <!--          />-->
 
 <!--        </FormKit>-->
+        <pre>{{ members }}</pre>
+        <FormKit
+            type="autocomplete"
+            name="members"
+            label="Search and select multiple members"
+            :options="members"
+            selection-appearance="text-input"
+            multiple
+
+        />
+        <pre>{{ value}}</pre>
         <div  class="absolute right-6 bottom-0">
         <FormKit type="submit">
           <template v-if="mode === 'edit'">
@@ -84,6 +96,163 @@ const startAddProcess = () => {
   addProcessModal.value.open()
 }
 
+
+
+async function getProcess(processId) {
+  loading.value = true
+  console.log(processId)
+  try {
+    let { data, error, status } = await client
+        .from('processes')
+        .select(`id, name, passwordProtected, password, description, profiles!profi_proc(id, email)`)
+        .eq('id', processId)
+        .single()
+
+    if (error && status !== 406) throw error
+    if (data) {
+
+      // if(Array.isArray(data.stages)) data.stages = data.stages.map(x => JSON.parse(x))
+      console.log(data)
+
+      const members = data.profiles.map((member) => {
+        return member.id
+      })
+
+      getNode('addProcess').input({
+        id: processId,
+        name: data.name,
+        description: data.description,
+        password: data.password,
+        passwordProtected: data.passwordProtected,
+        members
+        // stages: data.stages
+      })
+
+    }
+  } catch (error) {
+    console.log(error)
+
+  } finally {
+    loading.value = false
+  }
+}
+
+
+const members = ref([])
+async function getProfiles () {
+  loading.value = true;
+  try {
+    let { data, error, status } = await client
+        .from('profiles')
+        .select('id, email')
+        .order('email', { ascending: false })
+        .is('delete', false)
+    if (error && status !== 406) throw error
+    if (data) {
+
+      members.value = data.map((member) => {
+        return { value: member.id, label: member.email }
+      })
+
+    }
+  } catch (error) {
+    console.log(error)
+    error.value = error.message
+  } finally {
+    loading.value = false
+  }
+}
+await getProfiles()
+
+async function submitAddProcess (newProcess) {
+  const { error, data } = await client.from('processes')
+      .upsert({
+        id: newProcess.id,
+        name: newProcess.name,
+        description: newProcess.description,
+        password: newProcess.password,
+        passwordProtected: newProcess.passwordProtected,
+        // stages: newProcess.stages
+      })
+      .select('id', 'name, description, password, passwordProtected')
+      .single()
+  if (error) {
+    console.error(error);
+    return;
+  }
+  if (data) {
+    const projectId = data.id
+    console.log(projectId)
+    let membersToSave = newProcess.members
+    // Get existing connections
+    try {
+      let { data, error, status } = await client
+          .from('profi_proc')
+          .select('profi_id')
+      if (error) throw error
+      if (data) {
+        const membersInJoin = data.map((item) => {
+          return item.profi_id
+        })
+
+        console.log(membersInJoin, membersToSave)
+        for (let i = 0; i < membersInJoin.length; i++) {
+          // Check if existing join is in membersToSave
+          if(membersToSave.includes(membersInJoin[i])) {
+            // If yes, remove item from membersToSave
+            console.log('membersToSave includes', membersInJoin[i])
+            membersToSave = membersToSave.filter(item => item === membersInJoin[i])
+          } else {
+            // If no, delete join
+            const { error } = await client
+              .from('profi_proc')
+              .delete()
+              .eq('profi_id', membersInJoin[i])
+          }
+        }
+
+        // If membersToSave > 0, add membersToSave as JOIN
+        if(membersToSave.length > 0) {
+          for (let i = 0; i < membersToSave.length; i++) {
+            console.log('gonna delete', membersToSave[i])
+            await client.from('profi_proc')
+                .insert({
+                  profi_id: membersToSave[i],
+                  proc_id: projectId
+                })
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error)
+      error.value = error.message
+    } finally {
+      loading.value = false
+    }
+
+
+
+    // Check if there
+    if(newProcess.members.length < 1) return;
+    for (let i = 0; i < newProcess.members.length; i++) {
+      const memberId = newProcess.members[i]
+      // Save Members as JOIN table
+      //  TODO: what if members get deleted
+      console.log(data.id, memberId)
+
+      await client.from('profi_proc')
+        .insert({
+          profi_id: memberId,
+          proc_id: projectId
+        })
+
+    }
+
+
+  }
+  addProcessModal.value.close()
+}
+
 const processSchema = [
   {
     $formkit: 'text',
@@ -110,60 +279,15 @@ const processSchema = [
     label: 'Password',
     help: 'Enter your new password.',
     validation: 'length:5,16'
-  }
+  },
+  // {
+  //   $formkit: 'autocomplete',
+  //   name: 'autocomplete',
+  //   label: 'Members',
+  //   help: 'Select members who can view this project',
+  //   options: [],
+  //   selectionAppearance: 'option',
+  //   multiple: true
+  // }
 ]
-
-
-async function getProcess(processId) {
-  loading.value = true
-  try {
-    let { data, error, status } = await client
-        .from('processes')
-        .select(`name, passwordProtected, password, description`)
-        .eq('id', processId)
-        .single()
-
-    if (error && status !== 406) throw error
-    if (data) {
-
-      // if(Array.isArray(data.stages)) data.stages = data.stages.map(x => JSON.parse(x))
-
-      getNode('addProcess').input({
-        id: processId,
-        name: data.name,
-        description: data.description,
-        password: data.password,
-        passwordProtected: data.passwordProtected,
-        // stages: data.stages
-      })
-
-    }
-  } catch (error) {
-    console.log(error)
-
-  } finally {
-    loading.value = false
-  }
-}
-
-async function submitAddProcess (newProcess) {
-  const { error, data } = await client.from('processes')
-      .upsert({
-        id: newProcess.id,
-        name: newProcess.name,
-        description: newProcess.description,
-        password: newProcess.password,
-        passwordProtected: newProcess.passwordProtected,
-        // stages: newProcess.stages
-      })
-      .select('name, description, password, passwordProtected')
-      .single()
-  if (error) {
-    console.error(error);
-    return;
-  }
-  addProcessModal.value.close()
-}
-
-
 </script>

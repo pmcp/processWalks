@@ -1,27 +1,28 @@
 <template>
-  <Ui-Modal ref="loginModal">
-    <template v-slot:title>
-      Sign up / login
-    </template>
-    <template v-slot:content>
-      {{ loginMessage }}
-    </template>
-    <template v-slot:closeButton>
-      Close
-    </template>
-  </Ui-Modal>
-  <div class="min-h-full">
-    <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
-      <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
-        <div class="flex h-16 items-center justify-between">
-          <div class="flex items-center">
-            <div class="hidden md:block">
-              <div class="flex items-baseline space-x-4">
-                <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
+  <div>
+    <Ui-Modal ref="loginModal">
+      <template v-slot:title>
+        Sign up / login
+      </template>
+      <template v-slot:content>
+        {{ loginMessage }}
+      </template>
+      <template v-slot:closeButton>
+        Close
+      </template>
+    </Ui-Modal>
+    <div class="min-h-full">
+      <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
+        <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+          <div class="flex h-16 items-center justify-between">
+            <div class="flex items-center">
+              <div class="hidden md:block">
+                <div class="flex items-baseline space-x-4">
+                  <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="hidden md:block">
+            <div class="hidden md:block">
               <Menu as="div" class="relative inline-block text-left">
                 <div>
                   <MenuButton class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 focus:ring-offset-gray-100">
@@ -63,45 +64,47 @@
                 </transition>
               </Menu>
 
-<!--            Here: if logged in, show logged out button, if logged out, login -->
-          </div>
-          <div class="-mr-2 flex md:hidden">
-            <!-- Mobile menu button -->
-            <DisclosureButton class="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-              <span class="sr-only">Open main menu</span>
-              <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-              <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
-            </DisclosureButton>
+              <!--            Here: if logged in, show logged out button, if logged out, login -->
+            </div>
+            <div class="-mr-2 flex md:hidden">
+              <!-- Mobile menu button -->
+              <DisclosureButton class="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                <span class="sr-only">Open main menu</span>
+                <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+                <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
+              </DisclosureButton>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Mobile -->
-      <DisclosurePanel class="md:hidden">
-        <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-          <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>
-        </div>
-        <div class="border-t border-gray-700 pt-4 pb-3">
-          <div class="flex items-center px-5">
-            <div class="flex-shrink-0">
-              ???
+        <!-- Mobile -->
+        <DisclosurePanel class="md:hidden">
+          <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+            <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>
+          </div>
+          <div class="border-t border-gray-700 pt-4 pb-3">
+            <div class="flex items-center px-5">
+              <div class="flex-shrink-0">
+                ???
+              </div>
+
             </div>
 
           </div>
+        </DisclosurePanel>
+      </Disclosure>
 
-        </div>
-      </DisclosurePanel>
-    </Disclosure>
-
-<!--    <header class="bg-white shadow-sm">-->
-<!--      <div class="mx-auto max-w-7xl py-4 px-4 sm:px-6 lg:px-8">-->
-<!--        <h1 class="text-lg font-semibold leading-6 text-gray-900">Dashboard</h1>-->
-<!--      </div>-->
-<!--    </header>-->
-    <main>
-      <slot />
-    </main>
+      <!--    <header class="bg-white shadow-sm">-->
+      <!--      <div class="mx-auto max-w-7xl py-4 px-4 sm:px-6 lg:px-8">-->
+      <!--        <h1 class="text-lg font-semibold leading-6 text-gray-900">Dashboard</h1>-->
+      <!--      </div>-->
+      <!--    </header>-->
+      <main>
+        <slot />
+      </main>
+    </div>
   </div>
+
 </template>
 
 <script setup>
@@ -118,12 +121,16 @@ const loginModal = ref('loginModal')
 const loginMessage = ref('')
 async function signIn (data) {
   try {
-    const { error } = await client.auth.signInWithOtp({ email: data.email })
+    const { error } = await client.auth.signInWithOtp({ email: data.email }, {
+      data: {
+        email: data.email
+      }
+    })
     if (error) throw error
     loginMessage.value = `Please check your email inbox, we've send you a login link.`
     loginModal.value.open()
   } catch (error) {
-    console.log({error})
+    console.log(error)
     loginMessage.value = `You are not allowed to log in to this app.`
     loginModal.value.open()
   } finally {
@@ -137,11 +144,30 @@ async function signOut () {
   const { error } = await client.auth.signOut()
 }
 
-const navigation = [
+const navigation = ref([
   { name: 'Home', href: '/', current: true },
   { name: 'Processes', href: '/processes', current: false },
-  { name: 'Sandbox', href: '/sandbox', current: false }
-]
+  // { name: 'Sandbox', href: '/sandbox', current: false }
+])
 
+// If User is logged in, get the profile
+if(userSB.value) {
+  try {
+    const {data, error} = await client
+        .from('profiles')
+        .select('id, admin')
+        .eq('id', userSB.value.id)
+        .limit(1)
+        .single()
+    if (error) throw error
+    if (data) {
+      console.log(data)
+      if(data.admin) navigation.value.push({ name: 'Members', href: '/members', current: false })
 
+    }
+  } catch (error) {
+    console.log(error)
+  } finally {
+  }
+}
 </script>

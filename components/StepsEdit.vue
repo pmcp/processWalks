@@ -42,7 +42,6 @@
             type="range"
             min="-4"
             max="4"
-
             prefix-icon="sad"
             suffix-icon="EmojiHappyIcon"
             label="How do you rate the experience of this step?"
