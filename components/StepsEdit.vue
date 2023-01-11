@@ -1,5 +1,5 @@
 <template>
-  <Ui-Button @click="startAddSteps">
+  <Ui-Button @click="startAddSteps(null)">
     <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
     New step at <span class="w-24 pl-1 text-center">{{ walkTimeToStamp }}</span>
   </Ui-Button>
@@ -72,7 +72,10 @@
         </FormKit>
         </div>
       </FormKit>
-
+      <Ui-Button @click="deleteStep" v-if="mode == 'edit'">
+        Delete Step
+      </Ui-Button>
+      <p class="pt-4 text-rose-600"><span class="italic text-sm ">{{ errorMessage }}</span></p>
     </template>
     <template v-slot:closeButton>
       Close
@@ -96,6 +99,11 @@ const addStepModal = ref('addStepModal')
 
 const stepVideoPlayer = ref(null)
 
+
+let stepId = null;
+
+const errorMessage = ref('')
+
 // Changing the time
 const stepTiming = ref(null)
 function setCurrentTime(val) {
@@ -107,9 +115,35 @@ const mode = ref('add')
 async function startAddSteps(id) {
   emit('stopPlayer')
   addStepModal.value.open()
+  console.log(id)
   if(id) {
+
     mode.value = 'edit'
+    // Store this in let, for deleting if needed
+    stepId = id
     await getStep(id)
+  } else {
+    mode.value = 'add'
+  }
+
+  console.log(mode.value)
+
+}
+
+async function deleteStep() {
+  const { error } = await client
+      .from('steps')
+      .delete()
+      .eq('id', stepId)
+  console.log(error)
+  if(error) {
+    console.log(error.code)
+    if(error.code == 23503) {
+      console.log('setting errorMessage')
+      errorMessage.value = 'There are still action cards connected with this step. Delete these first.'
+    }
+  } else {
+    addStepModal.value.close()
   }
 }
 

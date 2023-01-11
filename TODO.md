@@ -1,13 +1,6 @@
 ## DOING
-
-WHERE I AM: saving email adres in sql safe
-
-- Add Member to project
-    - If admin: view all members and add
-
-->  - Create module for member adding
-      - Search members (https://formkit.com/inputs/autocomplete)
-      - Add to process (add to join table)
+- Restrict non members
+- Delete everything
 
 ## Todo
 

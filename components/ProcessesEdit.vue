@@ -24,21 +24,6 @@
       >
 
         <FormKitSchema :schema="processSchema" />
-<!--        <FormKit-->
-<!--            id="repeater"-->
-<!--            name="stages"-->
-<!--            type="repeater"-->
-<!--            label="Stages in the process"-->
-<!--            add-label="Add a stage"-->
-<!--            help="Describe the process by listing all the stages."-->
-<!--        >-->
-<!--          <FormKit-->
-<!--              label="Stage title"-->
-<!--              name="title"-->
-<!--          />-->
-
-<!--        </FormKit>-->
-        <pre>{{ members }}</pre>
         <FormKit
             type="autocomplete"
             name="members"
@@ -48,7 +33,6 @@
             multiple
 
         />
-        <pre>{{ value}}</pre>
         <div  class="absolute right-6 bottom-0">
         <FormKit type="submit">
           <template v-if="mode === 'edit'">
@@ -61,6 +45,9 @@
         </FormKit>
         </div>
       </FormKit>
+      <Ui-Button @click="removeProcess" v-if="mode == 'edit'">
+        Delete Process
+      </Ui-Button>
     </template>
     <template v-slot:closeButton>
       Close
@@ -100,7 +87,7 @@ const startAddProcess = () => {
 
 async function getProcess(processId) {
   loading.value = true
-  console.log(processId)
+
   try {
     let { data, error, status } = await client
         .from('processes')
@@ -111,8 +98,6 @@ async function getProcess(processId) {
     if (error && status !== 406) throw error
     if (data) {
 
-      // if(Array.isArray(data.stages)) data.stages = data.stages.map(x => JSON.parse(x))
-      console.log(data)
 
       const members = data.profiles.map((member) => {
         return member.id
@@ -164,6 +149,22 @@ async function getProfiles () {
 }
 await getProfiles()
 
+
+
+// Update project so it is flagged as deleted
+async function removeProcess () {
+  const {error, data} = await client.from('processes')
+      .update({delete: true, timeOfDeletion: new Date().toISOString()})
+      .eq('id', props.process)
+  if (error) {
+    console.error(error);
+    return;
+  }
+  addProcessModal.value.close()
+}
+
+
+
 async function submitAddProcess (newProcess) {
   const { error, data } = await client.from('processes')
       .upsert({
@@ -172,6 +173,7 @@ async function submitAddProcess (newProcess) {
         description: newProcess.description,
         password: newProcess.password,
         passwordProtected: newProcess.passwordProtected,
+        delete: false
         // stages: newProcess.stages
       })
       .select('id', 'name, description, password, passwordProtected')
@@ -182,7 +184,6 @@ async function submitAddProcess (newProcess) {
   }
   if (data) {
     const projectId = data.id
-    console.log(projectId)
     let membersToSave = newProcess.members
     // Get existing connections
     try {
@@ -195,12 +196,10 @@ async function submitAddProcess (newProcess) {
           return item.profi_id
         })
 
-        console.log(membersInJoin, membersToSave)
         for (let i = 0; i < membersInJoin.length; i++) {
           // Check if existing join is in membersToSave
           if(membersToSave.includes(membersInJoin[i])) {
             // If yes, remove item from membersToSave
-            console.log('membersToSave includes', membersInJoin[i])
             membersToSave = membersToSave.filter(item => item === membersInJoin[i])
           } else {
             // If no, delete join
@@ -214,7 +213,6 @@ async function submitAddProcess (newProcess) {
         // If membersToSave > 0, add membersToSave as JOIN
         if(membersToSave.length > 0) {
           for (let i = 0; i < membersToSave.length; i++) {
-            console.log('gonna delete', membersToSave[i])
             await client.from('profi_proc')
                 .insert({
                   profi_id: membersToSave[i],
@@ -238,7 +236,7 @@ async function submitAddProcess (newProcess) {
       const memberId = newProcess.members[i]
       // Save Members as JOIN table
       //  TODO: what if members get deleted
-      console.log(data.id, memberId)
+
 
       await client.from('profi_proc')
         .insert({

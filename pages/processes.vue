@@ -17,6 +17,8 @@ const error = ref(true)
 
 // Supabase stuff
 const client = useSupabaseClient()
+const user = useSupabaseUser();
+console.log(user)
 
 // Slide Over Menu
 const slideOver = ref('slideOver')
@@ -42,13 +44,19 @@ const activeProcess = computed(() => {
 let processes = ref([])
 async function getProcesses () {
   loading.value = true;
+
+  // TODO: Loading is unsafe, should still do rules on server
+
   try {
     let { data, error, status } = await client
         .from('processes')
-        .select('id, name, passwordProtected, description, walks(id)', )
+        .select('id, name, passwordProtected, description, walks(id), members:profi_proc(profi_id), delete')
         .order('created_at', { ascending: false })
+        .is('delete', false)
+
     if (error && status !== 406) throw error
     if (data) {
+      console.log(data)
       processes.value = data
     }
   } catch (error) {

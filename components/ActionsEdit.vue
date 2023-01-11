@@ -54,6 +54,11 @@
         </div>
       </FormKit>
 
+      <Ui-Button @click="deleteAction" v-if="mode == 'edit'">
+        Delete Action
+      </Ui-Button>
+
+
     </template>
     <template v-slot:closeButton>
       Close
@@ -69,6 +74,23 @@ const addActionModal = ref('addActionModal')
 
 // Supabase stuff
 const client = useSupabaseClient()
+
+async function deleteAction() {
+  // Delete the JOIN first
+  await client
+      .from('steps_actions')
+      .delete()
+      .eq('action_id', props.action.id)
+
+  // Then delete the action
+  await client
+      .from('actions')
+      .delete()
+      .eq('id', props.action.id)
+
+  addActionModal.value.close()
+}
+
 
 import { getNode } from '@formkit/core';
 async function startAddAction() {
