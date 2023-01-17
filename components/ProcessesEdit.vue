@@ -1,5 +1,9 @@
 <template>
-  <Ui-Button @click="startAddProcess" :mode="mode.value" :light="mode === 'edit'">
+  <Ui-Button
+      @click="startAddProcess"
+      v-if="!loading"
+      :mode="mode.value"
+      :light="mode === 'edit'">
       <template v-if="mode === 'edit'">
         Edit
       </template>
@@ -8,6 +12,7 @@
         Add a Process
       </template>
   </Ui-Button>
+  <Ui-Spinner v-else />
   <Ui-Modal ref="addProcessModal">
     <template v-slot:title>
       <span v-if="mode === 'edit'">Edit Process</span>
@@ -59,20 +64,19 @@ import { PlusIcon } from '@heroicons/vue/20/solid'
 import { getNode } from '@formkit/core';
 const client = useSupabaseClient()
 const props = defineProps(['process'])
-
+const loading = ref(true)
 const mode = ref('add')
+
 onMounted(async () => {
   if(props.process) {
     mode.value = 'edit'
   }
+  loading.value = false
 })
 
 
 const submitButton = ref('Add Process')
 if(mode.value === 'edit') submitButton.value = 'Save Process'
-
-const loading = ref(true)
-
 
 // Refs to the modal, to open and close them
 const addProcessModal = ref('addProcessModal')
@@ -83,11 +87,7 @@ const startAddProcess = () => {
   addProcessModal.value.open()
 }
 
-
-
 async function getProcess(processId) {
-  loading.value = true
-
   try {
     let { data, error, status } = await client
         .from('processes')
@@ -118,14 +118,14 @@ async function getProcess(processId) {
     console.log(error)
 
   } finally {
-    loading.value = false
+    // loading.value = false
   }
 }
 
 
 const members = ref([])
 async function getProfiles () {
-  loading.value = true;
+
   try {
     let { data, error, status } = await client
         .from('profiles')
@@ -144,7 +144,7 @@ async function getProfiles () {
     console.log(error)
     error.value = error.message
   } finally {
-    loading.value = false
+    // loading.value = false
   }
 }
 await getProfiles()

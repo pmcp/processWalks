@@ -26,7 +26,8 @@
 
         <Processes-Detail :process="walk.processes">
           <template v-slot:content>
-            <h3 class="text-lg font-medium leading-6 my-4">Date: {{ walk.date }}</h3>
+            <div class="flex justify-between"><span class="text-lg">Walk</span><Walks-Edit :walk="walk"></Walks-Edit></div>
+            <h3 class="text-md font-medium leading-6 my-4">Date: {{ walk.date }}</h3>
             <div>
               <Personas-List :personas="walk.personas"/>
             </div>
@@ -47,6 +48,7 @@ const loading = ref(true)
 const client = useSupabaseClient()
 import { RealtimeChannel } from '@supabase/supabase-js'
 let StepsRealtimeChannel = RealtimeChannel
+let WalksRealtimeChannel = RealtimeChannel
 let ActionsRealtimeChannel = RealtimeChannel
 
 // Get Walk
@@ -123,6 +125,16 @@ async function addVideo(video) {
 onMounted(async () => {
   loading.value = true
   // Subscribe to changes of Steps
+  WalksRealtimeChannel = client
+      .channel('walks')
+      .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'walks', filter: `id=eq.${route.params.walk}` },
+          data => {
+            getWalk(route.params.walk)
+          })
+      .subscribe()
+
   StepsRealtimeChannel = client
       .channel('steps')
       .on(
@@ -147,6 +159,7 @@ onMounted(async () => {
 onUnmounted(() => {
   client.removeChannel(StepsRealtimeChannel)
   client.removeChannel(ActionsRealtimeChannel)
+  client.removeChannel(WalksRealtimeChannel)
 })
 
 </script>

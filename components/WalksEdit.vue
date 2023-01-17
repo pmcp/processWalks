@@ -1,5 +1,8 @@
 <template>
-  <Ui-Button @click="startAddWalk">
+  <Ui-Button v-if="edit" @click="startAddWalk" :light="true">
+    Edit
+  </Ui-Button>
+  <Ui-Button v-else @click="startAddWalk">
     <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
     New Walk
   </Ui-Button>
@@ -39,7 +42,7 @@
         <div class="absolute right-6 bottom-0">
           <FormKit type="submit">
             <template v-if="edit">
-              Edit
+              Save
             </template>
             <template v-else>
               <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
@@ -61,21 +64,38 @@ import { PlusIcon } from '@heroicons/vue/20/solid'
 // Supabase stuff
 const client = useSupabaseClient()
 import { RealtimeChannel } from '@supabase/supabase-js'
+import {getNode} from "@formkit/core";
 let realtimeChannel = RealtimeChannel
 
 const props = defineProps(['process', 'walk'])
 const loading = ref(true)
 
-const edit = computed(() => props.walk)
+const edit = computed(() => {
+  if(props.walk) return true
+  return false
+})
 
 const addWalkModal = ref('addWalkModal')
-const startAddWalk = () => {
-  addWalkModal.value.open()
-}
+async function startAddWalk() {
+  // If edit mode, fill form with Walk
+  await addWalkModal.value.open()
 
+  if (edit) {
+    getNode('addWalk').input({
+      date: props.walk.date,
+      video: props.walk.video,
+      process: props.walk.process,
+      personas: props.walk.personas
+    }).then((data) => {
+    })
+  }
+}
+//  WAS HERE
 async function submitAddWalk (newWalk) {
+  console.log(props.walk)
   const { error, data } = await client.from('walks')
       .upsert({
+        id: props.walk.id,
         date: newWalk.date,
         video: newWalk.video,
         process: props.process,

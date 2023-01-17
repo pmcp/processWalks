@@ -4,13 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0dfe8fae-843f-4c43-b1b9-0ab1694a3545" name="Changes" comment="added member flow">
+    <list default="true" id="0dfe8fae-843f-4c43-b1b9-0ab1694a3545" name="Changes" comment="added deletions">
+      <change afterPath="$PROJECT_DIR$/components/UiSpinner.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ActionsEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ActionsEdit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/PersonasDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/PersonasDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/PersonasList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/PersonasList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ProcessesDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesDetail.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/ProcessesEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesEdit.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/ProcessesList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/StepsEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/StepsEdit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/WalksEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/WalksEdit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/WalksList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/WalksList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/[process]/[walk]/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/[process]/[walk]/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/[process]/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/[process]/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/processes.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/processes.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,7 +69,7 @@
       <updated>1672778320653</updated>
       <workItem from="1672778321820" duration="436000" />
       <workItem from="1672778776199" duration="10282000" />
-      <workItem from="1673280591675" duration="25674000" />
+      <workItem from="1673280591675" duration="35006000" />
     </task>
     <task id="LOCAL-00001" summary="Added flow to restrict only specific domains">
       <created>1672862403534</created>
@@ -87,7 +92,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673465133158</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added deletions">
+      <created>1673468693018</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1673468693018</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -98,11 +110,23 @@
     <option featureType="dependencySupport" implementationName="javascript:npm:nuxt" />
     <option featureType="dependencySupport" implementationName="javascript:npm:postcss" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added flow to restrict only specific domains" />
     <MESSAGE value="added supabase cli as dependency" />
     <MESSAGE value="added member flow" />
-    <option name="LAST_COMMIT_MESSAGE" value="added member flow" />
+    <MESSAGE value="added deletions" />
+    <option name="LAST_COMMIT_MESSAGE" value="added deletions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

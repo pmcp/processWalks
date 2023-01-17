@@ -3,12 +3,10 @@
   <template v-else>
     <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6 mb-6">
       <div class="flex flex-wrap items-center justify-between sm:flex-nowrap">
-        <Ui-Heading>
-          <div class="flex items-center">
-            <span class="mr-4">Walks</span>
-            <Walks-Edit :process="props.process"></Walks-Edit>
-          </div>
-        </Ui-Heading>
+        <div>
+          <span class="mr-4">Walks</span>
+          <Walks-Edit :process="props.process"></Walks-Edit>
+        </div>
         <div class="ml-4 mt-4 flex-shrink-0">
         </div>
       </div>
@@ -60,7 +58,7 @@ async function getWalks(id) {
   try {
     let { data, error, status } = await client
         .from('walks')
-        .select('id, date,personas, video')
+        .select('id, date, personas, video')
         .eq('process', id)
         .order('date', { ascending: false })
     if (error && status !== 406) throw error

@@ -1,7 +1,6 @@
 <template>
   <div class="mx-auto max-w-screen-2xl py-6 sm:px-6 lg:px-8 flex justify-center"> 
     <ui-slide-over ref="slideOver" @close="closeSlideOver">
-      <Processes-Detail :process="activeProcess" />
       <Walks-List :process="activeProcess.id" />
     </ui-slide-over>
     <div class="container" >
@@ -50,10 +49,9 @@ async function getProcesses () {
   try {
     let { data, error, status } = await client
         .from('processes')
-        .select('id, name, passwordProtected, description, walks(id), members:profi_proc(profi_id), delete')
+        .select('id, name, passwordProtected, description, walks(id), profiles!profi_proc(email), delete')
         .order('created_at', { ascending: false })
         .is('delete', false)
-
     if (error && status !== 406) throw error
     if (data) {
       console.log(data)
