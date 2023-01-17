@@ -1,15 +1,12 @@
 ## DOING
-- Restrict non members
-- Delete everything
+- Topics to JOIN Table
+- Personas to JOIN Table
 
 ## Todo
-
-- Add "edit walk" (date & Personas)
-- Personas to JOIN Table
-- Topics to JOIN Table
+- Restrict non members
 - Change storage to UploadCare?
 - Edit Personas in walk
 - Persona page
+- ACTION PAGE
 
 ## Nice to have
-- https://tympanus.net/Tutorials/SurfaceSampling/index3.html
