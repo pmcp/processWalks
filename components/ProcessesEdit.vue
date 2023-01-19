@@ -62,7 +62,7 @@
 <script setup>
 import { PlusIcon } from '@heroicons/vue/20/solid'
 import { getNode } from '@formkit/core';
-const client = useSupabaseClient()
+const client = useSupabase();
 const props = defineProps(['process'])
 const loading = ref(true)
 const mode = ref('add')

@@ -62,7 +62,7 @@
 import { PlusIcon } from '@heroicons/vue/20/solid'
 
 // Supabase stuff
-const client = useSupabaseClient()
+const client = useSupabase()
 import { RealtimeChannel } from '@supabase/supabase-js'
 import {getNode} from "@formkit/core";
 let realtimeChannel = RealtimeChannel

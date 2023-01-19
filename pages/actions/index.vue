@@ -7,7 +7,7 @@
 </template>
 <script setup>
 const loading = ref(false)
-const client = useSupabaseClient()
+const client = useSupabase()
 const actions = ref(null)
 
 // Load the Actions

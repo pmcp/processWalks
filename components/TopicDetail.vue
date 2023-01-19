@@ -2,7 +2,7 @@
   <div class="whitespace-nowrap px-2 py-1 text-center rounded-xl mb-2 text-xs font-medium bg-rose-100 text-gray-900">{{ p }}</div>
 </template>
 <script setup>
-const client = useSupabaseClient()
+const client = useSupabase()
 const props = defineProps(['topic'])
 const loading = ref(true)
 const p = ref({})

@@ -52,8 +52,9 @@ const loading = ref(true)
 const error = ref(true)
 
 // Supabase stuff
-const client = useSupabaseClient()
-const user = useSupabaseUser();
+const client = useSupabase();
+const user = useUserStore();
+
 
 // Get the Members
 let profiles = ref([])

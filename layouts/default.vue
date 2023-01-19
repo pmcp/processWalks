@@ -114,15 +114,15 @@ import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/vue/24/outline
 
 const supabase = useSupabase();
 
+// Stores
+const user = useUserStore();
+
 // Sign in
 const loginModal = ref('loginModal')
 const loginMessage = ref('')
 async function signIn (data) {
   const res = await supabase.auth.signInWithOtp({
     email: data.email,
-    // options: {
-    //   emailRedirectTo: 'https://example.com/welcome'
-    // }
   })
 }
 
@@ -151,12 +151,10 @@ supabase.auth.getSession().then(({ data }) => {
 })
 
 supabase.auth.onAuthStateChange((_, _session) => {
-  console.log(_session)
   session.value = _session
 })
 
 async function getProfile(){
-  console.log(session.value.user)
   try {
     const {data, error} = await supabase
         .from('profiles')
@@ -168,10 +166,13 @@ async function getProfile(){
     if (data) {
       console.log(data)
       if(data.admin) navigation.value.push({ name: 'Members', href: '/members', current: false })
+      user.id = session.value.user.id
+      user.admin = data.admin
     }
   } catch (error) {
     console.log(error)
   } finally {
+
   }
 }
 </script>

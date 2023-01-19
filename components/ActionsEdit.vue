@@ -73,7 +73,7 @@ const props = defineProps(['action', 'step'])
 const addActionModal = ref('addActionModal')
 
 // Supabase stuff
-const client = useSupabaseClient()
+const client = useSupabase()
 
 async function deleteAction() {
   // Delete the JOIN first

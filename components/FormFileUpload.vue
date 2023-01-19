@@ -21,7 +21,7 @@
 
 
 <script setup>
-const client = useSupabaseClient()
+const client = useSupabase()
 
 const emit = defineEmits(['upload'])
 const uploading = ref(false)

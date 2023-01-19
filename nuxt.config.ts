@@ -11,7 +11,14 @@ export default defineNuxtConfig({
     },
     modules: [
         '@vueuse/nuxt',
-        '@formkit/nuxt'
+        '@formkit/nuxt',
+        [
+            '@pinia/nuxt',
+            {
+                autoImports: ['defineStore', 'acceptHMRUpdate'],
+            },
+        ],
+
     ],
     css: ["@/assets/css/styles.css"],
     formkit: {
@@ -21,5 +28,8 @@ export default defineNuxtConfig({
         postcss: {
             postcssOptions: require("./postcss.config.js"),
         },
+    },
+    imports: {
+        dirs: ['stores'],
     },
 })

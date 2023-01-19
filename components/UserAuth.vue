@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-const supabase = useSupabaseClient()
+const supabase = useSupabase()
 
 const loading = ref(false)
 const email = ref('')

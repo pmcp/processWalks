@@ -2,7 +2,7 @@
   <p class="text-gray-900">{{ p }}</p>
 </template>
 <script setup>
-const client = useSupabaseClient()
+const client = useSupabase()
 const props = defineProps(['persona'])
 const loading = ref(true)
 const p = ref({})

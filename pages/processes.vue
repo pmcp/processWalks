@@ -16,7 +16,6 @@ const error = ref(true)
 
 // Supabase stuff
 const supabase = useSupabase();
-
 // Slide Over Menu
 const slideOver = ref('slideOver')
 

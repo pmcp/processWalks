@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-const client = useSupabaseClient()
+const client = useSupabase()
 
 const loading = ref(true)
 const username = ref('')

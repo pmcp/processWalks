@@ -45,7 +45,7 @@ const loading = ref(true)
 
 
 // Supabase stuff
-const client = useSupabaseClient()
+const client = useSupabase()
 import { RealtimeChannel } from '@supabase/supabase-js'
 let StepsRealtimeChannel = RealtimeChannel
 let WalksRealtimeChannel = RealtimeChannel

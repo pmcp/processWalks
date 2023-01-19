@@ -44,7 +44,7 @@
 <script setup>
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
 const loading = ref(true)
-const client = useSupabaseClient()
+const client = useSupabase()
 
 import { RealtimeChannel } from '@supabase/supabase-js'
 let realtimeChannel = RealtimeChannel

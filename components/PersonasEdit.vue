@@ -38,7 +38,7 @@
 <script setup>
 import { PlusIcon } from '@heroicons/vue/20/solid'
 const addPersonaModal = ref('addPersonaModal')
-const client = useSupabaseClient()
+const client = useSupabase()
 const emit = defineEmits(['added'])
 
 const startAddPersona = (e) => {

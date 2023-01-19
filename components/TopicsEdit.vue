@@ -46,7 +46,7 @@
 <script setup>
 import { PlusIcon } from '@heroicons/vue/20/solid'
 const addTopicModal = ref('addTopicModal')
-const client = useSupabaseClient()
+const client = useSupabase()
 const props = defineProps(['mode'])
 const emit = defineEmits(['added'])
 
