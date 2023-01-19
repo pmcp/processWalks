@@ -13,7 +13,7 @@ export const useMembersStore = defineStore('members-store', () => {
                 .is('delete', false)
             if (error) console.log(error)
             if (data) {
-                this.list = data
+                list.value = data
                 return;
             }
         } catch (error) {
@@ -29,7 +29,7 @@ export const useMembersStore = defineStore('members-store', () => {
         .on(
             'postgres_changes',
             { event: '*', schema: 'public', table: 'profiles' }, payload => {
-                this.getAll()
+                getAll()
             })
         .subscribe()
     }

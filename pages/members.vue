@@ -16,11 +16,8 @@
                   </th>
                 </tr>
                 </thead>
-
                 <tbody class="divide-y divide-gray-200 ">
-                <tr v-for="person in list" :key="person.id"
-
-                >
+                <tr v-for="person in list" :key="person.id">
                   <td class="whitespace-nowrap px-3 text-sm text-gray-500">{{ person.email }}</td>
                   <td class="flex justify-center pt-6">
                     <FormKit
@@ -51,14 +48,7 @@
 </template>
 
 <script setup>
-
-// UI Vars
-const loading = ref(true)
-const error = ref(true)
-
-
 //  Store Stuff
-import { storeToRefs } from 'pinia'
 const user = useUserStore();
 const members = useMembersStore();
 
@@ -67,7 +57,6 @@ const list = computed(() => members.list)
 
 // Get the Members
 await members.getAll()
-members.subscribe()
 
 onMounted(() => {
   members.subscribe()

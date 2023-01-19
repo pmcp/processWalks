@@ -4,23 +4,15 @@
       <Walks-List :process="activeProcess.id" />
     </ui-slide-over>
     <div class="container" >
-      <processes-list :processes="processes" @open="openProcess" />
+      <processes-list :processes="list" @open="openProcess" />
     </div>
   </div>
 </template>
 
 <script setup>
-// UI Vars
-const loading = ref(true)
-const error = ref(true)
-
-// Supabase stuff
-const supabase = useSupabase();
 // Slide Over Menu
 const slideOver = ref('slideOver')
-
 const openProcess = (processId) => {
-  // Set the [process] id, so Walks can be loaded
   activeProcessId.value = processId
   slideOver.value.open()
 }
@@ -29,54 +21,19 @@ const closeSlideOver = () => {
   activeProcessId.value = null
 }
 
-// Active Process is a computed based on activeProcessId
-let activeProcessId = ref(null)
-const activeProcess = computed(() => {
-  return processes.value.find(item => item.id === activeProcessId.value);
-});
 
+const processes = useProcessesStore();
+import { storeToRefs } from 'pinia'
+const { activeProcessId, activeProcess, list } = storeToRefs(processes)
+const { getAll } = processes
 // Load the Processes
-let processes = ref([])
-async function getProcesses () {
-  loading.value = true;
+await getAll()
 
-  // TODO: Loading is unsafe, should still do rules on server
-
-  try {
-    let { data, error, status } = await supabase
-        .from('processes')
-        .select('id, name, passwordProtected, description, walks(id), profiles!profi_proc(email), delete')
-        .order('created_at', { ascending: false })
-        .is('delete', false)
-    if (error && status !== 406) throw error
-    if (data) {
-      console.log(data)
-      processes.value = data
-    }
-  } catch (error) {
-    console.log(error)
-    error.value = error.message
-  } finally {
-    loading.value = false
-  }
-}
-await getProcesses()
-
-// Once mounted, start tracking updates
-import { RealtimeChannel } from '@supabase/supabase-js'
-let processesRealtimeChannel = RealtimeChannel
 onMounted(() => {
-  processesRealtimeChannel = supabase
-    .channel('public:[process]')
-    .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'processes' },
-        () => getProcesses())
-    .subscribe()
+  processes.subscribe()
 })
 onUnmounted(() => {
-  supabase.removeChannel(processesRealtimeChannel)
-  processes.value = []
+  processes.unsubscribe()
 })
 
 
