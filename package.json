@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "build": "node ./enableNetlifyCookies.js && nuxt build",
+    "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "node ./enableNetlifyCookies.js && nuxt generate",
+    "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
