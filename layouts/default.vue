@@ -151,7 +151,8 @@ async function signIn (data) {
 
 // Sign out
 async function signOut () {
-  const { error } = await client.auth.signOut()
+  const { error } = await supabase.auth.signOut()
+
 }
 
 const navigation = ref([
@@ -160,7 +161,19 @@ const navigation = ref([
   // { name: 'Sandbox', href: '/sandbox', current: false }
 ])
 
-// If User is logged in, get the profile
+
+const session = ref()
+  // If User is logged in, get the profile
+  supabase.auth.getSession().then(({ data }) => {
+    console.log(data)
+    session.value = data.session
+  })
+
+  supabase.auth.onAuthStateChange((_, _session) => {
+    console.log(_session)
+    session.value = _session
+  })
+
 if(userSB.value) {
   try {
     const {data, error} = await client
