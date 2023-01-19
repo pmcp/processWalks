@@ -26,7 +26,7 @@
               <Menu as="div" class="relative inline-block text-left">
                 <div>
                   <MenuButton class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-                    <span v-if="userSB">
+                    <span v-if="session != null">
                       Sign out
                     </span>
                     <span v-else>
@@ -38,7 +38,8 @@
 
                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                   <MenuItems class="absolute right-0 z-10 mt-2 w-80 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div v-if="userSB" class="py-1">
+
+                    <div v-if="session != null" class="py-1">
                       <button @click="signOut" class="hover:underline" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full px-4 py-2 text-left text-sm']">Sign out</button>
                     </div>
                     <div v-else class="p-4">
@@ -111,48 +112,24 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/vue/24/outline'
 
-
-const client = useSupabaseClient()
-const userSB = useSupabaseUser();
-
 const supabase = useSupabase();
 
 // Sign in
 const loginModal = ref('loginModal')
 const loginMessage = ref('')
 async function signIn (data) {
-  console.log(supabase)
   const res = await supabase.auth.signInWithOtp({
     email: data.email,
     // options: {
     //   emailRedirectTo: 'https://example.com/welcome'
     // }
   })
-
-  console.log(res)
-  // try {
-  //   const { error } = await client.auth.signInWithOtp({ email: data.email }, {
-  //     data: {
-  //       email: data.email
-  //     }
-  //   })
-  //   if (error) throw error
-  //   loginMessage.value = `Please check your email inbox, we've send you a login link.`
-  //   loginModal.value.open()
-  // } catch (error) {
-  //   console.log(error)
-  //   loginMessage.value = `You are not allowed to log in to this app.`
-  //   loginModal.value.open()
-  // } finally {
-  // //  Set loading false if we use this
-  // }
 }
 
 
 // Sign out
 async function signOut () {
   const { error } = await supabase.auth.signOut()
-
 }
 
 const navigation = ref([
@@ -161,32 +138,36 @@ const navigation = ref([
   // { name: 'Sandbox', href: '/sandbox', current: false }
 ])
 
-
 const session = ref()
-  // If User is logged in, get the profile
-  supabase.auth.getSession().then(({ data }) => {
-    console.log(data)
-    session.value = data.session
-  })
+// If User is logged in, get the profile
+supabase.auth.getSession().then(({ data }) => {
+  session.value = data.session
+  console.log(data)
+  if(data.session != null) {
+    getProfile()
+  } else {
+    console.log('no session')
+  }
+})
 
-  supabase.auth.onAuthStateChange((_, _session) => {
-    console.log(_session)
-    session.value = _session
-  })
+supabase.auth.onAuthStateChange((_, _session) => {
+  console.log(_session)
+  session.value = _session
+})
 
-if(userSB.value) {
+async function getProfile(){
+  console.log(session.value.user)
   try {
-    const {data, error} = await client
+    const {data, error} = await supabase
         .from('profiles')
         .select('id, admin')
-        .eq('id', userSB.value.id)
+        .eq('id', session.value.user.id)
         .limit(1)
         .single()
     if (error) throw error
     if (data) {
       console.log(data)
       if(data.admin) navigation.value.push({ name: 'Members', href: '/members', current: false })
-
     }
   } catch (error) {
     console.log(error)
