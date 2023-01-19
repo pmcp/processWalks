@@ -115,27 +115,37 @@ import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/vue/24/outline
 const client = useSupabaseClient()
 const userSB = useSupabaseUser();
 
+const supabase = useSupabase();
 
 // Sign in
 const loginModal = ref('loginModal')
 const loginMessage = ref('')
 async function signIn (data) {
-  try {
-    const { error } = await client.auth.signInWithOtp({ email: data.email }, {
-      data: {
-        email: data.email
-      }
-    })
-    if (error) throw error
-    loginMessage.value = `Please check your email inbox, we've send you a login link.`
-    loginModal.value.open()
-  } catch (error) {
-    console.log(error)
-    loginMessage.value = `You are not allowed to log in to this app.`
-    loginModal.value.open()
-  } finally {
-  //  Set loading false if we use this
-  }
+  console.log(supabase)
+  const res = await supabase.auth.signInWithOtp({
+    email: data.email,
+    // options: {
+    //   emailRedirectTo: 'https://example.com/welcome'
+    // }
+  })
+
+  console.log(res)
+  // try {
+  //   const { error } = await client.auth.signInWithOtp({ email: data.email }, {
+  //     data: {
+  //       email: data.email
+  //     }
+  //   })
+  //   if (error) throw error
+  //   loginMessage.value = `Please check your email inbox, we've send you a login link.`
+  //   loginModal.value.open()
+  // } catch (error) {
+  //   console.log(error)
+  //   loginMessage.value = `You are not allowed to log in to this app.`
+  //   loginModal.value.open()
+  // } finally {
+  // //  Set loading false if we use this
+  // }
 }
 
 
