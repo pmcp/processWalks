@@ -15,9 +15,7 @@ const loading = ref(true)
 const error = ref(true)
 
 // Supabase stuff
-const client = useSupabaseClient()
-const user = useSupabaseUser();
-console.log(user)
+const supabase = useSupabase();
 
 // Slide Over Menu
 const slideOver = ref('slideOver')
@@ -31,7 +29,6 @@ const closeSlideOver = () => {
   // The closing itself is done from the component (emit on the component), we just need to clear the active [process]
   activeProcessId.value = null
 }
-
 
 // Active Process is a computed based on activeProcessId
 let activeProcessId = ref(null)
@@ -47,7 +44,7 @@ async function getProcesses () {
   // TODO: Loading is unsafe, should still do rules on server
 
   try {
-    let { data, error, status } = await client
+    let { data, error, status } = await supabase
         .from('processes')
         .select('id, name, passwordProtected, description, walks(id), profiles!profi_proc(email), delete')
         .order('created_at', { ascending: false })
@@ -70,7 +67,7 @@ await getProcesses()
 import { RealtimeChannel } from '@supabase/supabase-js'
 let processesRealtimeChannel = RealtimeChannel
 onMounted(() => {
-  processesRealtimeChannel = client
+  processesRealtimeChannel = supabase
     .channel('public:[process]')
     .on(
         'postgres_changes',
@@ -79,7 +76,7 @@ onMounted(() => {
     .subscribe()
 })
 onUnmounted(() => {
-  client.removeChannel(processesRealtimeChannel)
+  supabase.removeChannel(processesRealtimeChannel)
   processes.value = []
 })
 
