@@ -1,12 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt",
+    "build": "node_modules/nuxt/bin/nuxt.js build -c ./nuxt.config.js",
+    "start": "node_modules/nuxt/bin/nuxt.js start -c ./nuxt.config.js",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "start": "nuxt start"
+    "heroku-postbuild": "npm run build"
   },
   "devDependencies": {
     "@nuxtjs/supabase": "0.3.0",
