@@ -1,13 +1,8 @@
-export const useUserStore = defineStore({
-    id: 'user-stores',
-    state: () => {
-        return {
-            id: null,
-            admin: false
-        }
-    },
-    actions: {},
-    getters: {}
+
+
+export const useUserStore = defineStore('user-store', () => {
+    const id = ref(null)
+    const admin = ref(false)
 })
 
 if (import.meta.hot) {

@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto max-w-screen-2xl py-6 sm:px-6 lg:px-8 flex justify-center">
-    <div class="container" v-if="!loading">
+    <div class="container">
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="mt-8 flex flex-col">
         <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -16,20 +16,24 @@
                   </th>
                 </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200 bg-white">
-                <tr v-for="person in profiles" :key="person.email">
+
+                <tbody class="divide-y divide-gray-200 ">
+                <tr v-for="person in list" :key="person.id"
+
+                >
                   <td class="whitespace-nowrap px-3 text-sm text-gray-500">{{ person.email }}</td>
                   <td class="flex justify-center pt-6">
                     <FormKit
-                        :value="person.admin"
+                        v-model="person.admin"
                         type="checkbox"
+                        decorator-icon="check"
                         name="admin"
                         :disabled="(user.id === person.id)"
-                        @click="setAdmin(person.id, !person.admin)"
+                        @click="members.makeAdmin(person.id, !person.admin)"
                     />
                   </td>
                   <td>
-                    <Ui-Button :disabled="(user.id === person.id)" @click="setToRemove(person.id)" :light="true">
+                    <Ui-Button :disabled="(user.id === person.id)" @click="members.remove(person.id)" :light="true">
                       Delete
                     </Ui-Button>
                   </td>
@@ -47,75 +51,29 @@
 </template>
 
 <script setup>
+
 // UI Vars
 const loading = ref(true)
 const error = ref(true)
 
-// Supabase stuff
-const client = useSupabase();
-const user = useUserStore();
 
+//  Store Stuff
+import { storeToRefs } from 'pinia'
+const user = useUserStore();
+const members = useMembersStore();
+
+// const { list } = storeToRefs(members)
+const list = computed(() => members.list)
 
 // Get the Members
-let profiles = ref([])
-async function getProfiles () {
-  loading.value = true;
-  try {
-    let { data, error, status } = await client
-        .from('profiles')
-        .select('id, email, admin, delete')
-        .order('email', { ascending: false })
-        .is('delete', false)
-    if (error && status !== 406) throw error
-    if (data) {
-      console.log(data)
-      profiles.value = data
-    }
-  } catch (error) {
-    error.value = error.message
-  } finally {
-    loading.value = false
-  }
-}
-await getProfiles()
+await members.getAll()
+members.subscribe()
 
-async function setAdmin (profileId, val) {
-  const { data, error } = await client
-      .from('profiles')
-      .update({ admin: val })
-      .eq('id', profileId)
-      .select()
-}
-
-async function setToRemove (profileId) {
-
-  const { data, error } = await client
-      .from('profiles')
-      .update({ delete: true, timeOfDeletion: new Date().toISOString() })
-      .eq('id', profileId)
-  if (error) throw error
-  if (data) {
-    console.log('done deleting', data)
-  }
-}
-
-// Once mounted, start tracking updates
-import { RealtimeChannel } from '@supabase/supabase-js'
-let profilesRealtimeChannel = RealtimeChannel
 onMounted(() => {
-  profilesRealtimeChannel = client
-      .channel('public:[profile]')
-      .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'profiles' },
-          () => getProfiles())
-      .subscribe()
+  members.subscribe()
 })
 onUnmounted(() => {
-  client.removeChannel(profilesRealtimeChannel)
-  profiles.value = []
+  members.unsubscribe()
 })
-
-
 
 </script>

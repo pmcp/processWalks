@@ -1,3 +1,6 @@
+// The following Tailwind theme aspires to be a reproduction of the 
+// default optional Genesis CSS theme that ships with FormKit
+
 export default {
     // Global styles apply to _all_ inputs with matching section keys
     global: {
@@ -20,7 +23,7 @@ export default {
         decorator: 'block relative h-5 w-5 mr-2 rounded bg-white bg-gradient-to-b from-transparent to-gray-200 ring-1 ring-gray-400 peer-checked:ring-blue-500 text-transparent peer-checked:text-blue-500',
         decoratorIcon: 'flex p-[3px] w-full h-full absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
         help: 'mb-2 mt-1.5',
-        input: 'absolute w-0 h-0 overflow-hidden opacity-0 pointer-events-none peer',
+        input: 'fixed left-[999em] w-0 h-0 overflow-hidden opacity-0 pointer-events-none peer',
         label: '$reset text-sm text-gray-700 mt-1 select-none',
         wrapper: 'flex items-center mb-1',
     },
@@ -134,7 +137,7 @@ export default {
     toggle: {
         altLabel: 'block w-full mb-1 font-bold text-sm',
         inner: '$reset inline-block mr-2',
-        input: 'peer absolute opacity-0 pointer-events-none',
+        input: 'peer fixed left-[999em] opacity-0 pointer-events-none',
         innerLabel: 'text-[10px] font-bold absolute left-full top-1/2 -translate-x-full -translate-y-1/2 px-1',
         thumb: 'relative left-0 aspect-square rounded-full transition-all w-5 bg-gray-100',
         track: 'p-0.5 min-w-[3em] relative rounded-full transition-all bg-gray-400 peer-checked:bg-blue-500 peer-checked:[&>div:last-child]:left-full peer-checked:[&>div:last-child]:-translate-x-full peer-checked:[&>div:first-child:not(:last-child)]:left-0 peer-checked:[&>div:first-child:not(:last-child)]:translate-x-0',
