@@ -36,7 +36,7 @@
               </tr>
               <tr v-else v-for="(step, id) in stepsOrdered"  :class="id % 2 === 0 ? undefined : 'bg-gray-50'">
                 <td class="align-top pt-6 whitespace-nowrap px-2 py-4 text-sm text-gray-50" align="center">
-                  <StarIcon v-if="step.milestone" class="border-transparent text-rose-500 h-5 w-5" aria-hidden="true" />
+                  <StarIcon v-if="step.milestone" class="border-transparent text-cyan-500 h-5 w-5" aria-hidden="true" />
                   <StarIcon v-else class="h-5 w-5 stroke-gray-500 text-transparent" aria-hidden="true" />
                 </td>
                 <td class="align-top whitespace-nowrap py-4 px-2 text-sm font-medium text-gray-900 ">
@@ -67,7 +67,7 @@
                 </td>
                 <td class="align-top relative whitespace-nowrap py-4 text-right text-sm font-medium sm:pr-2">
                   <Ui-Button-Icon :icon=true :light="true" @click="emit('editStep', step.id)">
-                    <PencilSquareIcon class="h-5 w-5 fill-gray-500 hover:fill-rose-500 text-transparent" aria-hidden="true" />
+                    <PencilSquareIcon class="h-5 w-5 fill-gray-500 hover:fill-cyan-500 text-transparent" aria-hidden="true" />
                   </Ui-Button-Icon>
                 </td>
               </tr>

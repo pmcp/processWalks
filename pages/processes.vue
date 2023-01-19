@@ -21,7 +21,6 @@ const closeSlideOver = () => {
   activeProcessId.value = null
 }
 
-
 const processes = useProcessesStore();
 import { storeToRefs } from 'pinia'
 const { activeProcessId, activeProcess, list } = storeToRefs(processes)

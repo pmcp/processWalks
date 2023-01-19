@@ -265,6 +265,7 @@ const processSchema = [
   },
   {
     $formkit: 'checkbox',
+    decoratorIcon: 'check',
     name: 'passwordProtected',
     id: 'passwordProtected',
     value: false,

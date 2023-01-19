@@ -36,6 +36,7 @@
         />
         <FormKit
             type="checkbox"
+            decorator-icon="check"
             label="Done"
             name="done"
             help="Has this action been done?"

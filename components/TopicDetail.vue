@@ -1,5 +1,5 @@
 <template>
-  <div class="whitespace-nowrap px-2 py-1 text-center rounded-xl mb-2 text-xs font-medium bg-rose-100 text-gray-900">{{ p }}</div>
+  <div class="whitespace-nowrap px-2 py-1 text-center rounded-xl mb-2 text-xs font-medium bg-cyan-100 text-gray-900">{{ p }}</div>
 </template>
 <script setup>
 const client = useSupabase()

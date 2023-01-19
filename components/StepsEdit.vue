@@ -34,6 +34,7 @@
         />
         <FormKit
             type="checkbox"
+            decorator-icon="star"
             label="Milestone"
             name="milestone"
             help="Is this an important moment in the walk?"
@@ -51,6 +52,7 @@
         <div class="relative">
           <FormKit
               type="checkbox"
+              decorator-icon="check"
               label="Topics"
               name="topics"
               ref="topicsInput"
@@ -75,7 +77,7 @@
       <Ui-Button @click="deleteStep" v-if="mode == 'edit'">
         Delete Step
       </Ui-Button>
-      <p class="pt-4 text-rose-600"><span class="italic text-sm ">{{ errorMessage }}</span></p>
+      <p class="pt-4 text-cyan-600"><span class="italic text-sm ">{{ errorMessage }}</span></p>
     </template>
     <template v-slot:closeButton>
       Close

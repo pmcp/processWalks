@@ -32,6 +32,7 @@
               type="checkbox"
               label="Personas"
               name="personas"
+              decorator-icon="check"
               ref="personasInput"
               :options="personas"
               help="Add personas to this walk"
