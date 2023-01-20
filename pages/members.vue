@@ -52,7 +52,6 @@
 const user = useUserStore();
 const members = useMembersStore();
 
-// const { list } = storeToRefs(members)
 const list = computed(() => members.list)
 
 // Get the Members

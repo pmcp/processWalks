@@ -5,7 +5,7 @@
       <div class="flex flex-wrap items-center justify-between sm:flex-nowrap">
         <div>
           <span class="mr-4">Walks</span>
-          <Walks-Edit :process="props.process"></Walks-Edit>
+          <Walks-Edit :process="props.process" ></Walks-Edit>
         </div>
         <div class="ml-4 mt-4 flex-shrink-0">
         </div>

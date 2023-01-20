@@ -45,7 +45,7 @@ const color = computed(() => {
   if(props.rating === blockWeighed) {
     style = style + ';opacity:1'
   } else {
-    style = style + ';opacity:.4;'
+    style = style + ';opacity:.1;'
 
   }
   console.log(style)

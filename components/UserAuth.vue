@@ -1,4 +1,18 @@
 <template>
+  <div>
+    <Ui-Modal ref="loginModal">
+      <template v-slot:title>
+        Sign up / login
+      </template>
+      <template v-slot:content>
+        {{ loginMessage }}
+      </template>
+      <template v-slot:closeButton>
+        Close
+      </template>
+    </Ui-Modal>
+  </div>
+
   <form class="row flex-center flex" @submit.prevent="handleLogin">
     <div class="col-6 form-widget">
       <h1 class="header">Supabase + Nuxt 3</h1>

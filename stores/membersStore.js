@@ -1,5 +1,9 @@
 import { useSupabase } from '~/composables/useSupabase.ts'
 
+// Hot reload
+
+
+
 export const useMembersStore = defineStore('members-store', () => {
     let realTimeChannel
     const list = ref([])
@@ -25,13 +29,13 @@ export const useMembersStore = defineStore('members-store', () => {
 
     function subscribe(){
         realTimeChannel = useSupabase()
-        .channel('public:[profile]')
-        .on(
-            'postgres_changes',
-            { event: '*', schema: 'public', table: 'profiles' }, payload => {
-                getAll()
-            })
-        .subscribe()
+            .channel('public:[profile]')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'profiles' }, payload => {
+                    getAll()
+                })
+            .subscribe()
     }
 
     function unsubscribe(){
@@ -64,9 +68,6 @@ export const useMembersStore = defineStore('members-store', () => {
 
     return { list, getAll, subscribe, unsubscribe, makeAdmin, remove }
 })
-
-
-// Hot reload
 if (import.meta.hot) {
     import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot));
 }

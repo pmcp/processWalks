@@ -81,7 +81,7 @@ async function startAddWalk() {
   // If edit mode, fill form with Walk
   await addWalkModal.value.open()
 
-  if (edit) {
+  if (edit.value) {
     getNode('addWalk').input({
       date: props.walk.date,
       video: props.walk.video,
@@ -93,21 +93,39 @@ async function startAddWalk() {
 }
 //  WAS HERE
 async function submitAddWalk (newWalk) {
-  console.log(props.walk)
-  const { error, data } = await client.from('walks')
-      .upsert({
-        id: props.walk.id,
-        date: newWalk.date,
-        video: newWalk.video,
-        process: props.process,
-        personas: newWalk.personas
-      })
-      .select('date, video, process')
-      .single()
-  if (error) {
-    console.error(error);
-    return;
+  if(edit.value) {
+    const { error, data } = await client.from('walks')
+        .upsert({
+          id: walkId,
+          date: newWalk.date,
+          video: newWalk.video,
+          process: props.process,
+          personas: newWalk.personas
+        })
+        .select('date, video, process')
+        .single()
+    if (error) {
+      console.error(error);
+      addWalkModal.value.close()
+      return;
+    }
+  } else {
+    const { error, data } = await client.from('walks')
+        .insert({
+          date: newWalk.date,
+          video: newWalk.video,
+          process: props.process,
+          personas: newWalk.personas
+        })
+        .select('date, video, process')
+        .single()
+    if (error) {
+      console.error(error);
+      addWalkModal.value.close()
+      return;
+    }
   }
+
   addWalkModal.value.close()
 }
 

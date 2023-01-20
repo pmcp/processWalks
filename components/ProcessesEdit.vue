@@ -64,6 +64,7 @@ import { PlusIcon } from '@heroicons/vue/20/solid'
 import { getNode } from '@formkit/core';
 const client = useSupabase();
 const props = defineProps(['process'])
+
 const loading = ref(true)
 const mode = ref('add')
 
@@ -211,15 +212,18 @@ async function submitAddProcess (newProcess) {
         }
 
         // If membersToSave > 0, add membersToSave as JOIN
-        if(membersToSave.length > 0) {
-          for (let i = 0; i < membersToSave.length; i++) {
-            await client.from('profi_proc')
-                .insert({
-                  profi_id: membersToSave[i],
-                  proc_id: projectId
-                })
+        if(membersToSave) {
+          if(membersToSave.length > 0) {
+            for (let i = 0; i < membersToSave.length; i++) {
+              await client.from('profi_proc')
+                  .insert({
+                    profi_id: membersToSave[i],
+                    proc_id: projectId
+                  })
+            }
           }
         }
+
       }
     } catch (error) {
       console.log(error)
@@ -230,8 +234,14 @@ async function submitAddProcess (newProcess) {
 
 
 
-    // Check if there
-    if(newProcess.members.length < 1) return;
+    if(!newProcess.members) {
+      addProcessModal.value.close()
+      return;
+    };
+    if(newProcess.members.length < 1) {
+      addProcessModal.value.close()
+      return;
+    };
     for (let i = 0; i < newProcess.members.length; i++) {
       const memberId = newProcess.members[i]
       // Save Members as JOIN table
@@ -248,6 +258,7 @@ async function submitAddProcess (newProcess) {
 
 
   }
+
   addProcessModal.value.close()
 }
 
