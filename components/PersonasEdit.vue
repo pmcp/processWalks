@@ -13,7 +13,7 @@
           id="addPersona"
           submit-label="Add Persona"
           :actions="false"
-          @submit="submitAddPersona"
+          @submit="addPersona"
       >
         <FormKit
             type="textarea"
@@ -38,26 +38,19 @@
 <script setup>
 import { PlusIcon } from '@heroicons/vue/20/solid'
 const addPersonaModal = ref('addPersonaModal')
-const client = useSupabase()
 const emit = defineEmits(['added'])
+
+const personas = usePersonasStore();
 
 const startAddPersona = (e) => {
   addPersonaModal.value.open()
   e.preventDefault();
 }
 
-async function submitAddPersona (item) {
-  const { error, data } = await client.from('personas')
-      .upsert({
-        description: item.description,
-      })
-      .select()
-  if (error) {
-    return;
-  }
+async function addPersona(data) {
+  const newPersona = await personas.add(data)
   addPersonaModal.value.close()
-  emit('added', data[0].id)
+  emit('added', newPersona[0].id)
 }
-
 
 </script>

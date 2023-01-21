@@ -126,7 +126,6 @@ async function getProcess(processId) {
 
 const members = ref([])
 async function getProfiles () {
-
   try {
     let { data, error, status } = await client
         .from('profiles')
@@ -163,8 +162,6 @@ async function removeProcess () {
   }
   addProcessModal.value.close()
 }
-
-
 
 async function submitAddProcess (newProcess) {
   const { error, data } = await client.from('processes')

@@ -7,19 +7,21 @@
     <section  class="sticky top-0 flex min-w-0 flex-1 flex-col lg:order-last">
       <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions"/>
     </section>
+
     <aside class="hidden lg:order-first lg:block lg:flex-shrink-0 h-full">
       <div class="relative flex gap-8 w-96 pr-2 flex-col border-r border-gray-200 h-full">
         <div class="sticky top-5 z-10 bg-white border-b-2 border-gray-50">
           <div class="px-2 pb-4 shadow-xl rounded-lg">
-            <div v-if="walk.video">
-              <Player :video="walk.video" ref="VideoPlayer" @timeupdate="updateTime"/>
+            <div v-if="walk.videoTempUrl">
+              <Player :video="walk.videoTempUrl" ref="VideoPlayer" @timeupdate="video.updateTime"/>
               <div class="flex flex-row justify-between mt-2 ">
+
                 <Form-File-Upload :light="true" @upload="addVideo" />
-                <Steps-Edit ref="stepsEdit" :walk="walk.id" :videoTime="currentVideoTime" :videoUrl="walk.video" @stopPlayer="$refs.VideoPlayer.player.pause()" />
+                <Steps-Edit ref="stepsEdit" :walk="walk.id" :videoTime="currentVideoTime" :videoUrl="walk.videoTempUrl" @stopPlayer="$refs.VideoPlayer.player.pause()" />
               </div>
             </div>
             <div v-else class="h-full rounded-lg border-4 border-dashed border-gray-200 flex justify-center py-20">
-              <Form-File-Upload :light="true" :empty="walk.video == null" @upload="addVideo" />
+              <Form-File-Upload :light="true" :empty="walk.videoTempUrl == null" @upload="addVideo" />
             </div>
           </div>
         </div>
@@ -41,54 +43,38 @@
 </template>
 <script setup>
 const route = useRoute()
-const loading = ref(true)
 
 
-// Supabase stuff
-const client = useSupabase()
-import { RealtimeChannel } from '@supabase/supabase-js'
-let StepsRealtimeChannel = RealtimeChannel
-let WalksRealtimeChannel = RealtimeChannel
-let ActionsRealtimeChannel = RealtimeChannel
-
-// Get Walk
-const walk = ref(null)
-async function getWalk(walkId) {
-  loading.value = true
-  try {
-    let { data, error, status } = await client
-        .from('walks')
-        .select(`id, date, video, personas, processes(id, description, name), steps!steps_walk_fkey(id, walk, description, timing, observation, milestone, topics, rating, actions(id, description, act_by, done, walk, assigned_to))`)
-        .eq('id', walkId)
-        .single()
-    if (error && status !== 406) throw error
-    if (data) {
-      // Get signed Url of video
-      if(data.video) {
-        const videoUrl = await client
-            .storage
-            .from('movies')
-            .createSignedUrl(data.video, 3600)
-        data.video = videoUrl.data.signedUrl
-      }
-      walk.value = data
-    }
-  } catch (error) {
-    console.log(error)
-  } finally {
-    loading.value = false
-  }
-}
-getWalk(route.params.walk)
-
-// Video Stuff
-const currentVideoTime = ref(0)
-const updateTime = (time) => currentVideoTime.value = time
-
+// UI Stuff
 // Slide Over Logic
 const slideOver = ref('slideOver')
 let activeStepId = ref(null)
 function closeStepSlideOver(){}
+
+// Stores
+import { storeToRefs } from 'pinia'
+const walks = useWalksStore();
+const steps = useStepsStore();
+const actions = useActionsStore();
+const processes = useProcessesStore();
+
+
+// Get Walk
+const { single: walk } = storeToRefs(walks)
+walks.get(route.params.walk)
+
+
+// Video Stuff
+const video = useVideoStore();
+const { player, currentTime } = storeToRefs(walks)
+async function addVideo(upload) {
+  console.log(upload)
+  video.add(upload, route.params.walk)
+}
+
+
+
+
 // Show slide over with actions
 function showActions(step) {
   activeStepId.value = step.id
@@ -100,6 +86,7 @@ const activeStep = computed(() => {
   return activeStep[0]
 })
 
+// Use the video player
 const VideoPlayer = ref(null)
 function seekVideoTime(time) {
   VideoPlayer.value.player.currentTime(time)
@@ -112,54 +99,21 @@ function editStep(id) {
   stepsEdit.value.startAddSteps(id)
 }
 
-// Uploading a video
-async function addVideo(video) {
-  console.log(video)
-  const { error } = await client
-      .from('walks')
-      .update({ video: video })
-      .eq('id', route.params.walk)
-  getWalk(route.params.walk)
-}
-
 onMounted(async () => {
-  loading.value = true
-  // Subscribe to changes of Steps
-  WalksRealtimeChannel = client
-      .channel('walks')
-      .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'walks', filter: `id=eq.${route.params.walk}` },
-          data => {
-            getWalk(route.params.walk)
-          })
-      .subscribe()
 
-  StepsRealtimeChannel = client
-      .channel('steps')
-      .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'steps', filter: `walk=eq.${route.params.walk}` },
-          data => {
-            getWalk(route.params.walk)
-          })
-      .subscribe()
-  ActionsRealtimeChannel = client
-      .channel('actions')
-      .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'actions', filter: `walk=eq.${route.params.walk}` },
-          data => {
-            getWalk(route.params.walk)
-          })
-      .subscribe()
-  loading.value = false
+  walks.subscribeSingle(route.params.walk)
+  steps.subscribeList(route.params.walk)
+  actions.subscribeList(route.params.walk)
+  processes.subscribeSingle(route.params.process, route.params.walk)
+  // TODO: Add subscribe for steps_topics
 })
 
 onUnmounted(() => {
-  client.removeChannel(StepsRealtimeChannel)
-  client.removeChannel(ActionsRealtimeChannel)
-  client.removeChannel(WalksRealtimeChannel)
+  walks.unsubscribeSingle()
+  steps.unsubscribeList()
+  actions.unsubscribeList()
+  processes.unsubscribeSingle()
+  // TODO: Add unsubscribe for steps_topics
 })
 
 </script>

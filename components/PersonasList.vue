@@ -4,7 +4,7 @@
   </div>
   <ul role="list" class="divide-y divide-gray-200 ">
     <li v-for="(persona, key) in personas" :key="key" class="text-sm font-light flex py-4 mr-4">
-      <Personas-Detail :persona="persona" />
+      <p class="text-gray-900">{{ persona.description }}</p>
     </li>
   </ul>
 </template>

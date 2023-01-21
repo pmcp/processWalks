@@ -1,14 +1,15 @@
 <template>
-  <Ui-Button v-if="edit" @click="startAddWalk" :light="true">
+  <Ui-Button v-if="edit" @click="open" :light="true">
     Edit
   </Ui-Button>
-  <Ui-Button v-else @click="startAddWalk">
+  <Ui-Button v-else @click="open">
     <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
     New Walk
   </Ui-Button>
-  <Ui-Modal ref="addWalkModal">
+  <Ui-Modal ref="walkModal">
     <template v-slot:title>
-      Add Walk
+      <span v-if="edit">Edit Walk</span>
+      <span v-else>Add Walk</span>
     </template>
     <template v-slot:content>
       <FormKit
@@ -17,7 +18,7 @@
           id="addWalk"
           :actions="false"
           submit-label="Add Walk"
-          @submit="submitAddWalk"
+          @submit="saveWalk"
       >
         <FormKit
             type="date"
@@ -34,11 +35,11 @@
               name="personas"
               decorator-icon="check"
               ref="personasInput"
-              :options="personas"
+              :options="personasList"
               help="Add personas to this walk"
           />
 
-          <Personas-Edit mode="add" @added="addPersona"/>
+          <Personas-Edit mode="add" @added="addPersonaToPersonaList"/>
         </div>
         <div class="absolute right-6 bottom-0">
           <FormKit type="submit">
@@ -62,121 +63,78 @@
 <script setup>
 import { PlusIcon } from '@heroicons/vue/20/solid'
 
-// Supabase stuff
-const client = useSupabase()
-import { RealtimeChannel } from '@supabase/supabase-js'
-import {getNode} from "@formkit/core";
-let realtimeChannel = RealtimeChannel
-
+// PROPS
 const props = defineProps(['process', 'walk'])
-const loading = ref(true)
 
+// UI Refs
+const walkModal = ref('walkModal')
+
+// Formkit
+import {getNode} from "@formkit/core";
+
+// Stores
+import { storeToRefs } from 'pinia'
+const walks = useWalksStore();
+
+// If a walk is passed as prop, we are editing this walk
 const edit = computed(() => {
   if(props.walk) return true
   return false
 })
 
-const addWalkModal = ref('addWalkModal')
-async function startAddWalk() {
-  // If edit mode, fill form with Walk
-  await addWalkModal.value.open()
+const personasFormkitFormatted = computed(() => {
+  return props.walk.personas.map((p) => p.id)
+})
 
+async function open() {
+  // If edit mode, fill form with Walk
+  await walkModal.value.open()
   if (edit.value) {
+    console.log(personasFormkitFormatted.value)
     getNode('addWalk').input({
       date: props.walk.date,
       video: props.walk.video,
       process: props.walk.process,
-      personas: props.walk.personas
+      personas: personasFormkitFormatted.value
     }).then((data) => {
     })
   }
 }
-//  WAS HERE
-async function submitAddWalk (newWalk) {
-  if(edit.value) {
-    const { error, data } = await client.from('walks')
-        .upsert({
-          id: walkId,
-          date: newWalk.date,
-          video: newWalk.video,
-          process: props.process,
-          personas: newWalk.personas
-        })
-        .select('date, video, process')
-        .single()
-    if (error) {
-      console.error(error);
-      addWalkModal.value.close()
-      return;
-    }
-  } else {
-    const { error, data } = await client.from('walks')
-        .insert({
-          date: newWalk.date,
-          video: newWalk.video,
-          process: props.process,
-          personas: newWalk.personas
-        })
-        .select('date, video, process')
-        .single()
-    if (error) {
-      console.error(error);
-      addWalkModal.value.close()
-      return;
-    }
-  }
 
-  addWalkModal.value.close()
-}
 
 // PERSONAS
-// Needed to check the checkbox of newly added Persona
+const personas = usePersonasStore();
+const { listFormkitFormatted: personasList } = storeToRefs(personas)
+// Needed to check the checkbox of newly added Personas
+// Get the ref for the Formkit
 const personasInput = ref([])
-// Load the Personas
-const personas = ref([])
-async function getPersonas() {
-  try {
-    let { data, error, status } = await client
-        .from('personas')
-        .select('id, description')
-        .order('description')
-    if (error && status !== 406) throw error
-    if (data) {
-      personas.value = data.map((p) => {
-        return {
-          value: p.id,
-          label: p.description,
-        }
-      })
-    }
-  } catch (error) {
-    alert(error.message)
-  } finally {}
-}
-
-function addPersona (personaId) {
+// Add to the Formkit input list, called from emit PersonasEdit
+function addPersonaToPersonaList (personaId) {
   personasInput.value.node.input([...personasInput.value.node.value, personaId])
 }
 
+await personas.getAll()
+
+async function saveWalk(data) {
+  console.log()
+  if(edit.value) {
+    console.log('editing walk', props.walk)
+    data.id = props.walk.id
+    const oldPersonas = props.walk.personas.map(x => x.id)
+    walks.edit(data, oldPersonas)
+  } else {
+    await walks.add(data, props.process)
+
+  }
+}
+
 onMounted(async () => {
-  loading.value = true
-  getPersonas();
-  // Subscribe to changes of Personas
-
-
-  realtimeChannel = client
-      .channel('public:personas')
-      .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'personas' },
-          () => getPersonas())
-      .subscribe()
-  loading.value = false
+  personas.subscribe()
 })
 
 onUnmounted(() => {
-  client.removeChannel(realtimeChannel)
-  personas.value = []
+  personas.unsubscribe()
+
 })
 
 

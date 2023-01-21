@@ -45,28 +45,25 @@
 </template>
 <script setup>
 import { PlusIcon } from '@heroicons/vue/20/solid'
-const addTopicModal = ref('addTopicModal')
-const client = useSupabase()
+
+// Props & Emits
 const props = defineProps(['mode'])
 const emit = defineEmits(['added'])
 
+// UI
+const addTopicModal = ref('addTopicModal')
 const startAddTopic = (e) => {
   addTopicModal.value.open()
   e.preventDefault();
 }
 
-async function submitAddTopic (item) {
-  const { error, data } = await client.from('topics')
-      .upsert({
-        name: item.name,
-        description: item.description,
-      })
-      .select()
-  if (error) {
-    return;
-  }
+// Store
+const topics = useTopicsStore();
+
+async function submitAddTopic (data) {
+  const newTopic = await topics.add(data)
   addTopicModal.value.close()
-  emit('added', data[0].id)
+  emit('added', newTopic[0].id)
 }
 
 

@@ -9,7 +9,7 @@
       <Player :video="videoUrl" :startTime="videoTime"  ref="stepVideoPlayer" />
       <div class="flex flex-row justify-between mt-2">
         <Ui-Button :light="true" @click="$refs.stepVideoPlayer.player.currentTime(stepTiming)"><span class="underline">Go to step ({{ stepTimeToStamp }})</span></Ui-Button>
-        <Ui-Button :light="true" @click="setCurrentTime($refs.stepVideoPlayer.player.currentTime())"><span class="underline">Save current time</span></Ui-Button>
+        <Ui-Button :light="true" @click="steps.setCurrentTime($refs.stepVideoPlayer.player.currentTime())"><span class="underline">Save current time</span></Ui-Button>
       </div>
     </template>
     <template v-slot:content>
@@ -18,7 +18,7 @@
           name="addSteps"
           id="addSteps"
           :actions="false"
-          @submit="submitAddStep"
+          @submit="addStep"
       >
         <FormKit
             type="textarea"
@@ -56,7 +56,7 @@
               label="Topics"
               name="topics"
               ref="topicsInput"
-              :options="topics"
+              :options="listFormkitFormatted"
               help="Tags this walk with topics"
           />
 
@@ -74,7 +74,7 @@
         </FormKit>
         </div>
       </FormKit>
-      <Ui-Button @click="deleteStep" v-if="mode == 'edit'">
+      <Ui-Button @click="removeStep(stepId)" v-if="mode == 'edit'">
         Delete Step
       </Ui-Button>
       <p class="pt-4 text-cyan-600"><span class="italic text-sm ">{{ errorMessage }}</span></p>
@@ -87,181 +87,99 @@
 </template>
 <script setup>
 import { PlusIcon } from '@heroicons/vue/20/solid'
-const loading = ref(true)
 
-// Supabase stuff
-const client = useSupabase()
-import { RealtimeChannel } from '@supabase/supabase-js'
-let topicsRealtimeChannel = RealtimeChannel
-
+// Props & Emits
 const props = defineProps(['walk', 'videoUrl', 'videoTime'])
 const emit = defineEmits(['stopPlayer'])
 
+// UI
 const addStepModal = ref('addStepModal')
-
 const stepVideoPlayer = ref(null)
 
+// Store
+import { storeToRefs } from 'pinia'
+const steps = useStepsStore();
+const topics = useTopicsStore();
+const { id: stepId, timing: stepTiming } = storeToRefs(steps)
+const { listFormkitFormatted } = storeToRefs(topics)
 
-let stepId = null;
-
-const errorMessage = ref('')
-
-// Changing the time
-const stepTiming = ref(null)
-function setCurrentTime(val) {
-  stepTiming.value = val
-}
+import { getNode } from '@formkit/core';
 
 // Starting the adding or editing of the step
 const mode = ref('add')
-async function startAddSteps(id) {
-  emit('stopPlayer')
-  addStepModal.value.open()
-  console.log(id)
-  if(id) {
 
-    mode.value = 'edit'
-    // Store this in let, for deleting if needed
-    stepId = id
-    await getStep(id)
-  } else {
-    mode.value = 'add'
-  }
 
-  console.log(mode.value)
-
-}
-
-async function deleteStep() {
-  const { error } = await client
-      .from('steps')
-      .delete()
-      .eq('id', stepId)
-  console.log(error)
-  if(error) {
-    console.log(error.code)
-    if(error.code == 23503) {
-      console.log('setting errorMessage')
-      errorMessage.value = 'There are still action cards connected with this step. Delete these first.'
-    }
-  } else {
-    addStepModal.value.close()
-  }
-}
-
-import { getNode } from '@formkit/core';
-async function getStep(id) {
-  loading.value = true
-  try {
-    let { data, error, status } = await client
-        .from('steps')
-        .select('id, timing, description, observation, topics, rating, milestone')
-        .eq('id', id)
-        .single()
-
-    if (error && status !== 406) throw error
-    if (data) {
-
-      // Set timing for video
-      setCurrentTime(data.timing)
-      stepVideoPlayer.value.player.currentTime(data.timing)
-
-      // Fill Form
-      getNode('addSteps').input({
-        id,
-        walk: data.walk,
-        description: data.description,
-        observation: data.observation,
-        topics: data.topics,
-        rating: data.rating,
-        milestone: data.milestone
-      }).then((data) => {
-        console.log('loaded data', data)
-      })
-    }
-  } catch (error) {
-    console.log(error)
-
-  } finally {
-    loading.value = false
-  }
-}
-
-async function submitAddStep (item) {
-  const { error, data } = await client.from('steps')
-      .upsert({
-        id: item.id,
-        walk: props.walk,
-        timing: stepTiming.value,
-        description: item.description,
-        observation: item.observation,
-        topics: item.topics,
-        rating: item.rating,
-        milestone: item.milestone
-      })
-      .select('id, timing, description, observation, topics, rating, milestone')
-      .single()
-  if (error) {
-    console.error(error);
-    return;
-  }
+async function addStep(step){
+  await steps.add(step)
   addStepModal.value.close()
 }
 
-// TOPICS
-// Needed to check the checkbox of newly added Persona
-const topicsInput = ref([])
-// Load the Personas
-const topics = ref([])
-async function getTopics() {
-  try {
-    let { data, error, status } = await client
-        .from('topics')
-        .select('id, name, description')
-        .order('name')
-    if (error && status !== 406) throw error
-    if (data) {
-      topics.value = data.map((p) => {
-        return {
-          value: p.id,
-          label: p.name
-        }
-      })
-    }
-  } catch (error) {
-    alert(error.message)
-  } finally {}
+
+async function removeStep(){
+  await steps.remove(stepId)
+  addStepModal.value.close()
 }
+
+async function startAddSteps(id) {
+  emit('stopPlayer')
+  addStepModal.value.open()
+
+  if(id) {
+    mode.value = 'edit'
+    steps.setStepId(id)
+    const data = await steps.get(id)
+    // Set timing for video
+    steps.setCurrentTime(data.timing)
+    stepVideoPlayer.value.player.currentTime(data.timing)
+    const topicsFormattedForFormkit = data.topics.map((t) => {
+      return {
+        value: t.id,
+        label: t.description,
+      }
+    })
+
+    // Fill Form
+    getNode('addSteps').input({
+      id,
+      walk: data.walk,
+      description: data.description,
+      observation: data.observation,
+      topics: topicsFormattedForFormkit,
+      rating: data.rating,
+      milestone: data.milestone
+    }).then((data) => {
+      console.log('loaded data', data)
+    })
+
+  } else {
+    mode.value = 'add'
+  }
+}
+
+// TOPICS
+await topics.getAll()
 
 // Make time readable
 import {useReadableTime} from "../utils/readableTime";
+
 const walkTimeToStamp = computed(() => useReadableTime(props.videoTime));
 const stepTimeToStamp = computed(() => useReadableTime(stepTiming.value));
 
-
+const topicsInput = ref([])
 function addTopics (id) {
+
   topicsInput.value.node.input([...topicsInput.value.node.value, id])
 }
 
 // Get the topics (and keep them realtime updated)
 onMounted(async () => {
-  loading.value = true
-  getTopics();
-  // Subscribe to changes of Topics
-  topicsRealtimeChannel = client
-      .channel('public:topics')
-      .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'topics' },
-          () => getTopics())
-      .subscribe()
-  loading.value = false
+  topics.subscribe()
 })
 
 
 function cleanUp () {
   stepTiming.value = 0
-  client.removeChannel(topicsRealtimeChannel)
+  topics.unsubscribe()
   topics.value = []
 }
 

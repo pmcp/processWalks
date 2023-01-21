@@ -4,13 +4,14 @@ import { useSupabase } from '~/composables/useSupabase.ts'
 
 
 
+let realTimeChannel
 export const useMembersStore = defineStore('members-store', () => {
-    let realTimeChannel
+    const client = useSupabase()
     const list = ref([])
 
     async function getAll() {
         try {
-            const { data, error } = await useSupabase()
+            const { data, error } = await client
                 .from('profiles')
                 .select('id, email, admin, delete')
                 .order('email', { ascending: false })
@@ -28,7 +29,7 @@ export const useMembersStore = defineStore('members-store', () => {
     }
 
     function subscribe(){
-        realTimeChannel = useSupabase()
+        realTimeChannel = client
             .channel('public:[profile]')
             .on(
                 'postgres_changes',
@@ -39,12 +40,12 @@ export const useMembersStore = defineStore('members-store', () => {
     }
 
     function unsubscribe(){
-        useSupabase().removeChannel(realTimeChannel)
+        client.removeChannel(realTimeChannel)
     }
 
     async function makeAdmin(profileId, val){
         try {
-            const { data, error } = await useSupabase()
+            const { data, error } = await client
                 .from('profiles')
                 .update({ admin: val })
                 .eq('id', profileId)

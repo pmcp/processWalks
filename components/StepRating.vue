@@ -48,7 +48,7 @@ const color = computed(() => {
     style = style + ';opacity:.1;'
 
   }
-  console.log(style)
+
   return style
 })
 

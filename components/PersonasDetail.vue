@@ -1,5 +1,5 @@
 <template>
-  <p class="text-gray-900">{{ p }}</p>
+  <p class="text-gray-900">{{ p.description }}</p>
 </template>
 <script setup>
 const client = useSupabase()
