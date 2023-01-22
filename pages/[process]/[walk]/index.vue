@@ -100,11 +100,14 @@ function editStep(id) {
 }
 
 onMounted(async () => {
+  const walkId = route.params.walk
+  walks.subscribeSingle(walkId)
+  steps.subscribeList(walkId)
+  walks.subscribeJoinWalksPersonas(walkId)
+  steps.subscribeJoinStepsTopics(walkId)
+  actions.subscribeList(walkId)
+  processes.subscribeSingle(route.params.process, walkId)
 
-  walks.subscribeSingle(route.params.walk)
-  steps.subscribeList(route.params.walk)
-  actions.subscribeList(route.params.walk)
-  processes.subscribeSingle(route.params.process, route.params.walk)
   // TODO: Add subscribe for steps_topics
 })
 

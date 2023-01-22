@@ -116,7 +116,6 @@ function addPersonaToPersonaList (personaId) {
 await personas.getAll()
 
 async function saveWalk(data) {
-  console.log()
   if(edit.value) {
     console.log('editing walk', props.walk)
     data.id = props.walk.id
@@ -124,8 +123,8 @@ async function saveWalk(data) {
     walks.edit(data, oldPersonas)
   } else {
     await walks.add(data, props.process)
-
   }
+  await walkModal.value.close()
 }
 
 onMounted(async () => {

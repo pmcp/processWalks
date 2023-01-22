@@ -5,6 +5,7 @@ import { useSupabase } from '~/composables/useSupabase.ts'
 
 let realtimeChannelWalksOfProcess
 let realtimeChannelsingleWalk
+let realtimeChannelJoinWalksPersonas
 
 export const useWalksStore = defineStore('walks-store', () => {
     const client = useSupabase()
@@ -46,6 +47,7 @@ export const useWalksStore = defineStore('walks-store', () => {
             if (data) {
                 console.log('going to get video url', data.video)
                 if(data.video) {
+                    console.log(data.video)
                     const videoUrl = await client
                         .storage
                         .from('movies')
@@ -94,6 +96,21 @@ export const useWalksStore = defineStore('walks-store', () => {
         client.removeChannel(realtimeChannelsingleWalk)
     }
 
+    function subscribeJoinWalksPersonas(walkId){
+        realtimeChannelJoinWalksPersonas = client
+            .channel('public:[walks_personas]')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'walks',  filter: `id=eq.${walkId}` }, payload => {
+                    console.log('got a payload from subscribeJoinWalksPersonas', payload)
+                    get(walkId)
+                })
+            .subscribe()
+    }
+
+    function unsubscribeJoinWalksPersonas(){
+        client.removeChannel(realtimeChannelJoinWalksPersonas)
+    }
 
 
 
@@ -147,9 +164,7 @@ export const useWalksStore = defineStore('walks-store', () => {
                 }
             }
             // Remove remaining in oldList from JOIN table
-            console.log(oldList)
             for (let i = 0; i < oldList.length ; i++) {
-
                 removePersonaJoin(data.id, oldList[i])
             }
 
@@ -203,7 +218,7 @@ export const useWalksStore = defineStore('walks-store', () => {
 
 
 
-    return { single, list, get, getWalksOfProcess, subscribeSingle, unsubscribeSingle, subscribeList, unsubscribeList, add, edit, remove, emptyList }
+    return { single, list, get, getWalksOfProcess, subscribeSingle, unsubscribeSingle, subscribeList, unsubscribeList, subscribeJoinWalksPersonas, unsubscribeJoinWalksPersonas, add, edit, remove, emptyList }
 })
 if (import.meta.hot) {
     import.meta.hot.accept(acceptHMRUpdate(useWalksStore, import.meta.hot));

@@ -56,7 +56,7 @@
               label="Topics"
               name="topics"
               ref="topicsInput"
-              :options="listFormkitFormatted"
+              :options="TopicListFormatted"
               help="Tags this walk with topics"
           />
 
@@ -96,24 +96,31 @@ const emit = defineEmits(['stopPlayer'])
 const addStepModal = ref('addStepModal')
 const stepVideoPlayer = ref(null)
 
+let previousTopics = []
+
 // Store
 import { storeToRefs } from 'pinia'
 const steps = useStepsStore();
 const topics = useTopicsStore();
 const { id: stepId, timing: stepTiming } = storeToRefs(steps)
-const { listFormkitFormatted } = storeToRefs(topics)
+const { listFormkitFormatted: TopicListFormatted } = storeToRefs(topics)
+
 
 import { getNode } from '@formkit/core';
 
 // Starting the adding or editing of the step
 const mode = ref('add')
 
-
 async function addStep(step){
-  await steps.add(step)
+  if(mode.value === 'edit') {
+    console.log('edit Step', step )
+    await steps.edit(step, previousTopics, )
+  } else {
+    console.log('add Step', step )
+    await steps.add(step, props.walk)
+  }
   addStepModal.value.close()
 }
-
 
 async function removeStep(){
   await steps.remove(stepId)
@@ -121,23 +128,25 @@ async function removeStep(){
 }
 
 async function startAddSteps(id) {
+  console.log('opening modal')
   emit('stopPlayer')
   addStepModal.value.open()
 
   if(id) {
     mode.value = 'edit'
+
     steps.setStepId(id)
     const data = await steps.get(id)
+    previousTopics = data.topics
+    console.log('got previousTopics', previousTopics )
     // Set timing for video
     steps.setCurrentTime(data.timing)
     stepVideoPlayer.value.player.currentTime(data.timing)
-    const topicsFormattedForFormkit = data.topics.map((t) => {
-      return {
-        value: t.id,
-        label: t.description,
-      }
-    })
+    const topicsFormattedForFormkit = data.topics.map((t) => t.id)
 
+
+
+    console.log(data, topicsFormattedForFormkit)
     // Fill Form
     getNode('addSteps').input({
       id,
@@ -148,7 +157,7 @@ async function startAddSteps(id) {
       rating: data.rating,
       milestone: data.milestone
     }).then((data) => {
-      console.log('loaded data', data)
+      console.log('set data as input for form', data)
     })
 
   } else {
@@ -167,7 +176,6 @@ const stepTimeToStamp = computed(() => useReadableTime(stepTiming.value));
 
 const topicsInput = ref([])
 function addTopics (id) {
-
   topicsInput.value.node.input([...topicsInput.value.node.value, id])
 }
 
@@ -175,7 +183,6 @@ function addTopics (id) {
 onMounted(async () => {
   topics.subscribe()
 })
-
 
 function cleanUp () {
   stepTiming.value = 0

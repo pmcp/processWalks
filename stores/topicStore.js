@@ -10,6 +10,7 @@ export const useTopicsStore = defineStore('topics-store', () => {
 
     const listFormkitFormatted = computed(() => {
         return list.value.map((p) => {
+
             return {
                 value: p.id,
                 label: p.name,
