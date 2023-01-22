@@ -1,6 +1,7 @@
 export const useAppStore = defineStore('app-store', () => {
     const nav = ref([
         { name: 'Home', href: '/', admin: false },
+        { name: 'Actions', href: '/actions', admin: false },
         { name: 'Processes', href: '/processes', admin: false },
         { name: 'Members', href: '/members', admin: true }
     ])

@@ -6,6 +6,7 @@ import { useSupabase } from '~/composables/useSupabase.ts'
 let realtimeChannelWalksOfProcess
 let realtimeChannelsingleWalk
 let realtimeChannelJoinWalksPersonas
+let realtimeChannelJoinWalksActions
 
 export const useWalksStore = defineStore('walks-store', () => {
     const client = useSupabase()
@@ -13,6 +14,7 @@ export const useWalksStore = defineStore('walks-store', () => {
     const realTimeChannelList = ref()
     const list = ref([])
     const single = ref(null)
+
     async function getWalksOfProcess(processId) {
         console.log('gonna get walks of process', {processId})
         try {
@@ -47,7 +49,6 @@ export const useWalksStore = defineStore('walks-store', () => {
             if (data) {
                 console.log('going to get video url', data.video)
                 if(data.video) {
-                    console.log(data.video)
                     const videoUrl = await client
                         .storage
                         .from('movies')
@@ -55,6 +56,7 @@ export const useWalksStore = defineStore('walks-store', () => {
                     data.videoTempUrl = videoUrl.data.signedUrl
                 }
                 single.value = data
+                return data
             }
         } catch (error) {
             console.log(error)
@@ -101,7 +103,7 @@ export const useWalksStore = defineStore('walks-store', () => {
             .channel('public:[walks_personas]')
             .on(
                 'postgres_changes',
-                { event: '*', schema: 'public', table: 'walks',  filter: `id=eq.${walkId}` }, payload => {
+                { event: '*', schema: 'public', table: 'walks',  filter: `walk_id=eq.${walkId}` }, payload => {
                     console.log('got a payload from subscribeJoinWalksPersonas', payload)
                     get(walkId)
                 })
@@ -111,6 +113,26 @@ export const useWalksStore = defineStore('walks-store', () => {
     function unsubscribeJoinWalksPersonas(){
         client.removeChannel(realtimeChannelJoinWalksPersonas)
     }
+
+
+
+
+    function subscribeJoinWalksActions(walkId){
+        realtimeChannelJoinWalksActions = client
+            .channel('public:[steps_actions]')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'walks',  filter: `walk_id=eq.${walkId}` }, payload => {
+                    console.log('got a payload from subscribeJoinWalksPersonas', payload)
+                    get(walkId)
+                })
+            .subscribe()
+    }
+
+    function unsubscribeJoinWalksActions(){
+        client.removeChannel(realtimeChannelJoinWalksActions)
+    }
+
 
 
 
@@ -218,7 +240,7 @@ export const useWalksStore = defineStore('walks-store', () => {
 
 
 
-    return { single, list, get, getWalksOfProcess, subscribeSingle, unsubscribeSingle, subscribeList, unsubscribeList, subscribeJoinWalksPersonas, unsubscribeJoinWalksPersonas, add, edit, remove, emptyList }
+    return { single, list, get, getWalksOfProcess, subscribeSingle, unsubscribeSingle, subscribeList, unsubscribeList, subscribeJoinWalksPersonas, unsubscribeJoinWalksPersonas, subscribeJoinWalksActions, unsubscribeJoinWalksActions, add, edit, remove, emptyList }
 })
 if (import.meta.hot) {
     import.meta.hot.accept(acceptHMRUpdate(useWalksStore, import.meta.hot));

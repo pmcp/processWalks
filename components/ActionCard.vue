@@ -1,61 +1,59 @@
 <template>
-  {{ action }}
-  <div class="overflow-hidden bg-white shadow sm:rounded-lg">
-    <div class="px-4 py-5 sm:px-6">
-      <h3 class="text-lg font-medium leading-6 text-gray-900">Card </h3>
-      <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
-    </div>
-    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
-      <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500">Assigned to</dt>
-          <dd class="mt-1 text-sm text-gray-900">{{ action.assigned_to }}</dd>
+  <div class="overflow-hidden bg-white shadow sm:rounded-lg relative">
+    <div class="flex justify-between">
+      <div class="px-4 py-5 sm:px-6 ">
+        <div class="flex ">
+          <StarIcon v-if="action.steps[0].milestone" class="pt-1 mr-2 h-5 w-5 fill-cyan-500" aria-hidden="true" />
+          <h3 class="text-lg pb-1 font-medium leading-6 text-gray-900">{{ action.description }}</h3>
         </div>
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500">Act by</dt>
-          <dd class="mt-1 text-sm text-gray-900">{{ action.act_by }}</dd>
+        <div class="flex flex-row gap-2 pt-2 pb-4">
+          <div class="flex items-center">
+            <UserCircleIcon class="mt-1 h-5 w-5 fill-gray-500" aria-hidden="true" />
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+              {{ action.assigned_to }}
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <CalendarIcon class="mt-1 h-5 w-5 fill-gray-500" aria-hidden="true" />
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+              {{ action.act_by}}
+            </p>
+          </div>
         </div>
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500">Walk</dt>
-          <dd v-for="walk in action.walks" :key="walk.id" class="mt-1 text-sm text-gray-900">{{ walk.name  }}</dd>
-        </div>
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500">Walks</dt>
-<!--          <dd v-for="walk in action.walks" :key="walk.id" class="mt-1 text-sm text-gray-900">{{ walk  }}</dd>-->
-        </div>
-        <div class="sm:col-span-2">
-          <dt class="text-sm font-medium text-gray-500">Description</dt>
-          <dd class="mt-1 text-sm text-gray-900">{{ action.description }}</dd>
-        </div>
-        <div class="sm:col-span-2">
-          <dt class="text-sm font-medium text-gray-500">Attachments</dt>
-          <dd class="mt-1 text-sm text-gray-900">
-            <ul role="list" class="divide-y divide-gray-200 rounded-md border border-gray-200">
-              <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                <div class="flex w-0 flex-1 items-center">
-                  <PaperClipIcon class="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-                  <span class="ml-2 w-0 flex-1 truncate">resume_back_end_developer.pdf</span>
-                </div>
-                <div class="ml-4 flex-shrink-0">
-                  <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Download</a>
-                </div>
-              </li>
-              <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                <div class="flex w-0 flex-1 items-center">
 
-                  <span class="ml-2 w-0 flex-1 truncate">coverletter_back_end_developer.pdf</span>
-                </div>
-                <div class="ml-4 flex-shrink-0">
-                  <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Download</a>
-                </div>
-              </li>
-            </ul>
-          </dd>
+
+        <div class="flex gap-2">
+          <span class="text-xs pt-1 w-20 uppercase">Topics</span>
+          <div class="flex gap-x-2 flex-wrap">
+            <Topic-Detail v-for="topic in action.steps[0].topics" :topic="topic"></Topic-Detail>
+          </div>
         </div>
-      </dl>
+
+        <div class="flex gap-2">
+          <span class="text-xs pt-1 w-20 uppercase ">Personas</span>
+          <div class="flex gap-x-2 flex-wrap">
+            <Personas-Detail v-for="persona in action.walk.personas" :persona="persona"></Personas-Detail>
+          </div>
+        </div>
+      </div>
+      <div class=" px-4  sm:px-6 flex-col ">
+        <div class="flex justify-center items-center overflow-hidden rounded-lg h-20">
+          <Step-Rating v-for="i in 9" :key="`rating-${i}`" :rating="action.steps[0].rating" :block="i"  />
+        </div>
+
+      </div>
+
+      <slot name="cardButton"></slot>
+
+
     </div>
+
+
   </div>
 </template>
 <script setup>
- const props = defineProps(['action'])
+
+import { UserCircleIcon, CalendarIcon, StarIcon } from '@heroicons/vue/20/solid'
+const props = defineProps(['action'])
+
 </script>

@@ -102,8 +102,9 @@ function editStep(id) {
 onMounted(async () => {
   const walkId = route.params.walk
   walks.subscribeSingle(walkId)
-  steps.subscribeList(walkId)
   walks.subscribeJoinWalksPersonas(walkId)
+  walks.subscribeJoinWalksActions(walkId)
+  steps.subscribeList(walkId)
   steps.subscribeJoinStepsTopics(walkId)
   actions.subscribeList(walkId)
   processes.subscribeSingle(route.params.process, walkId)
@@ -113,7 +114,10 @@ onMounted(async () => {
 
 onUnmounted(() => {
   walks.unsubscribeSingle()
+  walks.unsubscribeJoinWalksPersonas()
+  walks.unsubscribeJoinWalksActions()
   steps.unsubscribeList()
+  steps.unsubscribeJoinStepsTopics()
   actions.unsubscribeList()
   processes.unsubscribeSingle()
   // TODO: Add unsubscribe for steps_topics

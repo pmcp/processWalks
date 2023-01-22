@@ -54,7 +54,7 @@
                             validation-visibility="live"
                         />
                       </FormKit>
-                      <div v-if="user.message" class="bg-rose-500 p-2 text-white rounded">
+                      <div v-if="user.message" class="bg-gray-300 p-2 text-gray-800 rounded">
                         <span class="text-sm">{{ user.message }}</span>
                       </div>
                     </div>
@@ -107,7 +107,7 @@
                         validation-visibility="live"
                     />
                   </FormKit>
-                  <div v-if="user.message" class="bg-rose-500 p-2 text-white rounded">
+                  <div v-if="user.message" class="bg-gray-300 p-2 text-white rounded">
                     <span class="text-sm">{{ user.message }}</span>
                   </div>
                 </div>

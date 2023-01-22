@@ -42,6 +42,17 @@ export default defineComponent({
     const handleEvent = (log: any) => {}
     return { player, handleMounted, handleEvent }
   },
+  watch: {
+    startTime: function (newVal, oldVal) { // watch it
+      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      this.player.currentTime(newVal)
+    },
+    video: function (newVal, oldVal) { // watch it
+      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      // this.player.currentTime(newVal)
+    }
+  },
+
   mounted(){
     // if we have a start time, go there
     if(this.startTime) this.player.currentTime(this.startTime)
