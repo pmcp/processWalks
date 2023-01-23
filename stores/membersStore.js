@@ -44,16 +44,13 @@ export const useMembersStore = defineStore('members-store', () => {
     }
 
     async function makeAdmin(profileId, val){
-        try {
-            const { data, error } = await client
-                .from('profiles')
-                .update({ admin: val })
-                .eq('id', profileId)
-                .select()
-            if (error) console.log(error)
-        } catch (error) {
-            console.log(error)
-        } finally {}
+        const { data, error } = await client
+            .from('profiles')
+            .update({ admin: val })
+            .eq('id', profileId)
+            .select()
+        if (error) console.log(error)
+        console.log(data)
     }
 
     async function remove (profileId) {
