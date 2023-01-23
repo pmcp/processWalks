@@ -17,7 +17,7 @@
               <div class="flex flex-row justify-between mt-2 ">
 
                 <Form-File-Upload :light="true" @upload="addVideo" />
-                <Steps-Edit ref="stepsEdit" :walk="walk.id" :videoTime="currentVideoTime" :videoUrl="walk.videoTempUrl" @stopPlayer="$refs.VideoPlayer.player.pause()" />
+                <Steps-Edit ref="stepsEdit" :walk="walk.id" :videoTime="currentTime" :videoUrl="walk.videoTempUrl" @stopPlayer="$refs.VideoPlayer.player.pause()" />
               </div>
             </div>
             <div v-else class="h-full rounded-lg border-4 border-dashed border-gray-200 flex justify-center py-20">

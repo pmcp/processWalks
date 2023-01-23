@@ -1,12 +1,16 @@
 ## DOING
-- Topics to JOIN Table
-- Personas to JOIN Table
+
+- Check all editing & Deleting flows
+- New step doesn't appear at right time
+- Add done / Edit action to action flow
 
 ## Todo
+- Time jump in action page not working
 - Restrict non members
 - Change storage to UploadCare?
 - Edit Personas in walk
 - Persona page
-- ACTION PAGE
+- ACTION `PAGE`
+- More filters
 
 ## Nice to have
