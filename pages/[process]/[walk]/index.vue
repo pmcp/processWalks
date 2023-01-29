@@ -84,7 +84,7 @@ function seekVideoTime(time) {
 
 const stepsEdit = ref(null)
 function editStep(id) {
-  console.log(id, stepsEdit.value)
+  console.log(id, stepsEdit)
   if(!stepsEdit.value) return;
   stepsEdit.value.startAddSteps(id)
 }
