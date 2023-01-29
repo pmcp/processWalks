@@ -59,7 +59,8 @@ walks.get(route.params.walk)
 // Video Stuff
 
 const video = useVideoStore();
-const { player, currentTime } = storeToRefs(walks)
+const { player, currentTime } = storeToRefs(video)
+
 async function addVideo(upload) {
   console.log(upload)
   video.add(upload, route.params.walk)
