@@ -3,6 +3,7 @@
     <ui-slide-over ref="slideOver" @close="closeStepSlideOver">
       <Actions-List :step="activeStep" :actions="activeStep.actions"/>
     </ui-slide-over>
+    <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions"/>
     <Walks-Layout>
       <template v-slot:steps>
         <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions"/>
@@ -84,9 +85,12 @@ function seekVideoTime(time) {
 
 const stepsEdit = ref(null)
 function editStep(id) {
-  console.log(id, stepsEdit)
-  if(!stepsEdit.value) return;
-  stepsEdit.value.startAddSteps(id)
+  console.log(id)
+  console.log(stepsEdit)
+  console.log(stepsEdit.value.startAddSteps)
+
+  // if(!stepsEdit.value) return;
+  // stepsEdit.value.startAddSteps(id)
 }
 
 onMounted(async () => {
