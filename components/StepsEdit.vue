@@ -127,43 +127,47 @@ async function removeStep(){
   addStepModal.value.close()
 }
 
-async function startAddSteps(id) {
-  console.log('opening modal')
-  emit('stopPlayer')
-  addStepModal.value.open()
-
-  if(id) {
-    mode.value = 'edit'
-
-    steps.setStepId(id)
-    const data = await steps.get(id)
-    previousTopics = data.topics
-    console.log('got previousTopics', previousTopics )
-    // Set timing for video
-    steps.setCurrentTime(data.timing)
-    stepVideoPlayer.value.player.currentTime(data.timing)
-    const topicsFormattedForFormkit = data.topics.map((t) => t.id)
-
-
-
-    console.log(data, topicsFormattedForFormkit)
-    // Fill Form
-    getNode('addSteps').input({
-      id,
-      walk: data.walk,
-      description: data.description,
-      observation: data.observation,
-      topics: topicsFormattedForFormkit,
-      rating: data.rating,
-      milestone: data.milestone
-    }).then((data) => {
-      console.log('set data as input for form', data)
-    })
-
-  } else {
-    mode.value = 'add'
-  }
+function startAddSteps() {
+  console.log("Hello from MyComponent!");
 }
+
+// async function startAddSteps(id) {
+//   console.log('opening modal')
+//   emit('stopPlayer')
+//   addStepModal.value.open()
+//
+//   if(id) {
+//     mode.value = 'edit'
+//
+//     steps.setStepId(id)
+//     const data = await steps.get(id)
+//     previousTopics = data.topics
+//     console.log('got previousTopics', previousTopics )
+//     // Set timing for video
+//     steps.setCurrentTime(data.timing)
+//     stepVideoPlayer.value.player.currentTime(data.timing)
+//     const topicsFormattedForFormkit = data.topics.map((t) => t.id)
+//
+//
+//
+//     console.log(data, topicsFormattedForFormkit)
+//     // Fill Form
+//     getNode('addSteps').input({
+//       id,
+//       walk: data.walk,
+//       description: data.description,
+//       observation: data.observation,
+//       topics: topicsFormattedForFormkit,
+//       rating: data.rating,
+//       milestone: data.milestone
+//     }).then((data) => {
+//       console.log('set data as input for form', data)
+//     })
+//
+//   } else {
+//     mode.value = 'add'
+//   }
+// }
 
 // TOPICS
 await topics.getAll()
