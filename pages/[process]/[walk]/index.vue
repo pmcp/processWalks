@@ -24,7 +24,11 @@
       <template v-slot:process>
         <Processes-Detail :process="walk.processes">
           <template v-slot:content>
-            <div class="flex justify-between"><span class="text-lg">Walk</span><Walks-Edit :walk="walk"></Walks-Edit></div>
+            <div class="flex justify-between">
+              <span class="text-lg">Walk</span>
+
+              <Walks-Edit :walk="walk"></Walks-Edit>
+            </div>
             <h3 class="text-md font-medium leading-6 my-4">Date: {{ walk.date }}</h3>
             <div>
               <Personas-List :personas="walk.personas"/>

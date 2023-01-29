@@ -43,14 +43,18 @@ export default defineComponent({
     return { player, handleMounted, handleEvent }
   },
   watch: {
+
+    video: function (newVal, oldVal) { // watch it
+      // console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      // this.player.currentTime(newVal)
+      if(this.startTime) {
+        this.player.currentTime(this.startTime)
+      }
+    },
     startTime: function (newVal, oldVal) { // watch it
-      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      console.log('Time changed: ', newVal, ' | was: ', oldVal)
       this.player.currentTime(newVal)
     },
-    video: function (newVal, oldVal) { // watch it
-      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
-      // this.player.currentTime(newVal)
-    }
   },
 
   mounted(){

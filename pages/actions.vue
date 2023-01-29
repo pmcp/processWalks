@@ -39,7 +39,7 @@
             <div class="sticky top-5 z-10 bg-white border-b-2 border-gray-50">
               <div class="px-2 pt-2 pb-4 shadow-xl rounded-lg">
                 <div v-if="videoUrl">
-                  <Player :video="videoUrl" :startTime="walk.steps[0].timing"  ref="videoPlayer" />
+                  <Player :video="videoUrl" :startTime="startTime"  ref="videoPlayer" />
                 </div>
               </div>
               <div class=" sm:rounded-t-lg">
@@ -102,6 +102,7 @@ const { list } = storeToRefs(actions)
 const user = useUserStore();
 const { admin } = storeToRefs(user)
 
+const startTime = ref(0)
 
 await actions.getAll(admin)
 
@@ -124,10 +125,13 @@ const filteredList = computed(() => {
 })
 
 
+
 const walk = ref(null)
 const videoUrl = ref(null)
 async function open(data) {
+  videoUrl.value = null
   const url = await actions.getVideoUrl(data.walk.video)
+  startTime.value = data.steps[0].timing
   videoUrl.value = url
   walk.value = data
 
