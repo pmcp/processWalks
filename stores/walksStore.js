@@ -4,7 +4,7 @@ import { useSupabase } from '~/composables/useSupabase.ts'
 
 
 let realtimeChannelWalksOfProcess
-let realtimeChannelsingleWalk
+let realtimeChannelSingleWalk
 let realtimeChannelJoinWalksPersonas
 let realtimeChannelJoinWalksActions
 
@@ -83,7 +83,8 @@ export const useWalksStore = defineStore('walks-store', () => {
     }
 
     function subscribeSingle(walkId){
-        realtimeChannelsingleWalk = client
+        console.log('subscribe to walk', walkId)
+        realtimeChannelSingleWalk = client
             .channel('public:[walks]')
             .on(
                 'postgres_changes',
@@ -92,10 +93,12 @@ export const useWalksStore = defineStore('walks-store', () => {
                     get(walkId)
                 })
             .subscribe()
+
     }
 
     function unsubscribeSingle(){
-        client.removeChannel(realtimeChannelsingleWalk)
+        console.log('UNSUBSCRIBE walk')
+        client.removeChannel(realtimeChannelSingleWalk)
     }
 
     function subscribeJoinWalksPersonas(walkId){

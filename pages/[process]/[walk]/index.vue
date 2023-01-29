@@ -63,7 +63,6 @@ const processes = useProcessesStore();
 const { single: walk } = storeToRefs(walks)
 walks.get(route.params.walk)
 
-
 // Video Stuff
 const video = useVideoStore();
 const { player, currentTime } = storeToRefs(walks)
@@ -71,8 +70,6 @@ async function addVideo(upload) {
   console.log(upload)
   video.add(upload, route.params.walk)
 }
-
-
 
 
 // Show slide over with actions
@@ -95,6 +92,7 @@ function seekVideoTime(time) {
 
 const stepsEdit = ref(null)
 function editStep(id) {
+  console.log(id, stepsEdit.value)
   if(!stepsEdit.value) return;
   stepsEdit.value.startAddSteps(id)
 }
@@ -108,7 +106,6 @@ onMounted(async () => {
   steps.subscribeJoinStepsTopics(walkId)
   actions.subscribeList(walkId)
   processes.subscribeSingle(route.params.process, walkId)
-
   // TODO: Add subscribe for steps_topics
 })
 
