@@ -98,7 +98,12 @@ const actions = useActionsStore();
 import { storeToRefs } from 'pinia'
 const videoPlayer = ref(null);
 const { list } = storeToRefs(actions)
-await actions.getAll()
+
+const user = useUserStore();
+const { admin } = storeToRefs(user)
+
+
+await actions.getAll(admin)
 
 
 const checkMilestones = ref(false)

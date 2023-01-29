@@ -42,7 +42,6 @@
 </template>
 <script setup>
 const props = defineProps(['step', 'actions'])
-
 const actionsOpen = computed(() => {
     const open = props.actions.filter(a => !a.done || a.done === null)
     // console.log('open', open.length, open)

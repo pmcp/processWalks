@@ -42,6 +42,15 @@
             help="Has this action been done?"
         />
 
+        <FormKit
+            v-if="admin"
+            type="checkbox"
+            decorator-icon="check"
+            label="Hidden"
+            name="hidden"
+            help="Hide this action from non-admin users?"
+        />
+
         <div  class="absolute right-6 bottom-0">
           <FormKit type="submit">
             <template v-if="mode === 'edit'">
@@ -73,6 +82,11 @@ const loading = ref(true)
 const props = defineProps(['action', 'step'])
 const addActionModal = ref('addActionModal')
 
+import { storeToRefs } from 'pinia'
+const user = useUserStore();
+const { admin } = storeToRefs(user)
+
+
 // Supabase stuff
 const client = useSupabase()
 
@@ -95,6 +109,7 @@ async function deleteAction() {
 
 import { getNode } from '@formkit/core';
 async function startAddAction() {
+  console.log(props.action)
   // If edit mode, fill form with Action
   await addActionModal.value.open()
   if(mode.value === 'edit') {
@@ -103,6 +118,7 @@ async function startAddAction() {
       assignedTo: props.action.assigned_to,
       description: props.action.description,
       actBy: props.action.act_by,
+      hidden: props.action.hidden,
       done: props.action.done,
     }).then((data) => {})
   }
@@ -117,6 +133,7 @@ async function submitAddAction (item) {
         description: item.description,
         act_by: item.actBy,
         done: item.done,
+        hidden: item.hidden,
         walk: props.step.walk
       })
       .select('id')
@@ -150,6 +167,7 @@ onMounted(async () => {
   if(props.action) {
     mode.value = 'edit'
   }
+
 })
 
 defineExpose({

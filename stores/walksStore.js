@@ -42,7 +42,7 @@ export const useWalksStore = defineStore('walks-store', () => {
         try {
             let { data, error, status } = await client
                 .from('walks')
-                .select(`id, date, video, personas!walks_personas(id, description), processes(id, description, name), steps!steps_walk_fkey(id, walk, description, timing, observation, milestone, topics!steps_topics(id, name, description), rating, actions(id, description, act_by, done, walk, assigned_to))`)
+                .select(`id, date, video, personas!walks_personas(id, description), processes(id, description, name), steps!steps_walk_fkey(id, walk, description, timing, observation, milestone, topics!steps_topics(id, name, description), rating, actions(id, description, act_by, done, walk, assigned_to, hidden))`)
                 .eq('id', walkId)
                 .single()
             if (error && status !== 406) throw error

@@ -1,4 +1,5 @@
 import { useSupabase } from '~/composables/useSupabase.ts'
+import {storeToRefs} from "pinia";
 
 
 //
@@ -19,11 +20,10 @@ import { useSupabase } from '~/composables/useSupabase.ts'
 // }
 
 
+
 let realtimeChannelSteps
 export const useActionsStore = defineStore('actions-store', () => {
     const client = useSupabase()
-
-
 
     async function getVideoUrl(video){
         const videoUrl = await client
@@ -36,19 +36,38 @@ export const useActionsStore = defineStore('actions-store', () => {
     // ...Until here
 
     const list = ref([])
-    async function getAll () {
+    async function getAll (admin) {
         try {
-            let { data, error } = await client
-                .from('actions')
-                .select('id, assigned_to, description, act_by, done, walk(id, date, video, process, personas!walks_personas(id, description), delete, process(id, name, passwordProtected, description, delete, profiles!profi_proc(id, email)), steps!steps_actions(id, description, rating, milestone, observation, timing, topics!steps_topics(id, name, description))), steps!steps_actions(id, description, rating, milestone, observation, timing, topics!steps_topics(id, name, description))')
-                .order('act_by', { ascending: false })
-            if (error) throw error
-            console.log(error)
-            if (data) {
-                console.log(data)
-                list.value = data
-                return;
+
+            if(admin) {
+
+                let { data, error } = await client
+                    .from('actions')
+                    .select('id, assigned_to, description, act_by, done, hidden, walk(id, date, video, process, personas!walks_personas(id, description), delete, process(id, name, passwordProtected, description, delete, profiles!profi_proc(id, email)), steps!steps_actions(id, description, rating, milestone, observation, timing, topics!steps_topics(id, name, description))), steps!steps_actions(id, description, rating, milestone, observation, timing, topics!steps_topics(id, name, description))')
+                    .order('act_by', { ascending: false })
+                if (error) throw error
+                console.log(error)
+                if (data) {
+                    console.log(data)
+                    list.value = data
+                    return;
+                }
+            } else {
+                let { data, error } = await client
+                    .from('actions')
+                    .select('id, assigned_to, description, act_by, done, hidden, walk(id, date, video, process, personas!walks_personas(id, description), delete, process(id, name, passwordProtected, description, delete, profiles!profi_proc(id, email)), steps!steps_actions(id, description, rating, milestone, observation, timing, topics!steps_topics(id, name, description))), steps!steps_actions(id, description, rating, milestone, observation, timing, topics!steps_topics(id, name, description))')
+                    .neq('hidden', true)
+                    .order('act_by', { ascending: false })
+                if (error) throw error
+                console.log(error)
+                if (data) {
+                    console.log(data)
+                    list.value = data
+                    return;
+                }
             }
+
+
         } catch (error) {
             console.log(error)
             error.value = error.message

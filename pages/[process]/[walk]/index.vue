@@ -1,5 +1,5 @@
 <template>
-  <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions"/>
+
   <div v-if="walk">
     <ui-slide-over ref="slideOver" @close="closeStepSlideOver">
       <Actions-List :step="activeStep" :actions="activeStep.actions"/>
