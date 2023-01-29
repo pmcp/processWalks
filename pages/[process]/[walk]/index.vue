@@ -3,7 +3,7 @@
     <ui-slide-over ref="slideOver" @close="closeStepSlideOver">
       <Actions-List :step="activeStep" :actions="activeStep.actions"/>
     </ui-slide-over>
-    <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions"/>
+<!--    <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions"/>-->
     <Walks-Layout>
       <template v-slot:steps>
         <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions"/>
