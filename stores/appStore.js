@@ -6,8 +6,15 @@ export const useAppStore = defineStore('app-store', () => {
         { name: 'Members', href: '/members', admin: true }
     ])
 
+    const walkLayout = ref('simple')
 
-    return { nav }
+    function setWalkLayout(ui){
+        console.log('setWalkLayout', ui)
+        walkLayout.value = ui
+        console.log(walkLayout.value)
+    }
+
+    return { nav, walkLayout, setWalkLayout }
 })
 if (import.meta.hot) {
     import.meta.hot.accept(acceptHMRUpdate(useAppStore, import.meta.hot));
