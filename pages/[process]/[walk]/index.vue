@@ -83,14 +83,14 @@ function seekVideoTime(time) {
   VideoPlayer.value.player.play()
 }
 
-const stepsEdit = ref(null)
+const stepsEdit = ref({})
 function editStep(id) {
   console.log(id)
   console.log(stepsEdit)
   console.log(stepsEdit.value.startAddSteps)
 
-  // if(!stepsEdit.value) return;
-  // stepsEdit.value.startAddSteps(id)
+  if(!stepsEdit.value) return;
+  stepsEdit.value.startAddSteps(id)
 }
 
 onMounted(async () => {
