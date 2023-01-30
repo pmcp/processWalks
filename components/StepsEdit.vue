@@ -1,12 +1,9 @@
 <template>
-  <Ui-Button @click="startAddSteps(null)">
-    <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-    New step at <span class="w-24 pl-1 text-center">{{ walkTimeToStamp }}</span>
-  </Ui-Button>
+
 
   <Ui-Modal ref="addStepModal" @closed="cleanUp" @opened="setUp">
     <template v-slot:title>
-      <Player :video="videoUrl" :startTime="videoTime"  ref="stepVideoPlayer" />
+      <Player :video="video.url" :startTime="video.time"  ref="stepVideoPlayer" />
       <div class="flex flex-row justify-between mt-2">
         <Ui-Button :light="true" @click="$refs.stepVideoPlayer.player.currentTime(stepTiming)"><span class="underline">Go to step ({{ stepTimeToStamp }})</span></Ui-Button>
         <Ui-Button :light="true" @click="steps.setCurrentTime($refs.stepVideoPlayer.player.currentTime())"><span class="underline">Save current time</span></Ui-Button>
@@ -89,7 +86,6 @@
 import { PlusIcon } from '@heroicons/vue/20/solid'
 
 // Props & Emits
-const props = defineProps(['walk', 'videoUrl', 'videoTime'])
 const emit = defineEmits(['stopPlayer'])
 
 // UI
@@ -110,6 +106,8 @@ import { getNode } from '@formkit/core';
 
 // Starting the adding or editing of the step
 const mode = ref('add')
+const walkId = ref(null);
+const video = ref({time: 0, url: ''});
 
 async function addStep(step){
   if(mode.value === 'edit') {
@@ -117,7 +115,7 @@ async function addStep(step){
     await steps.edit(step, previousTopics, )
   } else {
     console.log('add Step', step )
-    await steps.add(step, props.walk)
+    await steps.add(step, walkId.value)
   }
   addStepModal.value.close()
 }
@@ -128,14 +126,13 @@ async function removeStep(){
 }
 
 
-async function startAddSteps(id) {
+async function startAddSteps(id, walk, videoUrl, videoTime) {
   console.log('opening modal')
   emit('stopPlayer')
   addStepModal.value.open()
 
   if(id) {
     mode.value = 'edit'
-
     steps.setStepId(id)
     const data = await steps.get(id)
     previousTopics = data.topics
@@ -162,6 +159,12 @@ async function startAddSteps(id) {
     })
 
   } else {
+    console.log(walk)
+    walkId.value = walk
+    video.value = {
+      url:videoUrl,
+      time: videoTime
+    }
     mode.value = 'add'
   }
 }
@@ -172,7 +175,6 @@ await topics.getAll()
 // Make time readable
 import {useReadableTime} from "../utils/readableTime";
 
-const walkTimeToStamp = computed(() => useReadableTime(props.videoTime));
 const stepTimeToStamp = computed(() => useReadableTime(stepTiming.value));
 
 const topicsInput = ref([])
@@ -192,8 +194,9 @@ function cleanUp () {
 }
 
 function setUp () {
-  if(props.videoTime) {
-    stepTiming.value = props.videoTime
+  console.log(video.value)
+  if(video.value.time) {
+    stepTiming.value = video.value.time
   }
 }
 

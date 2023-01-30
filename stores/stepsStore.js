@@ -26,6 +26,7 @@ export const useStepsStore = defineStore('steps-store', () => {
     }
 
     async function add (item, walk) {
+        console.log(item, walk)
         const { error, data } = await client
             .from('steps')
             .insert({

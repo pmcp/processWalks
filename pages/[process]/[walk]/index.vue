@@ -1,5 +1,5 @@
 <template>
-
+  <Steps-Edit ref="stepsEdit"  @stopPlayer="$refs.VideoPlayer.player.pause()" />
   <div v-if="walk">
     <ui-slide-over ref="slideOver" @close="closeStepSlideOver">
       <Actions-List :step="activeStep" :actions="activeStep.actions"/>
@@ -14,7 +14,12 @@
           <Player :video="walk.videoTempUrl" ref="VideoPlayer" @timeupdate="video.updateTime"/>
           <div class="flex flex-row justify-between mt-2 ">
             <Form-File-Upload :light="true" @upload="addVideo" />
-            <Steps-Edit ref="stepsEdit" :walk="walk.id" :videoTime="currentTime" :videoUrl="walk.videoTempUrl" @stopPlayer="$refs.VideoPlayer.player.pause()" />
+            <Ui-Button @click="editStep(null, walk.id, walk.videoTempUrl, video.updateTime)">
+              <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+<!--              New step at <span class="w-24 pl-1 text-center">{{ walkTimeToStamp }}</span>-->
+              New step at <span class="w-24 pl-1 text-center">Meh</span>
+            </Ui-Button>
+
           </div>
         </div>
         <div v-else class="h-full rounded-lg border-4 border-dashed border-gray-200 flex justify-center py-20">
@@ -62,8 +67,12 @@ walks.get(route.params.walk)
 
 // Video Stuff
 
+
 const video = useVideoStore();
 const { player, currentTime } = storeToRefs(video)
+
+// import {useReadableTime} from "/utils/readableTime";
+// const walkTimeToStamp = computed(() => useReadableTime(currentTime));
 
 async function addVideo(upload) {
   console.log(upload)
@@ -90,13 +99,10 @@ function seekVideoTime(time) {
 }
 
 const stepsEdit = ref({})
-function editStep(id) {
-  console.log(id)
-  console.log(stepsEdit)
-  console.log(stepsEdit.value.startAddSteps)
-
+function editStep(id, walkId, videoUrl, videoTime) {
   if(!stepsEdit.value) return;
-  stepsEdit.value.startAddSteps(id)
+  console.log(route.params.walk)
+  stepsEdit.value.startAddSteps(id, walkId, videoUrl, videoTime )
 }
 
 onMounted(async () => {
@@ -107,7 +113,7 @@ onMounted(async () => {
   steps.subscribeList(walkId)
   steps.subscribeJoinStepsTopics(walkId)
   actions.subscribeList(walkId)
-  processes.subscribeSingle(route.params.process, walkId)
+  processes.subscribeSingle(route.params.process, walkId, )
   // TODO: Add subscribe for steps_topics
 })
 
