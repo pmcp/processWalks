@@ -159,12 +159,12 @@ async function startAddSteps(id, walk, videoUrl, videoTime) {
     })
 
   } else {
-    console.log(walk)
     walkId.value = walk
     video.value = {
       url:videoUrl,
       time: videoTime
     }
+    stepTiming.value = videoTime
     mode.value = 'add'
   }
 }
@@ -194,10 +194,11 @@ function cleanUp () {
 }
 
 function setUp () {
-  console.log(video.value)
-  if(video.value.time) {
-    stepTiming.value = video.value.time
-  }
+  // console.log(video.value.time)
+  //
+  // if(video.value.time) {
+  //   stepTiming.value = video.value.time
+  // }
 }
 
 onUnmounted(() => {

@@ -14,10 +14,10 @@
           <Player :video="walk.videoTempUrl" ref="VideoPlayer" @timeupdate="video.updateTime"/>
           <div class="flex flex-row justify-between mt-2 ">
             <Form-File-Upload :light="true" @upload="addVideo" />
-            <Ui-Button @click="editStep(null, walk.id, walk.videoTempUrl, video.updateTime)">
+            <Ui-Button @click="editStep(null, walk.id, walk.videoTempUrl, currentTime)">
               <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
 <!--              New step at <span class="w-24 pl-1 text-center">{{ walkTimeToStamp }}</span>-->
-              New step at <span class="w-24 pl-1 text-center">Meh</span>
+              New step at <span class="w-24 pl-1 text-center">{{  walkTimeToStamp }}</span>
             </Ui-Button>
 
           </div>
@@ -71,8 +71,8 @@ walks.get(route.params.walk)
 const video = useVideoStore();
 const { player, currentTime } = storeToRefs(video)
 
-// import {useReadableTime} from "/utils/readableTime";
-// const walkTimeToStamp = computed(() => useReadableTime(currentTime));
+import {useReadableTime} from "/utils/readableTime";
+const walkTimeToStamp = computed(() => useReadableTime(currentTime.value));
 
 async function addVideo(upload) {
   console.log(upload)
@@ -101,7 +101,7 @@ function seekVideoTime(time) {
 const stepsEdit = ref({})
 function editStep(id, walkId, videoUrl, videoTime) {
   if(!stepsEdit.value) return;
-  console.log(route.params.walk)
+  console.log(id, walkId, videoUrl, videoTime)
   stepsEdit.value.startAddSteps(id, walkId, videoUrl, videoTime )
 }
 
