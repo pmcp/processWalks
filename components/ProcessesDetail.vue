@@ -5,7 +5,7 @@
         <span class="mr-4">{{  process.name }}</span>
         <Processes-Edit :process="process.id"/>
       </div>
-      <p class="w-full text-sm text-gray-500 pb-5">{{ process.description }}</p>
+      <div class="whitespace-pre-wrap w-full text-sm text-gray-500 pb-5">{{ process.description }}</div>
       <slot name="content"/>
       <Ui-Button
           @click="open(process.id)"

@@ -6,7 +6,7 @@
     <Processes-Edit></Processes-Edit>
   </Ui-Heading>
   <div v-if="processes?.length > 0" class="overflow-hidden bg-white shadow-xl sm:rounded-xl p-2 ">
-    <ul role="list" class="p-2 grid gap-5 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 divide-y divide-gray-200">
+    <ul role="list" class="p-2 grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 divide-y divide-gray-200">
       <Processes-Detail
           v-for="process of processes"
           :process="process"

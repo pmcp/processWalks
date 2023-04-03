@@ -4,24 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0dfe8fae-843f-4c43-b1b9-0ab1694a3545" name="Changes" comment="added deletions">
-      <change afterPath="$PROJECT_DIR$/components/UiSpinner.vue" afterDir="false" />
+    <list default="true" id="0dfe8fae-843f-4c43-b1b9-0ab1694a3545" name="Changes" comment="added fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/PersonasDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/PersonasDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/PersonasList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/PersonasList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/ProcessesDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ProcessesEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesEdit.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/ProcessesList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/WalksEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/WalksEdit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/WalksList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/WalksList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/[process]/[walk]/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/[process]/[walk]/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/[process]/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/[process]/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/processes.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/processes.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -49,12 +44,16 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Node.js.formkit.theme.js">
     <configuration name="localhost:8888" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:8888">
+      <method v="2" />
+    </configuration>
+    <configuration name="formkit.theme.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/formkit.theme.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Node.js.formkit.theme.js" />
         <item itemvalue="JavaScript Debug.localhost:8888" />
       </list>
     </recent_temporary>
@@ -70,6 +69,10 @@
       <workItem from="1672778321820" duration="436000" />
       <workItem from="1672778776199" duration="10282000" />
       <workItem from="1673280591675" duration="35006000" />
+      <workItem from="1674498825015" duration="20569000" />
+      <workItem from="1677947166484" duration="22000" />
+      <workItem from="1678295245409" duration="684000" />
+      <workItem from="1680538284634" duration="696000" />
     </task>
     <task id="LOCAL-00001" summary="Added flow to restrict only specific domains">
       <created>1672862403534</created>
@@ -99,7 +102,224 @@
       <option name="project" value="LOCAL" />
       <updated>1673468693018</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="moving away from nuxt supabase">
+      <created>1674134960755</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1674134960755</updated>
+    </task>
+    <task id="LOCAL-00006" summary="moving away from nuxt supabase">
+      <created>1674135015489</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1674135015489</updated>
+    </task>
+    <task id="LOCAL-00007" summary="added the actual loggin in">
+      <created>1674135799705</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1674135799705</updated>
+    </task>
+    <task id="LOCAL-00008" summary="started implementing new js supabase">
+      <created>1674136863838</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1674136863838</updated>
+    </task>
+    <task id="LOCAL-00009" summary="started implementing new js supabase">
+      <created>1674137540952</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1674137540952</updated>
+    </task>
+    <task id="LOCAL-00010" summary="started using pinia store">
+      <created>1674139765797</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1674139765797</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Members ported to pinia">
+      <created>1674150807139</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1674150807139</updated>
+    </task>
+    <task id="LOCAL-00012" summary="added processes to store">
+      <created>1674152321241</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1674152321241</updated>
+    </task>
+    <task id="LOCAL-00013" summary="changed some stuff">
+      <created>1674153687793</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1674153687793</updated>
+    </task>
+    <task id="LOCAL-00014" summary="changed some stuff">
+      <created>1674230408531</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1674230408531</updated>
+    </task>
+    <task id="LOCAL-00015" summary="almost there, stopping at topics">
+      <created>1674338391428</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1674338391429</updated>
+    </task>
+    <task id="LOCAL-00016" summary="finished functionality">
+      <created>1674389238564</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1674389238564</updated>
+    </task>
+    <task id="LOCAL-00017" summary="last before demo">
+      <created>1674409759662</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1674409759662</updated>
+    </task>
+    <task id="LOCAL-00018" summary="last before demo">
+      <created>1674410128697</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1674410128697</updated>
+    </task>
+    <task id="LOCAL-00019" summary="changed colors">
+      <created>1674411039455</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1674411039455</updated>
+    </task>
+    <task id="LOCAL-00020" summary="after pres">
+      <created>1674463021651</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1674463021651</updated>
+    </task>
+    <task id="LOCAL-00021" summary="fix">
+      <created>1674501244720</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1674501244720</updated>
+    </task>
+    <task id="LOCAL-00022" summary="testing edit issue 1">
+      <created>1674999188179</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1674999188179</updated>
+    </task>
+    <task id="LOCAL-00023" summary="testing edit issue 2">
+      <created>1675001020711</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1675001020711</updated>
+    </task>
+    <task id="LOCAL-00024" summary="wide video">
+      <created>1675005409352</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1675005409352</updated>
+    </task>
+    <task id="LOCAL-00025" summary="wide video">
+      <created>1675005716877</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1675005716877</updated>
+    </task>
+    <task id="LOCAL-00026" summary="startAddSteps test 1">
+      <created>1675005840972</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1675005840972</updated>
+    </task>
+    <task id="LOCAL-00027" summary="startAddSteps test 2">
+      <created>1675006922384</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1675006922384</updated>
+    </task>
+    <task id="LOCAL-00028" summary="layout mobile">
+      <created>1675007431523</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1675007431523</updated>
+    </task>
+    <task id="LOCAL-00029" summary="startAddSteps test 3">
+      <created>1675007546719</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1675007546719</updated>
+    </task>
+    <task id="LOCAL-00030" summary="startAddSteps test 4">
+      <created>1675007759719</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1675007759719</updated>
+    </task>
+    <task id="LOCAL-00031" summary="added hidden actions">
+      <created>1675009697739</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1675009697739</updated>
+    </task>
+    <task id="LOCAL-00032" summary="fixed set time">
+      <created>1675010291445</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1675010291445</updated>
+    </task>
+    <task id="LOCAL-00033" summary="fixed set time actions">
+      <created>1675011853284</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1675011853284</updated>
+    </task>
+    <task id="LOCAL-00034" summary="test issue with edit 1">
+      <created>1675111240146</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1675111240146</updated>
+    </task>
+    <task id="LOCAL-00035" summary="added fix">
+      <created>1675111912229</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1675111912229</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -122,11 +342,32 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added flow to restrict only specific domains" />
-    <MESSAGE value="added supabase cli as dependency" />
-    <MESSAGE value="added member flow" />
-    <MESSAGE value="added deletions" />
-    <option name="LAST_COMMIT_MESSAGE" value="added deletions" />
+    <MESSAGE value="started implementing new js supabase" />
+    <MESSAGE value="started using pinia store" />
+    <MESSAGE value="Members ported to pinia" />
+    <MESSAGE value="added processes to store" />
+    <MESSAGE value="changed some stuff" />
+    <MESSAGE value="almost there, stopping at topics" />
+    <MESSAGE value="finished functionality" />
+    <MESSAGE value="last before demo" />
+    <MESSAGE value="changed colors" />
+    <MESSAGE value="after pres" />
+    <MESSAGE value="Make members admin" />
+    <MESSAGE value="fix" />
+    <MESSAGE value="testing edit issue 1" />
+    <MESSAGE value="testing edit issue 2" />
+    <MESSAGE value="wide video" />
+    <MESSAGE value="startAddSteps test 1" />
+    <MESSAGE value="startAddSteps test 2" />
+    <MESSAGE value="layout mobile" />
+    <MESSAGE value="startAddSteps test 3" />
+    <MESSAGE value="startAddSteps test 4" />
+    <MESSAGE value="added hidden actions" />
+    <MESSAGE value="fixed set time" />
+    <MESSAGE value="fixed set time actions" />
+    <MESSAGE value="test issue with edit 1" />
+    <MESSAGE value="added fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="added fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -134,7 +375,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/pages/members.vue</url>
           <line>3</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

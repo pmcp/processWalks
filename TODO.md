@@ -2,13 +2,19 @@
 
 
 ## Todo
+- How to add admin
+- Give access to a division (only that project)
+- fix changing stuff to a walk (for example delete step)
+- Add a link doc to a walk
+- bigger movie view (while still seeing steps)
+- persona as begin
+- Change storage to UploadCare
 - Subscribe update after editing walk when coming from processes doesn't work (does work when reload)
 - Change subscriptions to allSubscriptions -> Move to a "subscribionStore"?
 - Better text for descriptions etc
 - Check all editing & Deleting flows
 - Add done / Edit action to action flow
 - Restrict non members
-- Change storage to UploadCare
 - Edit Personas in walk
 - Persona page
 - ACTION `PAGE`
