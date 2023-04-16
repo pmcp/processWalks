@@ -6,15 +6,21 @@
     </ui-slide-over>
 <!--    <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions"/>-->
     <Walks-Layout>
-      <template v-slot:steps>
-        <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions"/>
+      <template #steps="{ layout }">
+
+        <Steps-List :steps="walk.steps" @editStep="editStep" @seekVideoTime="seekVideoTime" @showActions="showActions" :layout="layout"/>
       </template>
       <template v-slot:video>
         <div v-if="walk.videoTempUrl">
+          <div>
+            <Form-File-Upload :light="true" type="video" @upload="addVideo" class="mb-2" />
+
+          </div>
+
           <Player :video="walk.videoTempUrl" ref="VideoPlayer" @timeupdate="video.updateTime"/>
           <div class="flex flex-row justify-between mt-2 ">
-            <Form-File-Upload :light="true" @upload="addVideo" />
-            <Ui-Button @click="editStep(null, walk.id, walk.videoTempUrl, currentTime)">
+
+            <Ui-Button @click="editStep(null, walk.id, walk.videoTempUrl, currentTime)" style="width:100%">
               <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
 <!--              New step at <span class="w-24 pl-1 text-center">{{ walkTimeToStamp }}</span>-->
               New step at <span class="w-24 pl-1 text-center">{{  walkTimeToStamp }}</span>
@@ -23,7 +29,7 @@
           </div>
         </div>
         <div v-else class="h-full rounded-lg border-4 border-dashed border-gray-200 flex justify-center py-20">
-          <Form-File-Upload :light="true" :empty="walk.videoTempUrl == null" @upload="addVideo" />
+          <Form-File-Upload :light="true" type="video"  :empty="walk.videoTempUrl == null" @upload="addVideo" />
         </div>
       </template>
       <template v-slot:process>
@@ -31,9 +37,29 @@
           <template v-slot:content>
             <div class="flex justify-between">
               <span class="text-lg">Walk</span>
-
               <Walks-Edit :walk="walk"></Walks-Edit>
             </div>
+
+            <ui-button :light="true" class="my-2">
+
+              <a :href="walk.docTempUrl" download>View Doc</a>
+            </ui-button>
+
+            <ui-button :light="true" class="my-2" @click="showNotes.open()">
+              Show notes
+            </ui-button>
+            <Ui-Modal ref="showNotes">
+              <template v-slot:title>
+                Notes
+              </template>
+              <template v-slot:content>
+                <pre>{{ walk.notes }}</pre>
+              </template>
+              <template v-slot:closeButton>
+                Close
+              </template>
+            </Ui-Modal>
+
             <h3 class="text-md font-medium leading-6 my-4">Date: {{ walk.date }}</h3>
             <div>
               <Personas-List :personas="walk.personas"/>
@@ -46,7 +72,7 @@
 </template>
 <script setup>
 const route = useRoute()
-
+import { PlusIcon } from '@heroicons/vue/20/solid'
 
 // UI Stuff
 // Slide Over Logic
@@ -61,13 +87,15 @@ const steps = useStepsStore();
 const actions = useActionsStore();
 const processes = useProcessesStore();
 
+const showNotes = ref('showNotes')
+
+
+
 // Get Walk
 const { single: walk } = storeToRefs(walks)
 walks.get(route.params.walk)
 
 // Video Stuff
-
-
 const video = useVideoStore();
 const { player, currentTime } = storeToRefs(video)
 

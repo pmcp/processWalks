@@ -1,5 +1,5 @@
 import { useSupabase } from '~/composables/useSupabase.ts'
-
+import { useDateFormat } from '@vueuse/core'
 // Hot reload
 
 
@@ -20,7 +20,7 @@ export const useWalksStore = defineStore('walks-store', () => {
         try {
             const { data, error } = await client
                 .from('walks')
-                .select('id, date')
+                .select(`id, date, personas!walks_personas(id, description)`)
                 .eq('process', processId)
                 .order('date', { ascending: false })
             .is('delete', false)
@@ -42,7 +42,7 @@ export const useWalksStore = defineStore('walks-store', () => {
         try {
             let { data, error, status } = await client
                 .from('walks')
-                .select(`id, date, video, personas!walks_personas(id, description), processes(id, description, name), steps!steps_walk_fkey(id, walk, description, timing, observation, milestone, topics!steps_topics(id, name, description), rating, actions(id, description, act_by, done, walk, assigned_to, hidden))`)
+                .select(`id, date, video, doc, notes, personas!walks_personas(id, description), processes(id, description, name), steps!steps_walk_fkey(id, walk, description, timing, observation, milestone, topics!steps_topics(id, name, description), rating, actions(id, description, act_by, done, walk, assigned_to, hidden))`)
                 .eq('id', walkId)
                 .single()
             if (error && status !== 406) throw error
@@ -55,6 +55,23 @@ export const useWalksStore = defineStore('walks-store', () => {
                         .createSignedUrl(data.video, 3600)
                     data.videoTempUrl = videoUrl.data.signedUrl
                 }
+
+                console.log('going to get doc url', data.doc)
+                if(data.doc) {
+                    const docUrl = await client
+                        .storage
+                        .from('docs')
+                        .createSignedUrl(data.doc, 3600)
+                    console.log('HERE', docUrl)
+                    data.docTempUrl = docUrl.data.signedUrl
+                    // first part of the doc name is the timestamp when it was uploaded.
+                    // - Create a name without the timestamp
+                    // - Make timestamp readable
+                    data.docOriginalName = data.doc.split(".")[1]
+                    data.docReadableTime = useDateFormat(data.doc.split(".")[0], 'YYYY-MM-DD HH:mm:ss')
+
+                }
+
                 single.value = data
                 return data
             }
@@ -162,13 +179,36 @@ export const useWalksStore = defineStore('walks-store', () => {
     }
 
     async function edit (walk, previousPersonas) {
+        console.log(walk)
+        // if there is a document: its new (doc is saved in the "walk.doc", newly added doc is in walk.newDoc)
+        // If something in newDoc: upload it first.
+        let fileName = walk.doc
+
+        if(walk.newDocs.length > 1) {
+            fileName = `${Date.now()}.${walk.newDocs[0].name}`
+            try {
+                let { error: uploadError } = await client.storage.from('docs').upload(timeStampedFileName, walk.newDocs[0].file)
+                if (uploadError) throw uploadError
+            } catch (error) {
+                console.log(error)
+                // TODO: let user know upload failed
+                return;
+            } finally {
+                console.log('file is uploaded')
+            }
+        }
+
+
+
         const { error, data } = await client
             .from('walks')
             .upsert({
                 id: walk.id,
                 date: walk.date,
                 video: walk.video,
-                process: walk.process
+                process: walk.process,
+                doc: fileName,
+                notes: walk.notes
             })
             .select('id')
             .single()

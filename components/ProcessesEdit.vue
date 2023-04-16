@@ -18,6 +18,7 @@
       <span v-if="mode === 'edit'">Edit Process</span>
       <span v-else>Add Process</span>
     </template>
+
     <template v-slot:content>
       <FormKit
           type="form"
@@ -29,15 +30,15 @@
       >
 
         <FormKitSchema :schema="processSchema" />
-        <FormKit
-            type="autocomplete"
-            name="members"
-            label="Search and select multiple members"
-            :options="members"
-            selection-appearance="text-input"
-            multiple
+<!--        <FormKit-->
+<!--            type="taglist"-->
+<!--            name="members"-->
+<!--            label="Search and select multiple members"-->
+<!--            :options="members"-->
+<!--            selection-appearance="text-input"-->
+<!--            multiple-->
 
-        />
+<!--        />-->
         <div  class="absolute right-6 bottom-0">
         <FormKit type="submit">
           <template v-if="mode === 'edit'">
@@ -104,6 +105,7 @@ async function getProcess(processId) {
         return member.id
       })
 
+      console.log(members)
       getNode('addProcess').input({
         id: processId,
         name: data.name,
@@ -134,6 +136,7 @@ async function getProfiles () {
         .is('delete', false)
     if (error && status !== 406) throw error
     if (data) {
+      console.log(data)
 
       members.value = data.map((member) => {
         return { value: member.id, label: member.email }
@@ -145,7 +148,9 @@ async function getProfiles () {
     error.value = error.message
   } finally {
     // loading.value = false
+
   }
+
 }
 await getProfiles()
 
@@ -183,6 +188,7 @@ async function submitAddProcess (newProcess) {
   if (data) {
     const projectId = data.id
     let membersToSave = newProcess.members
+    console.log('membersToSave', membersToSave)
     // Get existing connections
     try {
       let { data, error, status } = await client
@@ -193,7 +199,7 @@ async function submitAddProcess (newProcess) {
         const membersInJoin = data.map((item) => {
           return item.profi_id
         })
-
+        console.log('membersInJoin', membersInJoin)
         for (let i = 0; i < membersInJoin.length; i++) {
           // Check if existing join is in membersToSave
           if(membersToSave.includes(membersInJoin[i])) {
@@ -209,9 +215,10 @@ async function submitAddProcess (newProcess) {
         }
 
         // If membersToSave > 0, add membersToSave as JOIN
+        console.log('membersToSave', membersToSave.length)
         if(membersToSave) {
           if(membersToSave.length > 0) {
-            for (let i = 0; i < membersToSave.length; i++) {
+            for (let i = 1; i < membersToSave.length; i++) {
               await client.from('profi_proc')
                   .insert({
                     profi_id: membersToSave[i],
@@ -287,14 +294,14 @@ const processSchema = [
     help: 'Enter your new password.',
     validation: 'length:5,16'
   },
-  // {
-  //   $formkit: 'autocomplete',
-  //   name: 'autocomplete',
-  //   label: 'Members',
-  //   help: 'Select members who can view this project',
-  //   options: [],
-  //   selectionAppearance: 'option',
-  //   multiple: true
-  // }
+  {
+    $formkit: 'taglist',
+    name: 'members',
+    label: 'Members',
+    help: 'Select members who can view this project',
+    options: members.value,
+    selectionAppearance: 'option',
+    multiple: true
+  }
 ]
 </script>

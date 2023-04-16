@@ -14,12 +14,13 @@
   <div v-if="list.length > 0" class=" overflow-hidden bg-white shadow sm:rounded-md mx-6">
     <ul role="list" class="divide-y divide-gray-200">
       <li  v-for="walk of list" :key="walk.id">
+
         <nuxt-link :to="`/${props.process}/${walk.id}`" class="block hover:bg-gray-50">
           <div class="flex items-center px-4 py-4 sm:px-6">
             <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
               <div class="truncate">
                 <div class="flex text-sm">
-                  <p class="truncate font-medium text-rose-600">{{ walk.date }}</p>
+                  <p class="truncate font-medium text-rose-600">{{ walk.date }} - {{ walk.personas[0].description}}</p>
                 </div>
               </div>
             </div>

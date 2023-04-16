@@ -32,7 +32,7 @@ export const useProcessesStore = defineStore('processes-store', () => {
         try {
             let { data, error, status } = await client
                 .from('processes')
-                .select('id, name, passwordProtected, description, walks(id), profiles!profi_proc(email), delete')
+                .select('id, name, passwordProtected, description, walks(id), profiles!profi_proc(id, email), delete')
                 .order('created_at', { ascending: false })
                 .is('delete', false)
             if (error && status !== 406) throw error

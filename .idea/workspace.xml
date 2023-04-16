@@ -4,11 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0dfe8fae-843f-4c43-b1b9-0ab1694a3545" name="Changes" comment="added fix">
+    <list default="true" id="0dfe8fae-843f-4c43-b1b9-0ab1694a3545" name="Changes" comment="upgrades">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormFileUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormFileUpload.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/ProcessesDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ProcessesEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesEdit.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/ProcessesList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/StepsEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/StepsEdit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/StepsList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/StepsList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/WalksEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/WalksEdit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/WalksLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/WalksLayout.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/WalksList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/WalksList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/formkit.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/formkit.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/netlify.toml" beforeDir="false" afterPath="$PROJECT_DIR$/netlify.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nuxt.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/nuxt.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/[process]/[walk]/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/[process]/[walk]/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/[process]/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/[process]/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/processes.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/processes.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/processesStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/stores/processesStore.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/walksStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/stores/walksStore.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +89,11 @@
       <workItem from="1674498825015" duration="20569000" />
       <workItem from="1677947166484" duration="22000" />
       <workItem from="1678295245409" duration="684000" />
-      <workItem from="1680538284634" duration="696000" />
+      <workItem from="1680538284634" duration="17030000" />
+      <workItem from="1680963360141" duration="1353000" />
+      <workItem from="1680964845917" duration="599000" />
+      <workItem from="1680966342922" duration="5410000" />
+      <workItem from="1681568181750" duration="13416000" />
     </task>
     <task id="LOCAL-00001" summary="Added flow to restrict only specific domains">
       <created>1672862403534</created>
@@ -319,7 +340,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675111912229</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="added todos + small text layout fix">
+      <created>1680539016391</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1680539016391</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -342,9 +370,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="started implementing new js supabase" />
-    <MESSAGE value="started using pinia store" />
-    <MESSAGE value="Members ported to pinia" />
     <MESSAGE value="added processes to store" />
     <MESSAGE value="changed some stuff" />
     <MESSAGE value="almost there, stopping at topics" />
@@ -367,7 +392,10 @@
     <MESSAGE value="fixed set time actions" />
     <MESSAGE value="test issue with edit 1" />
     <MESSAGE value="added fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="added fix" />
+    <MESSAGE value="added todos + small text layout fix" />
+    <MESSAGE value="upgrades + added taglist + fixed double add" />
+    <MESSAGE value="upgrades" />
+    <option name="LAST_COMMIT_MESSAGE" value="upgrades" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

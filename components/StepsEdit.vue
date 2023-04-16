@@ -120,7 +120,7 @@ async function addStep(step){
   addStepModal.value.close()
 }
 
-async function removeStep(){
+async function removeStep(stepId){
   await steps.remove(stepId)
   addStepModal.value.close()
 }

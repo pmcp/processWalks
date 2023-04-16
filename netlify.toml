@@ -7,7 +7,7 @@
 [dev]
   command = "npm run dev -- -o"
   autoLaunch = true
-
+  targetPort = 3000 # The port for your application server, framework or site generator
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.
   #[[redirects]]
