@@ -12,6 +12,7 @@
       <FormKit
           type="form"
           name="addActions"
+          ref="addActionsNode"
           id="addActions"
           :actions="false"
           @submit="submitAddAction"
@@ -86,6 +87,7 @@ import { storeToRefs } from 'pinia'
 const user = useUserStore();
 const { admin } = storeToRefs(user)
 
+const addActionsNode = ref(null)
 
 // Supabase stuff
 const client = useSupabase()
@@ -113,7 +115,7 @@ async function startAddAction() {
   // If edit mode, fill form with Action
   await addActionModal.value.open()
   if(mode.value === 'edit') {
-    getNode('addActions').input({
+    addActionsNode.value.node.input({
       id: props.action.id,
       assignedTo: props.action.assigned_to,
       description: props.action.description,

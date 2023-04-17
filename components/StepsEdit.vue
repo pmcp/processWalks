@@ -13,6 +13,7 @@
       <FormKit
           type="form"
           name="addSteps"
+          ref="addStepsNode"
           id="addSteps"
           :actions="false"
           @submit="addStep"
@@ -101,6 +102,7 @@ const topics = useTopicsStore();
 const { id: stepId, timing: stepTiming } = storeToRefs(steps)
 const { listFormkitFormatted: TopicListFormatted } = storeToRefs(topics)
 
+const addStepsNode = ref(null)
 
 import { getNode } from '@formkit/core';
 
@@ -146,7 +148,7 @@ async function startAddSteps(id, walk, videoUrl, videoTime) {
 
     console.log(data, topicsFormattedForFormkit)
     // Fill Form
-    getNode('addSteps').input({
+    addStepsNode.value.node.input({
       id,
       walk: data.walk,
       description: data.description,

@@ -25,7 +25,7 @@
           #default="{ value }"
           id="addProcess"
           name="addProcess"
-          ref="addProcessTest"
+          ref="addProcessNode"
           :actions="false"
           @submit="submitAddProcess"
       >
@@ -70,7 +70,7 @@ const props = defineProps(['process'])
 const loading = ref(true)
 const mode = ref('add')
 
-const addProcessTest = ref(null)
+const addProcessNode = ref(null)
 
 onMounted(async () => {
   if(props.process) {
@@ -109,9 +109,8 @@ async function getProcess(processId) {
       const members = data.profiles.map((member) => {
         return member.id
       })
-      console.log(addProcessTest.value.node)
-      // console.log('here', getNode('addProcess'))
-      addProcessTest.value.node.input({
+
+      addProcessNode.value.node.input({
         id: processId,
         name: data.name,
         description: data.description,

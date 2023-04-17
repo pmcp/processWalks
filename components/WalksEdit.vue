@@ -16,6 +16,7 @@
           type="form"
           name="addWalk"
           id="addWalk"
+          ref="addWalkNode"
           :actions="false"
           submit-label="Add Walk"
           @submit="saveWalk"
@@ -93,6 +94,8 @@ const walkModal = ref('walkModal')
 // Formkit
 import {getNode} from "@formkit/core";
 
+const addWalkNode = ref(null)
+
 // Stores
 import { storeToRefs } from 'pinia'
 const walks = useWalksStore();
@@ -112,7 +115,7 @@ async function open() {
   await walkModal.value.open()
   if (edit.value) {
     console.log(personasFormkitFormatted.value)
-    getNode('addWalk').input({
+    addWalkNode.value.node.input({
       date: props.walk.date,
       video: props.walk.video,
       process: props.walk.process,
