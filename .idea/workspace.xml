@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0dfe8fae-843f-4c43-b1b9-0ab1694a3545" name="Changes" comment="test getNode 1">
+    <list default="true" id="0dfe8fae-843f-4c43-b1b9-0ab1694a3545" name="Changes" comment="changed everything to ref for reactivitiy">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ActionsEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ActionsEdit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ProcessesEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesEdit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/StepsEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/StepsEdit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/WalksEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/WalksEdit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/[process]/[walk]/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/[process]/[walk]/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +74,7 @@
       <workItem from="1680963360141" duration="1353000" />
       <workItem from="1680964845917" duration="599000" />
       <workItem from="1680966342922" duration="5410000" />
-      <workItem from="1681568181750" duration="18370000" />
+      <workItem from="1681568181750" duration="18575000" />
     </task>
     <task id="LOCAL-00001" summary="Added flow to restrict only specific domains">
       <created>1672862403534</created>
@@ -359,7 +356,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681757790043</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="changed everything to ref for reactivitiy">
+      <created>1681758617069</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1681758617069</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -382,7 +386,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="last before demo" />
     <MESSAGE value="changed colors" />
     <MESSAGE value="after pres" />
     <MESSAGE value="Make members admin" />
@@ -407,7 +410,8 @@
     <MESSAGE value="last changes" />
     <MESSAGE value="test getNode" />
     <MESSAGE value="test getNode 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="test getNode 1" />
+    <MESSAGE value="changed everything to ref for reactivitiy" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed everything to ref for reactivitiy" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -40,15 +40,15 @@
               <Walks-Edit :walk="walk"></Walks-Edit>
             </div>
 
-            <ui-button :light="true" class="my-2">
-
+            <ui-button v-if="walk.docTempUrl" :light="true" class="my-2" >
               <a :href="walk.docTempUrl" download>View Doc</a>
             </ui-button>
 
-            <ui-button :light="true" class="my-2" @click="showNotes.open()">
+            <ui-button v-if="walk.notes" :light="true" class="my-2" @click="showNotes.open()">
               Show notes
             </ui-button>
-            <Ui-Modal ref="showNotes">
+
+            <Ui-Modal v-if="walk.notes" ref="showNotes">
               <template v-slot:title>
                 Notes
               </template>
