@@ -38,7 +38,28 @@
               :options="personasList"
               help="Add personas to this walk"
           />
+          <FormKit
+              v-if="edit"
+              type="textarea"
+              label="Notes"
+              name="notes"
+              rows="10"
+              help="Extra notes about this walk."
+          />
 
+          <FormKit
+            v-if="edit"
+            type="file"
+            name="newDocs"
+            label="Documents"
+            accept=".pdf,.doc,.docx,.xml,.md,.csv"
+            help="Select a document to add to this walk."
+            multiple="false"
+          />
+          <ui-button :light="true" class="my-2">
+            <a :href="walk.docTempUrl" download>View uploaded doc</a>
+          </ui-button>
+<!--          <Form-File-Upload v-if="edit" :light="true" :type="'file'" :empty="!walk.doc"  @upload="addFile" />-->
           <Personas-Edit mode="add" @added="addPersonaToPersonaList"/>
         </div>
         <div class="absolute right-6 bottom-0">
@@ -95,6 +116,7 @@ async function open() {
       date: props.walk.date,
       video: props.walk.video,
       process: props.walk.process,
+      notes: props.walk.notes,
       personas: personasFormkitFormatted.value
     }).then((data) => {
     })
@@ -116,6 +138,8 @@ function addPersonaToPersonaList (personaId) {
 await personas.getAll()
 
 async function saveWalk(data) {
+
+
   if(edit.value) {
     console.log('editing walk', props.walk)
     data.id = props.walk.id
