@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0dfe8fae-843f-4c43-b1b9-0ab1694a3545" name="Changes" comment="added">
+    <list default="true" id="0dfe8fae-843f-4c43-b1b9-0ab1694a3545" name="Changes" comment="last changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/StepsList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/StepsList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/WalksEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/WalksEdit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/WalksLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/WalksLayout.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ProcessesEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProcessesEdit.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +74,7 @@
       <workItem from="1680963360141" duration="1353000" />
       <workItem from="1680964845917" duration="599000" />
       <workItem from="1680966342922" duration="5410000" />
-      <workItem from="1681568181750" duration="14830000" />
+      <workItem from="1681568181750" duration="15176000" />
     </task>
     <task id="LOCAL-00001" summary="Added flow to restrict only specific domains">
       <created>1672862403534</created>
@@ -337,7 +335,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681650910937</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="last changes">
+      <created>1681751299294</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1681751299294</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -360,7 +365,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="changed some stuff" />
     <MESSAGE value="almost there, stopping at topics" />
     <MESSAGE value="finished functionality" />
     <MESSAGE value="last before demo" />
@@ -385,7 +389,8 @@
     <MESSAGE value="upgrades + added taglist + fixed double add" />
     <MESSAGE value="upgrades" />
     <MESSAGE value="fixed errors" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed errors" />
+    <MESSAGE value="last changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="last changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

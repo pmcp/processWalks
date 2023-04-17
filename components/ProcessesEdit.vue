@@ -105,8 +105,8 @@ async function getProcess(processId) {
         return member.id
       })
 
-      console.log(members)
-      getNode('addProcess').input({
+      console.log('here', getNode('addProcess'))
+      await getNode('addProcess').input({
         id: processId,
         name: data.name,
         description: data.description,
